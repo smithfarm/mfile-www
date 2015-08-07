@@ -803,3 +803,8 @@ Revision history for App::MFILE::WWW
 - mfile-www/dnotice-hooks.js: make demoNotice display a random number to
   illustrate that noticeText is generated at runtime
 
+0.137  2015-08-07 13:17 CEST
+- migrate to GitHub
+- Tame $VERSION strings
+- Tame READMEs
+
