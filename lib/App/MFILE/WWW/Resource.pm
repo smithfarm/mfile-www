@@ -62,17 +62,6 @@ App::MFILE::WWW::Resource - HTTP request/response cycle
 
 
 
-=head1 VERSION
-
-Version 0.136
-
-=cut
-
-our $VERSION = '0.136';
-
-
-
-
 =head1 SYNOPSIS
 
 In PSGI file:

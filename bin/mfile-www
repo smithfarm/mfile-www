@@ -42,7 +42,7 @@ use warnings;
 #use App::CELL::Test::LogToFile; # uncomment this line to debug initialization
 use App::CELL qw( $meta $site );
 use App::CELL::Util qw( is_directory_viable );
-use App::MFILE::WWW;
+use App::MFILE::WWW qw( $VERSION );
 use Getopt::Long;
 use File::Path;
 use File::ShareDir;
@@ -59,18 +59,6 @@ use Web::Machine;
 =head1 NAME
 
 mfile-www - App::MFILE::WWW server startup script
-
-
-
-
-=head1 VERSION
-
-Version 0.136
-
-=cut
-
-our $VERSION = '0.136';
-
 
 
 

@@ -63,7 +63,7 @@ Version 0.136
 =cut
 
 our $VERSION = '0.136';
-
+our @EXPORT_OK = ( $VERSION );
 
 
 
