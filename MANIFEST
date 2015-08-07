@@ -5,11 +5,13 @@ COPYING
 ignore.txt
 lib/App/MFILE/WWW.pm
 lib/App/MFILE/WWW/Resource.pm
+LICENSE
 Makefile.PL
 MANIFEST			This list of files
 META.json
 META.yml
 README
+README.md
 share/config/WWW_Config.pm
 share/config/WWW_Message_en.conf
 share/css/qunit.css
