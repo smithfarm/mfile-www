@@ -344,7 +344,7 @@ a "415 Unsupported Media Type" response if it is anything other than
 sub known_content_type {
     my ( $self, $content_type ) = @_;
 
-    #$log->debug( "known_content_type" );
+    #$log->debug( "known_content_type: " . Dumper $content_type );
     # for GET requests, we don't care about the content
     return 1 if $self->request->method eq 'GET';
 
@@ -358,7 +358,8 @@ sub known_content_type {
         return ( $content_type =~ m/application\/json/ ) ? 1 : 0;
     }
     if ( ref( $content_type ) eq 'HTTP::Headers::ActionPack::MediaType' ) {
-        return $content_type->equals( 'application/json' ) ? 1 : 0;
+        $log->debug( "Content type is a HTTP::Headers::ActionPack::MediaType object!" );
+        return $content_type->match( 'application/json' ) ? 1 : 0;
     }
     return 0;
 }
@@ -426,6 +427,7 @@ in the response is forwarded back to the JavaScript side.
 
 sub process_post {
     my $self = shift;
+    $log->debug( "entering process_post" );
 
     my $r = $self->request;
     my $session = Plack::Session->new( $r->{'env'} );
