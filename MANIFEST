@@ -2,7 +2,6 @@ bin/mfile-www
 Build.PL
 Changes
 COPYING
-ignore.txt
 lib/App/MFILE/WWW.pm
 lib/App/MFILE/WWW/Resource.pm
 LICENSE
