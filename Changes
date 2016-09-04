@@ -808,3 +808,9 @@ Revision history for App::MFILE::WWW
 - Tame $VERSION strings
 - Tame READMEs
 
+0.138 2016-09-04 17:45 CEST
+- WWW.pm: export $VERSION variable correctly
+- Resource.pm: use match method to check content type
+- Travis CI
+- MANIFEST: drop ignore.txt
+
