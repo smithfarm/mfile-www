@@ -10,8 +10,7 @@ Makefile.PL
 MANIFEST			This list of files
 META.json
 META.yml
-README
-README.md
+README.rst
 share/config/WWW_Config.pm
 share/config/WWW_Message_en.conf
 share/css/qunit.css
