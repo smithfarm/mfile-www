@@ -47,7 +47,6 @@ share/js/mfile-www/dnotice-init.js
 share/js/mfile-www/lib.js
 share/js/mfile-www/target-init.js
 t/00-load.t
-t/boilerplate.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
