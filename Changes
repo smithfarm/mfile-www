@@ -814,3 +814,6 @@ Revision history for App::MFILE::WWW
 - Travis CI
 - MANIFEST: drop ignore.txt
 
+0.139 2016-09-05 08:29 CEST
+- tests: drop t/boilerplate.t
+

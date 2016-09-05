@@ -57,7 +57,7 @@
    "provides" : {
       "App::MFILE::WWW" : {
          "file" : "lib/App/MFILE/WWW.pm",
-         "version" : "0.138"
+         "version" : "0.139"
       },
       "App::MFILE::WWW::Resource" : {
          "file" : "lib/App/MFILE/WWW/Resource.pm"
@@ -69,6 +69,6 @@
          "http://opensource.org/licenses/bsd-license.php"
       ]
    },
-   "version" : "0.138",
+   "version" : "0.139",
    "x_serialization_backend" : "JSON::PP version 2.27203"
 }
