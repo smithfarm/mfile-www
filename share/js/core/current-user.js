@@ -75,11 +75,11 @@ define ([
     // returns)
     var cu = Object.create(prototypes.user),
         ce = cf('currentUser'),
-        priv = cf('currentUserPriv') || 'passerby',
+        priv = cf('currentUserPriv'),
         flag1;
 
-    //console.log("current-user: ce is ", ce);
-    //console.log("current-user: currentUserPriv is " + priv);
+    console.log("current-user: ce is ", ce);
+    console.log("current-user: currentUserPriv is " + priv);
 
     if (ce) {
         $.extend(cu, ce)
@@ -87,6 +87,7 @@ define ([
 
     // current-user function
     return function (sw, arg) { 
+        console.log('current-user function called with arguments ', sw, arg);
         if (sw === 'obj') {
             if (arg) {
                 console.log('NOTICE: setting current user object to ', arg);

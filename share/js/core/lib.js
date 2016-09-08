@@ -90,7 +90,7 @@ define ([
                 //console.log("Something is wrong: cannot determine priv level of current user!");
                 return undefined;
             } else {
-                //console.log('privCheck comparing ' + p + ' against ACL ' + cep);
+                console.log('privCheck comparing ' + p + ' against ACL ' + cep);
             }
             if (p === 'passerby' && cep) {
                 return true;
