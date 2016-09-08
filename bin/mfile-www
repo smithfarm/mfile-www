@@ -156,11 +156,11 @@ The embedded JavaScript code does the following:
 
 =over
 
-=item * sets the C<baseURL> to C<$site->MFILE_WWW_REQUIREJS_BASEURL>, which
+=item * sets the C<baseURL> to C<< $site->MFILE_WWW_REQUIREJS_BASEURL >>, which
 is set to C</js> -- in absolute terms, this means C<HTTP_ROOT/js>
 
-=item * sets the "C<app>" path config to C<$site->MFILE_APPNAME> -- for
-example, if C<$site->MFILE_APPNAME> is set to 'foobar', the path config for
+=item * sets the "C<app>" path config to C<< $site->MFILE_APPNAME >> -- for
+example, if C<< $site->MFILE_APPNAME >> is set to 'foobar', the path config for
 C<app> will be set to C<foobar> and a RequireJS dependency C<app/bazblat>
 on the JavaScript side will translate to C<HTTP_ROOT/js/foobar/bazblat.js>
 
