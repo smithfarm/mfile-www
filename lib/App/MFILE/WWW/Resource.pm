@@ -691,7 +691,7 @@ sub _require_js {
 
         # currentEmployee 
         $r .= "currentUser: " . ( $ce ? to_json( $ce ) : 'null' ) . ',';
-        $r .= 'currentUserPriv: \'' . ( $cepriv || 'passerby' ) . '\',';
+        $r .= 'currentUserPriv: \'' . ( $cepriv || 'null' ) . '\',';
 
         # loginDialog
         $r .= 'loginDialogChallengeText: \'' . $site->MFILE_WWW_LOGIN_DIALOG_CHALLENGE_TEXT . '\',';
