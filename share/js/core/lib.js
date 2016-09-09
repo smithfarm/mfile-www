@@ -85,26 +85,35 @@ define ([
 
         // check current employee's privilege against a given ACL profile
         privCheck: function (p) {
-            var cep = currentUser('priv');
+
+            var cep = currentUser('priv'),
+                r,
+                yesno;
+
             if ( ! cep ) {
-                //console.log("Something is wrong: cannot determine priv level of current user!");
+                console.log("Something is wrong: cannot determine priv level of current user!");
                 return undefined;
-            } else {
-                console.log('privCheck comparing ' + p + ' against ACL ' + cep);
             }
+
             if (p === 'passerby' && cep) {
-                return true;
+                r = true;
+                yesno = "Yes.";
+            } else if (p === 'inactive' && (cep === 'inactive' || cep === 'active' || cep === 'admin')) {
+                r = true;
+                yesno = "Yes.";
+            } else if (p === 'active' && (cep === 'active' || cep === 'admin')) {
+                r = true;
+                yesno = "Yes.";
+            } else if (p === 'admin' && cep === 'admin') {
+                r = true;
+                yesno = "Yes.";
+            } else {
+                r = false;
+                yesno = "No.";
             }
-            if (p === 'inactive' && (cep === 'inactive' || cep === 'active' || cep === 'admin')) {
-                return true;
-            }
-            if (p === 'active' && (cep === 'active' || cep === 'admin')) {
-                return true;
-            }
-            if (p === 'admin' && cep === 'admin') {
-                return true;
-            }
-            return false;
+
+            console.log("Does " + cep + " user satisfy ACL " + p + "? " + yesno);
+            return r;
         },
 
         // right pad a string with spaces 
