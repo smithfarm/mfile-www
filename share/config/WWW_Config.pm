@@ -45,7 +45,7 @@ set( 'MFILE_WWW_HOST', 'localhost' );
 
 # MFILE_WWW_PORT
 #     default port number where WWW server will listen
-set( 'MFILE_WWW_PORT', 5000 );
+set( 'MFILE_WWW_PORT', 5001 );
 
 # MFILE_WWW_LOG_FILE
 #     full path of logfile
