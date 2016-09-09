@@ -174,13 +174,15 @@ define ([
             return r;
         },
         body: function () {
+            console.log("Entering html.body");
             var r = '';
             r += '<div class="leftright">';
 
             r += '<p class="alignleft" style="font-size: x-large; font-weight: bold">';
             r += cf('appName');
             r += ' <span style="font-size: normal; font-weight: normal;">';
-            r += cf('appVersion') + '</span>';
+            r += cf('appVersion');
+            r += '</span>';
             r += '</p>';
 
             r += '<p class="alignright"><span id="userbox">';
@@ -199,8 +201,9 @@ define ([
             r += '<div class="boxtopbot" id="result">&nbsp;</div>';
 
             r += '<div id="noticesline" style="font-size: small">';
-            r += appLib.fillNoticesLine();
+            // r += appLib.fillNoticesLine();
             r += '</div>';
+            console.log("Leaving html.body");
             return r;
         },
         //

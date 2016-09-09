@@ -56,7 +56,7 @@ define ([
 
     return function () {
 
-        console.log("Entering app/target-init");
+        console.log("Entering app/target-init (mfile-www version)");
 
         // round one - set up the targets
         dactionInitRoundOne();

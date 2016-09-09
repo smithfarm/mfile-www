@@ -60,13 +60,16 @@ define ([
     // and returns that value.
 
     return function (param, override) {
+        var r;
         if (override) {
             state[param] = override;
             return override;
         }
-        return (state.hasOwnProperty(param))
+        r = (state.hasOwnProperty(param))
             ? state[param]
             : module.config()[param];
+        console.log("cf function asked for value of parameter " + param + ", returning " + r);
+        return r;
     };
 
 });

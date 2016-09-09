@@ -70,6 +70,8 @@ define ([
     prototypes
 ) {
 
+    console.log("Entering mfile-www current-user function");
+
     // Initialization routine (run only once but the variables are available
     // to the current-user function and provide storage for the object it
     // returns)
