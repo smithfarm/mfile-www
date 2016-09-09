@@ -3,6 +3,7 @@ Build.PL
 Changes
 COPYING
 lib/App/MFILE/WWW.pm
+lib/App/MFILE/WWW/Dispatch.pm
 lib/App/MFILE/WWW/Resource.pm
 LICENSE
 Makefile.PL
