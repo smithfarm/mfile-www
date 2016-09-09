@@ -48,6 +48,7 @@ use File::Path;
 use File::ShareDir;
 use File::Spec;
 use Module::Load;
+use Module::Runtime qw( is_module_name require_module );
 use Plack::Builder;
 use Plack::Runner;
 use Try::Tiny;
@@ -264,12 +265,52 @@ operation>
 
 =cut
 
+sub _get_sharedir {
+    my ( $distro ) = @_;
+
+    # for distro, we allow both formats My::Distro and My-Distro
+    # distro might be just Foo, or Foo::Bar, or Foo-Bar
+    my @tmp_c;
+    if ( $distro =~ m/\:/ ) {
+        @tmp_c = split( '::', $distro ); 
+    } elsif ( $distro =~ m/\-/ ) {
+        @tmp_c = split( '-', $distro );
+    } else {
+        @tmp_c = ( $distro );
+    }
+    my $app_distro = join( '-', @tmp_c );
+    my $module = join( '::', @tmp_c );
+    my $app_module = $module . '::Resource';
+    die "$app_module is not a module name" unless is_module_name( $app_module );
+    print "Derived distro is $app_distro\n";
+
+    my $status = undef;
+    try {
+        require_module( $app_module );
+    } catch {
+        $status = "Module $app_module cannot be found. Bailing out!";
+    };
+    die $status if $status;
+    print "Derived module is $app_module\n";
+
+    my $distro_sharedir;
+    $status = undef;
+    try {
+        $distro_sharedir = File::ShareDir::dist_dir( $app_distro );
+        print "Derived distro sharedir is $distro_sharedir\n";
+    } catch {
+        $status = "Could not find a sharedir for distro $app_distro: $_";
+    };
+    die $status if $status;
+
+    return ( $app_distro, $app_module, $distro_sharedir );
+}
 
 print "App::MFILE::WWW ver. $VERSION\n";
 
 my $ddist = '';
 my $sitedir = '';
-my ( $ddist_sharedir, $mfile_sharedir, $http_root );
+my ( $mfile_sharedir, $http_root );
 
 # Determine uid we are running under and set $running_as_root
 my $pwuid = getpwuid( $< );
@@ -286,7 +327,8 @@ $mfile_sharedir = File::ShareDir::dist_dir( 'App-MFILE-WWW' );
 
 # determine if we are running in standalone or derived distribution mode
 GetOptions( 'ddist=s' => \$ddist, 'sitedir=s' => \$sitedir );
-$ddist =~ s/::/-/g; # convert Foo::Bar::Baz to Foo-Bar-Baz
+my ( $ddist_distro, $ddist_module, $ddist_sharedir ) = _get_sharedir( $ddist );
+exit(0);
 
 sub _symlink_paths {
     my ( $ddir ) = @_;
@@ -328,13 +370,6 @@ sub _create_symlink {
 # derived distribution mode
 if ( $ddist ) {
 
-    # first, try to get the name of derived distribution sharedir
-    try {
-        $ddist_sharedir = File::ShareDir::dist_dir( $ddist );
-    } catch {
-        print "Invalid derived distro '$ddist'\n";
-        exit;
-    };
     print "Derived distro is $ddist\n";
     print "Derived distro sharedir is $ddist_sharedir\n";
 
@@ -450,7 +485,7 @@ my $runner = Plack::Runner->new;
 # If only one is present, error exit. If neither are present, default to
 # MFILE_WWW_HOST and MFILE_WWW_PORT
 
-push @ARGV, ('--port=5001', '--reload');
+#push @ARGV, ('--port=5001', '--reload');
 
 $runner->parse_options(@ARGV);
 
