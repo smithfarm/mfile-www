@@ -280,7 +280,7 @@ sub _get_sharedir {
     }
     my $app_distro = join( '-', @tmp_c );
     my $module = join( '::', @tmp_c );
-    my $app_module = $module . '::Resource';
+    my $app_module = $module . '::Dispatch';
     die "$app_module is not a module name" unless is_module_name( $app_module );
     print "Derived distro is $app_distro\n";
 
@@ -291,13 +291,11 @@ sub _get_sharedir {
         $status = "Module $app_module cannot be found. Bailing out!";
     };
     die $status if $status;
-    print "Derived module is $app_module\n";
 
     my $distro_sharedir;
     $status = undef;
     try {
         $distro_sharedir = File::ShareDir::dist_dir( $app_distro );
-        print "Derived distro sharedir is $distro_sharedir\n";
     } catch {
         $status = "Could not find a sharedir for distro $app_distro: $_";
     };
@@ -305,30 +303,6 @@ sub _get_sharedir {
 
     return ( $app_distro, $app_module, $distro_sharedir );
 }
-
-print "App::MFILE::WWW ver. $VERSION\n";
-
-my $ddist = '';
-my $sitedir = '';
-my ( $mfile_sharedir, $http_root );
-
-# Determine uid we are running under and set $running_as_root
-my $pwuid = getpwuid( $< );
-#print "pwuid says you are running as $pwuid\n";
-my $running_as_root = ( $pwuid eq 'root' ) || 0;
-
-# Report the result
-print "Running as ";
-print "root\n" if $running_as_root;
-print "a normal user\n" if not $running_as_root;
-
-# get the App::MFILE::WWW distro sharedir
-$mfile_sharedir = File::ShareDir::dist_dir( 'App-MFILE-WWW' ); 
-
-# determine if we are running in standalone or derived distribution mode
-GetOptions( 'ddist=s' => \$ddist, 'sitedir=s' => \$sitedir );
-my ( $ddist_distro, $ddist_module, $ddist_sharedir ) = _get_sharedir( $ddist );
-exit(0);
 
 sub _symlink_paths {
     my ( $ddir ) = @_;
@@ -366,11 +340,38 @@ sub _create_symlink {
     return;
 }
 
+#
+# MAIN
+#
+print "App::MFILE::WWW ver. $VERSION\n";
+
+my $ddist = '';
+my $sitedir = '';
+my ( $mfile_sharedir, $http_root );
+
+# Determine uid we are running under and set $running_as_root
+my $pwuid = getpwuid( $< );
+#print "pwuid says you are running as $pwuid\n";
+my $running_as_root = ( $pwuid eq 'root' ) || 0;
+
+# Report the result
+print "Running as ";
+print "root\n" if $running_as_root;
+print "a normal user\n" if not $running_as_root;
+
+# get the App::MFILE::WWW distro sharedir
+$mfile_sharedir = File::ShareDir::dist_dir( 'App-MFILE-WWW' ); 
+
+# determine if we are running in standalone or derived distribution mode
+GetOptions( 'ddist=s' => \$ddist, 'sitedir=s' => \$sitedir );
+
 # if the user as specified a derived distribution, we might be running in
 # derived distribution mode
 if ( $ddist ) {
 
-    print "Derived distro is $ddist\n";
+    my ( $ddist_distro, $ddist_module, $ddist_sharedir ) = _get_sharedir( $ddist );
+    print "Derived distro is $ddist_distro\n";
+    print "Derived module is $ddist_module\n";
     print "Derived distro sharedir is $ddist_sharedir\n";
 
     # in derived distro mode, we need symlinks; check if they exist
