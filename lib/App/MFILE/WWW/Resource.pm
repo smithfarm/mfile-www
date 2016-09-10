@@ -569,8 +569,8 @@ sub _require_js {
         $r .= 'appName: \'' . $site->MFILE_APPNAME . '\',';
         $r .= 'appVersion: \'' . $meta->META_MFILE_APPVERSION . '\',';
 
-        # connectToRestServer (false means "standalone mode")
-        $r .= 'connectToRestServer: ' . $meta->META_WWW_CONNECT_TO_REST_SERVER . ',';
+        # standaloneMode (boolean; false means "derived distro mode")
+        $r .= 'standaloneMode: \'' . ( $meta->META_WWW_STANDALONE_MODE ? 'true' : 'false' ) . '\',';
 
         # currentEmployee 
         $r .= "currentUser: " . ( $ce ? to_json( $ce ) : 'null' ) . ',';

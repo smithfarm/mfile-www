@@ -369,10 +369,7 @@ sub init {
     return $status if $status->not_ok;
 
     # * mode-specific meta configuration
-    $meta->set( 'META_WWW_CONNECT_TO_REST_SERVER', ( $mode eq 'STANDALONE' 
-        ? 'false'
-        : 'true' ) 
-    );
+    $meta->set( 'META_WWW_STANDALONE_MODE', ( $mode eq 'STANDALONE' ) );
 
     # * set up logging
     return $CELL->status_not_ok( "MFILE_APPNAME not set!" ) if not $site->MFILE_APPNAME;

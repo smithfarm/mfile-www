@@ -99,15 +99,6 @@ sub is_authorized {
     #$log->debug( "the session is " . ( $yesno ? '' : 'not ' ) . "fresh" );
 
     #
-    # we are not to connect to REST server, so authorization is meaningless
-    #
-    if ( $meta->META_WWW_CONNECT_TO_REST_SERVER eq 'false' ) {
-        $log->debug( 'is_authorized: we are not to connect to REST server, so authorization is meaningless' );
-        $session->set('last_seen', time); 
-        return 1;
-    }
-
-    #
     # authorized session
     #
     if ( $ce = $session->get('currentEmployee') and
