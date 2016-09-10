@@ -265,6 +265,12 @@ operation>
 
 =cut
 
+# global variables
+my $mfile_sharedir = File::ShareDir::dist_dir( 'App-MFILE-WWW' ); 
+my $running_as_root = ( 'root' eq getpwuid( $< ) ) || 0;
+my ( $ddist_distro, $dispatch_module, $ddist_sharedir );
+
+
 sub _get_sharedir {
     my ( $distro ) = @_;
 
@@ -347,20 +353,12 @@ print "App::MFILE::WWW ver. $VERSION\n";
 
 my $ddist = '';
 my $sitedir = '';
-my ( $mfile_sharedir, $http_root );
-
-# Determine uid we are running under and set $running_as_root
-my $pwuid = getpwuid( $< );
-#print "pwuid says you are running as $pwuid\n";
-my $running_as_root = ( $pwuid eq 'root' ) || 0;
+my $http_root;
 
 # Report the result
 print "Running as ";
 print "root\n" if $running_as_root;
 print "a normal user\n" if not $running_as_root;
-
-# get the App::MFILE::WWW distro sharedir
-$mfile_sharedir = File::ShareDir::dist_dir( 'App-MFILE-WWW' ); 
 
 # determine if we are running in standalone or derived distribution mode
 GetOptions( 'ddist=s' => \$ddist, 'sitedir=s' => \$sitedir );
@@ -369,9 +367,8 @@ GetOptions( 'ddist=s' => \$ddist, 'sitedir=s' => \$sitedir );
 # derived distribution mode
 if ( $ddist ) {
 
-    my ( $ddist_distro, $ddist_module, $ddist_sharedir ) = _get_sharedir( $ddist );
+    ( $ddist_distro, $dispatch_module, $ddist_sharedir ) = _get_sharedir( $ddist );
     print "Derived distro is $ddist_distro\n";
-    print "Derived module is $ddist_module\n";
     print "Derived distro sharedir is $ddist_sharedir\n";
 
     # in derived distro mode, we need symlinks; check if they exist
@@ -422,8 +419,11 @@ if ( $ddist ) {
     die "Running as root in standalone mode; nothing to do" if $running_as_root;
     print "Running in standalone mode\n";
     $http_root = $mfile_sharedir;
+    $dispatch_module = 'App::MFILE::WWW::Dispatch';
 
 }
+
+print "Dispatch module is $dispatch_module\n";
 
 #
 #
@@ -431,8 +431,6 @@ if ( $ddist ) {
 # "derived distribution" - $ddist is distro name/true)
 #
 #
-
-print "\nInitializing...\n";
 
 #
 # prepare arguments for the call to App::MFILE::WWW::init
@@ -475,7 +473,7 @@ load $ddist_with_colons;
 }
 $meta->set('META_MFILE_APPVERSION', $ddist_version);
 
-print "Version is " . $meta->META_MFILE_APPVERSION . "\n";
+print "Application version is " . $meta->META_MFILE_APPVERSION . "\n";
 print "Log messages will be written to " . $site->MFILE_WWW_LOG_FILE .  "\n";
 print "JS and CSS files will be served from $http_root\n";
 print "Starting server\n";
@@ -486,7 +484,10 @@ my $runner = Plack::Runner->new;
 # If only one is present, error exit. If neither are present, default to
 # MFILE_WWW_HOST and MFILE_WWW_PORT
 
-#push @ARGV, ('--port=5001', '--reload');
+push @ARGV, ( 
+    '--host=' . $site->MFILE_WWW_HOST,
+    '--port=' . $site->MFILE_WWW_PORT,
+);
 
 $runner->parse_options(@ARGV);
 
