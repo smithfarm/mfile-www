@@ -180,4 +180,167 @@ sub is_authorized {
     return 1;
 }
 
+
+=head2 process_post
+
+AJAX calls come in as POST requests with a JSON body of the following structure:
+
+    { method: "PUT", path: "employee/nick", body: { nick: "bubba", realname: "Bubba Jones" } }
+
+There is one special case: the POST request from the login dialog looks like this:
+
+    { method: "LOGIN", path: "login", body: { nam: 'nick', pwd: 'kcin" } }
+
+This structure represents an HTTP request to the REST server. The request is sent
+via the LWP::UserAgent object stored in the session data. The status object received
+in the response is forwarded back to the JavaScript side.
+
+
+=cut
+
+sub process_post {
+    my $self = shift;
+    $log->debug( "entering process_post" );
+
+    my $r = $self->request;
+    my $session = Plack::Session->new( $r->{'env'} );
+    my $ajax = $self->context->{'request_body'};  # request body (Perl string)
+
+    if ( ! $ajax ) {
+        $log->crit( 'POST request received, but without a body' );
+        return 0;
+    }
+
+    my $method = $ajax->{'method'};
+    my $path = $ajax->{'path'};
+    my $body = $ajax->{'body'} || {};
+
+    $log->debug( "process_post: method $method, path $path, body " . Dumper $body );
+
+    if ( ! $method or ! $path or ! $body ) {
+        $log->crit( 'POST request received, but missing mandatory attribute(s) - ' .
+                    'here is the entire request body: ' . Dumper( $ajax ) );
+        return 0;
+    }
+
+    # two possibilities: login/logout attempt or normal AJAX call
+    # - login/logout attempt
+    if ( $method =~ m/^LOGIN/i ) {
+        $log->debug( "Incoming login/logout attempt" );
+        if ( $path =~ m/^login/i ) {
+            return $self->_login_dialog( $body, $session );
+        } else {
+            return $self->_logout( $body, $session );
+        }
+    }
+
+    # - normal AJAX call
+    my $rr = rest_req( $session->get('ua'), {
+        server => $site->MFILE_REST_SERVER_URI,
+        method => $method,
+        path => $path,
+        req_body => $body,
+    } );
+    my $hr = $rr->{'hr'};
+    return $self->_prep_ajax_response( $hr, $rr->{'body'} );
+}
+
+
+sub _login_dialog {
+    my ( $self, $body, $session ) = @_;
+    my $nick = $body->{'nam'};
+    my $password = $body->{'pwd'};
+
+    $log->debug( "Entering Resource.pm->_login_dialog" );
+    $log->debug( "Authenticating $nick to REST server " . $site->MFILE_REST_SERVER_URI );
+   
+    if ( ref($session->get('ua')) eq 'LWP::UserAgent' ) {
+        $log->debug("_login_dialog: there is already a LWP::UserAgent");
+    } else {
+        $session->set('ua', LWP::UserAgent->new( 
+            cookie_jar => { file => "$ENV{HOME}/.cookies" . $session->id . ".txt" } 
+        ) );
+        $log->debug( "_login_dialog: User agent created OK" ) if ref($session->get('ua')) eq 'LWP::UserAgent';
+    }
+
+    my $rr = rest_req( $session->get('ua'), {
+        server => $site->MFILE_REST_SERVER_URI,
+        nick => $nick,
+        password => $password,
+        path => 'employee/current',
+    } );
+    my $hr = $rr->{'hr'};
+    my $body_json = $rr->{'body'};
+
+
+    my $status;
+    if ( $hr->code == 200 ) {
+        $session->set( 'currentEmployee', $body_json->{'payload'} );
+        $log->debug( "Login successful, currentEmployee is now " . Dumper $body_json->{'payload'} );
+        return 1 if $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and ! $meta->META_LOGIN_BYPASS_STATE;
+        $status = $CELL->status_ok( 'MFILE_WWW_LOGIN_OK', payload => $body_json->{'payload'} );
+    } else {
+        $session->set( 'currentEmployee', undef );
+        $log->debug( "Login unsuccessful, reset currentEmployee to undef" );
+        return 0 if $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and ! $meta->META_LOGIN_BYPASS_STATE;
+        $status = $CELL->status_not_ok( 
+            'MFILE_WWW_LOGIN_FAIL: %s', 
+            args => [ $hr->code ],
+            payload => { code => $hr->code, message => $hr->message },
+        );
+    }
+    $self->response->header( 'Content-Type' => 'application/json' );
+    $self->response->body( to_json( $status->expurgate ) );
+    return 1;
+}
+         
+sub _logout {
+    my ( $self, $body, $session ) = @_;
+    $log->debug( "mainLogout form handler expiring session " . $session->id );
+    init_session( $session );
+    $self->response->header( 'Content-Type' => 'application/json' );
+    $self->response->body( to_json( $CELL->status_ok( 'MFILE_WWW_LOGOUT_OK' )->expurgate ) );
+    return 1;
+}
+
+sub _prep_ajax_response {
+    my ( $self, $hr, $body_json ) = @_;
+    my $expurgated_status;
+    if ( $hr->is_success ) {
+        $expurgated_status = $body_json;
+    } else {
+        $expurgated_status = $CELL->status_err( 
+            "MFILE_WWW_REST_FAIL: %s", 
+            args => [ $hr->code ],
+            payload => { code => $hr->code, message => $hr->message },
+        )->expurgate;
+    }
+    $self->response->header('Content-Type' => 'application/json; charset=UTF-8' );
+    $self->response->header('Content-Encoding' => 'UTF-8' );
+    $self->response->body( JSON->new->encode( $expurgated_status ) );
+    return 1;
+}
+
+=head3 init_session
+
+Takes a session and an IP address. Initializes the session so it no longer
+contains any information that might tie it to the current user.
+
+=cut
+
+sub init_session {
+    my ( $session ) = validate_pos( @_, 
+        { type => HASHREF, can => 'id' },
+    );
+
+    $session->set('eid', undef );
+    $session->set('nick', undef );
+    $session->set('priv', undef );
+    $session->set('ip_addr', undef );
+    $session->set('last_seen', undef );
+    $session->set('target', undef );
+    $session->expire;
+    return;
+}
+
 1;
