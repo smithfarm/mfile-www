@@ -435,7 +435,7 @@ print "Dispatch module is $dispatch_module\n";
 #
 # prepare arguments for the call to App::MFILE::WWW::init
 #
-my %ARGS = ( debug_mode => 1 );
+my %ARGS = ();
 if ( $ddist and $ddist_sharedir ) {
     $ARGS{mode} = 'DDIST';
     if ( is_directory_viable( $ddist_sharedir ) ) {

@@ -39,12 +39,16 @@
 #     the name of this web client, e.g. 'MFILE-www'
 set( 'MFILE_APPNAME', 'mfile-www' );
 
+# MFILE_WWW_DEBUG_MODE
+#     turn debug-level log messages on and off
+set( 'MFILE_WWW_DEBUG_MODE', 1 );
+
 # MFILE_WWW_HOST
-#     default hostname where WWW server will listen
+#     hostname/IP address where WWW server will listen
 set( 'MFILE_WWW_HOST', 'localhost' );
 
 # MFILE_WWW_PORT
-#     default port number where WWW server will listen
+#     port number where WWW server will listen
 set( 'MFILE_WWW_PORT', 5001 );
 
 # MFILE_WWW_LOG_FILE
@@ -57,6 +61,8 @@ set( 'MFILE_WWW_LOG_FILE_RESET', 1 );
 
 # MFILE_REST_SERVER_URI
 #     determines the URI where App::MFILE::WWW will forward all AJAX calls
+#     N.B.: used in derived distro mode only; App::MFILE::WWW itself does
+#     note generate any AJAX calls
 set( 'MFILE_REST_SERVER_URI', 'http://localhost:5000' );
 
 # MFILE_URI_MAX_LENGTH
@@ -64,16 +70,30 @@ set( 'MFILE_REST_SERVER_URI', 'http://localhost:5000' );
 set( 'MFILE_URI_MAX_LENGTH', 1000 );
 
 # MFILE_WWW_BYPASS_LOGIN_DIALOG
-#     bypass the login dialog - 
-#     if you set this to a true value, be sure to also set
-#     MFILE_WWW_FORCE_LOGIN_CREDENTIALS
+#     bypass the login dialog and use default login credentials (see next
+#     param)
 set( 'MFILE_WWW_BYPASS_LOGIN_DIALOG', 0 );
 
-# MFILE_WWW_FORCE_LOGIN_CREDENTIALS
-set( 'MFILE_WWW_FORCE_LOGIN_CREDENTIALS', {
+# MFILE_WWW_DEFAULT_LOGIN_CREDENTIALS
+#     when bypassing login dialog, use these credentials
+set( 'MFILE_WWW_DEFAULT_LOGIN_CREDENTIALS', {
     'nam' => 'root',
-    'pwd' => 'immutable',
+    'pwd' => 'root'
 } );
+
+# MFILE_WWW_STANDALONE_CREDENTIALS_DATABASE
+set( 'MFILE_WWW_STANDALONE_CREDENTIALS_DATABASE', [
+    {
+        'nam' => 'root',
+        'pwd' => 'root',
+        'priv' => 'admin',
+    },
+    {
+        'nam' => 'demo',
+        'pwd' => 'demo',
+        'priv' => 'passerby',
+    },
+] );
 
 # MFILE_WWW_LOGIN_DIALOG_CHALLENGE_TEXT
 #     text displayed in the login dialog

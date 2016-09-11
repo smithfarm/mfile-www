@@ -111,7 +111,7 @@ various widgets are used.
 =head1 QUICK START (DEMO)
 
 L<App::MFILE::WWW> can be run as a standalone HTTP server providing a
-self-contained demo application.
+self-contained demo web application, or "web frontend".
 
 Assuming L<App::MFILE::WWW> has been installed properly, this mode of operation
 can be started by running C<mfile-www>, as a normal user (even 'nobody'), with
@@ -126,61 +126,10 @@ happens when the start-up script is run, see the POD of C<mfile-www> itself
 - e.g. "man mfile-www".
 
 
-
-=head1 WRITING A DERIVED CLIENT
-
-Now that you have the demo running, you probably want to roll up your sleeves
-and start using this to write your own application. Now is a good time to read
-about the basic architecture of applications based on L<App::MFILE::WWW>.
-
-
-
-=head2 Stack
-
-The full stack, of which L<App::MFILE::WWW> is a part, consists of the
-following components:
-
-=over
-
-=item * Database engine
-
-For storing application data.
-
-=item * Perl DBI
-
-For interfacing between the Perl code and the database engine.
-
-=item * REST server
-
-A REST server, such as L<App::Dochazka::REST>, implements a data model and
-provides an HTTP interface to that model.
-
-=item * optional CLI client/frontend
-
-An optional Command Line Interface (frontend) can provide a command line
-interface to the REST server.
-
-=item * WWW client/frontend
-
-The WWW frontend, built from this distro, is a web server that serves HTML,
-CSS, and JavaScript code to users to provide them with a menu-driven "browser
-experience" of the application.
-
-=back
-
-Conceptually, the frontends (or "clients") act as proxies between the user and
-the REST server in this setup. Taking this one step further, the REST server
-itself is a proxy between the client and the database engine.
-
-Strict separation between backend (REST server) and frontend (clients) is a
-technical measure that makes the application as a whole more robust.
-
-
-
 =head1 DERIVED WWW CLIENTS
 
 When you write your own web frontend using this distro, from
-L<App::MFILE::WWW>'s perspective it is a "derived client" and will be reffered
+L<App::MFILE::WWW>'s perspective it is a "derived client" and will be referred
 to as such in this document.
 
 
@@ -260,23 +209,14 @@ like any other page (re)load and the path is simply ignored.
 =item * if the session is expired or invalid, any incoming GET request will
 cause the login dialog to be displayed.
 
-=item * well-formed POST requests are assumed to be AJAX calls and are
-directed to the C<process_post> routine, which first examines the request body, 
-which must adhere to a simple structure:
-
-    { method: "GET", path: "employee/current", body: { ... } }
-
-where 'method' is any HTTP method accepted by the REST server, 'path' is a
-valid path to a REST server resource, and 'body' is the content body to be
-sent in the HTTP request to the REST server. Provided the request is properly
-authorized and the body is well-formed, the request is forwarded to the REST
-server via the L<App::MFILE> package's C<rest_req> routine and the REST
-server's response is sent back to the user's browser, where it is processed by
-the JavaScript code.
+=item * well-formed POST requests are directed to the C<process_post> routine
+in L<App::MFILE::WWW::Dispatch>. In derived-distro mode, the derived distro
+must provide its own dispatch module.
 
 =item * under ordinary operation, the user will spend 99% of her time
 interacting with the JavaScript code running in her browser, which will
-communicate asynchronously as needed with the REST server via AJAX calls.
+communicate asynchronously as needed with the back-end (which must be
+implemented separately) via AJAX calls.
 
 =back
 
@@ -377,7 +317,7 @@ sub init {
     if ( exists $ARGS{'debug_mode'} ) {
         $debug_mode = $ARGS{'debug_mode'};
     } else {
-        $debug_mode = $site->MFILE_REST_DEBUG_MODE || 0;
+        $debug_mode = $site->MFILE_WWW_DEBUG_MODE || 0;
     }
     unlink $site->MFILE_WWW_LOG_FILE if $site->MFILE_WWW_LOG_FILE_RESET;
     Log::Any::Adapter->set('File', $site->MFILE_WWW_LOG_FILE );
