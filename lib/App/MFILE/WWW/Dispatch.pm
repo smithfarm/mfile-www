@@ -274,9 +274,20 @@ sub _login_dialog {
 
     my ( $code, $message, $body_json );
     if ( $standalone ) {
-        $code = 200;
-        $message = 'OK';
-        $body_json = { payload => { nick => "root", priv => "admin" } };
+        # check nam and pwd against MFILE_WWW_STANDALONE_CREDENTIALS_DATABASE
+        my $db = $site->MFILE_WWW_STANDALONE_CREDENTIALS_DATABASE;
+        $code = 401;
+        $message = 'Unauthorized';
+        for my $entry (@$db) {
+            if ( $nick eq $entry->{nam} ) {
+                if ( $password eq $entry->{pwd} ) {
+                    $code = 200;
+                    $message = 'OK';
+                    $body_json = { payload => { nick => $nick, priv => $entry->{priv} } };
+                }
+                last;
+            }
+        }
     } else {
         my $rr = rest_req( $session->get('ua'), {
             server => $site->MFILE_REST_SERVER_URI,
