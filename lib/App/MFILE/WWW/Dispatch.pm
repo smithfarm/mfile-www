@@ -234,9 +234,10 @@ sub process_post {
         }
     }
 
-    # - normal AJAX call
+    # - normal AJAX call (shown for didactic purposes only; App::MFILE::WWW
+    #   itself doesn't generate any AJAX calls)
     my $rr = rest_req( $session->get('ua'), {
-        server => $site->MFILE_REST_SERVER_URI,
+        server => $site->MFILE_REST_SERVER_URI || 'http://localhost:5000',
         method => $method,
         path => $path,
         req_body => $body,
@@ -252,7 +253,9 @@ sub _login_dialog {
     my $password = $body->{'pwd'};
 
     $log->debug( "Entering Resource.pm->_login_dialog" );
-    $log->debug( "Authenticating $nick to REST server " . $site->MFILE_REST_SERVER_URI );
+    $log->debug( 
+        "Authenticating $nick to server " . ( $site->MFILE_REST_SERVER_URI || 'http://localhost:5000' )
+    );
    
     if ( ref($session->get('ua')) eq 'LWP::UserAgent' ) {
         $log->debug("_login_dialog: there is already a LWP::UserAgent");
