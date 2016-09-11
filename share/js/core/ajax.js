@@ -33,7 +33,7 @@
 // ajax.js
 //
 // provides a function that sends AJAX requests to the App::MFILE::WWW server
-// (which forwards them to the REST server) and takes action based on the
+// (which forwards them to the backend server) and takes action based on the
 // HTTP response received.
 //
 // The 'ajax' function takes three arguments:
@@ -48,19 +48,19 @@
 //
 // In all cases except login/logout, the MFILE AJAX Object looks like this:
 // {
-//     "method": any HTTP method accepted by the REST server
-//     "path": valid path to REST server resource
-//     "body": content body to be sent to REST server (can be null)
+//     "method": any HTTP method accepted by the backend server
+//     "path": valid path to backend server resource
+//     "body": content body to be sent to backend server (can be null)
 // }
 //
-// MFILE AJAX Object for _login_ to REST server:
+// MFILE AJAX Object for _login_ to backend server:
 // {
 //     "method": "LOGIN",
 //     "path": "login",
 //     "body": { "nam": $USERNAME, "pas": $PASSWORD }
 // }
 //
-// MFILE AJAX Object for _logout_ from REST server:
+// MFILE AJAX Object for _logout_ from backend server:
 // {
 //     "method": "LOGIN",
 //     "path": "logout",
@@ -79,7 +79,7 @@ define ([
     cf
 ) {
 
-    var rest_req = function (mfao, scb, fcb) {
+    var req = function (mfao, scb, fcb) {
             // mfao is 'MFILE AJAX Object'
             // scb is 'Success Call Back' 
             // fcb is 'Failure Call Back' 
@@ -111,6 +111,6 @@ define ([
                 }
             });
         };
-    return rest_req;
+    return req;
 
 });

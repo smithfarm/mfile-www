@@ -59,12 +59,6 @@ set( 'MFILE_WWW_LOG_FILE', $ENV{'HOME'} . "/.mfile-www.log" );
 #     should the logfile be deleted/wiped/unlinked/reset before each use
 set( 'MFILE_WWW_LOG_FILE_RESET', 1 );
 
-# MFILE_REST_SERVER_URI
-#     determines the URI where App::MFILE::WWW will forward all AJAX calls
-#     N.B.: used in derived distro mode only; App::MFILE::WWW itself does
-#     note generate any AJAX calls
-set( 'MFILE_REST_SERVER_URI', 'http://localhost:5000' );
-
 # MFILE_URI_MAX_LENGTH
 #     see lib/App/MFILE/WWW/Resource.pm
 set( 'MFILE_URI_MAX_LENGTH', 1000 );

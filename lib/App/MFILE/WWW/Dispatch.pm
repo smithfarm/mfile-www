@@ -41,7 +41,6 @@ use strict;
 use warnings;
 
 use App::CELL qw( $CELL $log $meta $site );
-use App::MFILE::HTTP qw( rest_req );
 use Data::Dumper;
 use JSON;
 use LWP::UserAgent;
@@ -194,13 +193,9 @@ JSON with the following simple structure:
 
     { method: HTTP_METHOD, path: RESOURCE, body: BODY_JSON }
 
-where HTTP_METHOD is any HTTP method accepted by the REST server, RESOURCE is a
-valid path to a REST server resource, and BODY_JSON is the content body to be
-sent in the HTTP request to the REST server. Provided the request is properly
-authorized and the body is well-formed, the request is forwarded to the REST
-server via the L<App::MFILE> package's C<rest_req> routine and the REST
-server's response is sent back to the user's browser, where it is processed by
-the JavaScript code.
+where HTTP_METHOD is any HTTP method accepted by the backend server, RESOURCE
+is a valid path to a backend server resource, and BODY_JSON is the content body
+to be sent in the HTTP request to the backend server.
 
 In derived-distro mode, this structure is expected to be translated into a
 "real" HTTP request, to be forwarded via the LWP::UserAgent object stored in
@@ -240,7 +235,7 @@ sub process_post {
         return 0;
     }
 
-    # POST is used only for login/logout
+    # POST is used only for login/logout ATM
     if ( $method =~ m/^LOGIN/i ) {
         $log->debug( "Incoming login/logout attempt" );
         if ( $path =~ m/^login/i ) {
@@ -250,7 +245,7 @@ sub process_post {
         }
     }
 
-    $log->crit( 'Invalid POST request!' );
+    $log->crit( "Asked to perform an AJAX call, but feature is not implemented!" );
     return 0;
 }
 
@@ -289,15 +284,8 @@ sub _login_dialog {
             }
         }
     } else {
-        my $rr = rest_req( $session->get('ua'), {
-            server => $site->MFILE_REST_SERVER_URI,
-            nick => $nick,
-            password => $password,
-            path => 'employee/current',
-        } );
-        $code = $rr->{'hr'}->code;
-        $message = $rr->{'hr'}->message;
-        $body_json = $rr->{'body'};
+        $log->crit( "Not running in standalone mode" );
+        return 0;
     }
 
     my $status;
@@ -334,7 +322,7 @@ sub _logout {
 
 Takes a single argument, which is assumed to be number of seconds since
 epoch when the session was last seen. This is compared to "now" and if the
-difference is greater than the MFILE_REST_SESSION_EXPIRATION_TIME site
+difference is greater than the MFILE_WWW_SESSION_EXPIRATION_TIME site
 parameter, the return value is false, otherwise true.
 
 =cut
