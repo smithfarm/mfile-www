@@ -817,3 +817,22 @@ Revision history for App::MFILE::WWW
 0.139 2016-09-05 08:29 CEST
 - tests: drop t/boilerplate.t
 
+0.140 2016-09-11 22:22 CEST
+- current-user: do not fall back to passerby if priv undefined
+- doc: fix POD markup in bin/mfile-www
+- Resource.pm: start with null currentUserPriv
+- core/lib.js: improve diagnostic message
+- js: add console.log() calls to shed light on code paths
+- config: set MFILE_WWW_PORT to right value
+- bin/mfile-www: improved --ddist handling
+- cleanup: concentrate subroutines at the top in bin/mfile-www
+- Move is_authorized() from Resource.pm to Dispatch.pm
+- Implement standaloneMode boolean config param
+- Get listen host/port from configuration
+- Move login dialog and POST processing to Dispatch.pm
+- bin/mfile-www: use $dispatch_module instead of hard-coding
+- Make debug mode controllable via MFILE_WWW_DEBUG_MODE config param
+- Resource.pm, Dispatch.pm: support login/logout
+- Implement login/logout functionality in standalone mode
+- login dialog: fail properly on bad login creds
+
