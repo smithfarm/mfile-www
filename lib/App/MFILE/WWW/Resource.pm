@@ -109,6 +109,7 @@ This is the first method called on every incoming request.
 
 sub service_available {
     my $self = shift;
+    $log->debug( "Entering " . __PACKAGE__ . "::service_available()" );
     $log->info( "Incoming " . $self->request->method . " request for " . $self->request->path_info );
     $self->{'context'} = {};
     return 1;
@@ -193,26 +194,6 @@ sub uri_too_long {
     ( length $uri > $site->MFILE_URI_MAX_LENGTH )
         ? 1
         : 0;
-}
-
-
-=head3 _is_fresh
-
-Takes a single argument, which is assumed to be number of seconds since
-epoch when the session was last seen. This is compared to "now" and if the
-difference is greater than the MFILE_REST_SESSION_EXPIRATION_TIME site
-parameter, the return value is false, otherwise true.
-
-=cut
-
-sub _is_fresh {
-    my ( $session ) = validate_pos( @_, { type => HASHREF, can => 'id' } );
-
-    return 0 unless my $last_seen = $session->get('last_seen');
-
-    return ( time - $last_seen > $site->MFILE_WWW_SESSION_EXPIRATION_TIME )
-        ? 0
-        : 1;
 }
 
 
@@ -301,6 +282,9 @@ FIXME: might be worth spinning this off into a separate module.
 
 sub main_html {
     my ( $ce, $cepriv ) = @_;
+
+    $log->debug( "Entering " . __PACKAGE__ . "::main_html() with \$ce " .
+                 Dumper($ce) . " and \$cepriv " . $cepriv );
 
     my $r = '<!DOCTYPE html><html>';
 
@@ -401,24 +385,24 @@ sub _require_js {
     $r .= 'requirejs.config({ config: {';
     $r .= '\'cf\': { ';
 
-        # appName, appVersion
-        $r .= 'appName: \'' . $site->MFILE_APPNAME . '\',';
-        $r .= 'appVersion: \'' . $meta->META_MFILE_APPVERSION . '\',';
+    # appName, appVersion
+    $r .= 'appName: \'' . $site->MFILE_APPNAME . '\',';
+    $r .= 'appVersion: \'' . $meta->META_MFILE_APPVERSION . '\',';
 
-        # standaloneMode (boolean; false means "derived distro mode")
-        $r .= 'standaloneMode: \'' . ( $meta->META_WWW_STANDALONE_MODE ? 'true' : 'false' ) . '\',';
+    # standaloneMode (boolean; false means "derived distro mode")
+    $r .= 'standaloneMode: \'' . ( $meta->META_WWW_STANDALONE_MODE ? 'true' : 'false' ) . '\',';
 
-        # currentEmployee 
-        $r .= "currentUser: " . ( $ce ? to_json( $ce ) : 'null' ) . ',';
-        $r .= 'currentUserPriv: \'' . ( $cepriv || 'null' ) . '\',';
+    # currentEmployee 
+    $r .= "currentUser: " . ( $ce ? to_json( $ce ) : 'null' ) . ',';
+    $r .= 'currentUserPriv: \'' . ( $cepriv || 'null' ) . '\',';
 
-        # loginDialog
-        $r .= 'loginDialogChallengeText: \'' . $site->MFILE_WWW_LOGIN_DIALOG_CHALLENGE_TEXT . '\',';
-        $r .= 'loginDialogMaxLengthUsername: ' . $site->MFILE_WWW_LOGIN_DIALOG_MAXLENGTH_USERNAME . ',';
-        $r .= 'loginDialogMaxLengthPassword: ' . $site->MFILE_WWW_LOGIN_DIALOG_MAXLENGTH_PASSWORD . ',';
+    # loginDialog
+    $r .= 'loginDialogChallengeText: \'' . $site->MFILE_WWW_LOGIN_DIALOG_CHALLENGE_TEXT . '\',';
+    $r .= 'loginDialogMaxLengthUsername: ' . $site->MFILE_WWW_LOGIN_DIALOG_MAXLENGTH_USERNAME . ',';
+    $r .= 'loginDialogMaxLengthPassword: ' . $site->MFILE_WWW_LOGIN_DIALOG_MAXLENGTH_PASSWORD . ',';
 
-        # dummyParam in last position so we don't have to worry about comma/no comma
-        $r .= 'dummyParam: null';
+    # dummyParam in last position so we don't have to worry about comma/no comma
+    $r .= 'dummyParam: null';
 
     $r .= '} } });';
     $r .= '</script>';
