@@ -9,11 +9,6 @@ App::MFILE::WWW
 
 Web UI development toolkit with prototype demo app
 
-Version
-=======
-
-Version 0.137
-
 License
 =======
 
