@@ -49,41 +49,26 @@ define ([
         // <span> element at the top right of the "screen" (i.e. browser
         // window) -- called from html.js
         //
+        // Derived apps will want to overlay this function. See
+        // App::Dochazka::WWW's version for an example.
+        //
         fillUserBox: function () {
 
+            console.log("Entering mfile-www fillUserBox function");
+
             var r = '', 
-                cu = currentUser(),
-                cunick,
-                cupriv,
-                cumasq;
+                cu = currentUser('obj'),
+                nick,
+                priv = currentUser('priv') || 'null';
 
-            if (cu) {
-                cunick = cu.obj.nick || null;
-                cupriv = cu.priv || 'passerby';
-                cumasq = cu.flag1; // use flag1 as masquerade state
+            if (cu === null) {
+                nick = '&lt;NONE&gt'
+            } else if (typeof cu === 'object' && 'nick' in cu) {
+                nick = cu.nick;
             } else {
-                cunick = null;
-                cupriv = 'passerby';
-                cumasq = undefined;
+                nick = 'ERROR';
             }
-
-            if (cumasq) {
-                r += '<b>!!! ';
-            }
-
-            r += 'Employee: ';
-            r += cunick ? cu.obj.nick : '&lt;NONE&gt;';
-            if (cumasq) {
-                r += '(MASQUERADE)';
-            } else {
-                if (cupriv === 'admin') {
-                    r += '&nbsp;ADMIN';
-                }
-            }
-
-            if (cumasq) {
-                r += ' !!!</b>';
-            }
+            r += 'User: ' + nick + ' (' + priv + ')';
 
             return r;
 

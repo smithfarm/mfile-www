@@ -50,31 +50,21 @@ define([
     return function () {
         var displayLogoutMessage = function () {
                 $('#mainarea').html(html.logout());
-                setTimeout(function () { location.reload(); }, 1500);
+                setTimeout(function () { location.reload(); }, 500);
             },
-            logout;
+            rest = {
+                method: 'LOGIN',
+                path: 'logout',
+                body: null
+            },
+            // success callback
+            sc = function (status) {
+                $('#result').html('Logout successful: ' + status.text);
+                displayLogoutMessage();
+            },
+            // failure callback
+            fc = null;
 
-        // if in standalone mode (i.e. if connectToRestServer is false),
-        // 'logout' means just reload the page
-        if (cf('connectToRestServer')) {
-            logout = function () {
-                var rest = {
-                        method: 'LOGIN',
-                        path: 'logout',
-                        body: null
-                    },
-                    // success callback
-                    sc = function (status) {
-                        $('#result').html('Logout successful: ' + status.text);
-                        displayLogoutMessage();
-                    },
-                    // failure callback
-                    fc = null;
-                ajax(rest, sc, fc);
-            };
-        } else {
-            logout = function () { displayLogoutMessage(); };
-        }
-        logout();
+        ajax(rest, sc, fc);
     }
 });

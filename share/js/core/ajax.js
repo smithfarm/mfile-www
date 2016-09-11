@@ -84,12 +84,12 @@ define ([
             // scb is 'Success Call Back' 
             // fcb is 'Failure Call Back' 
             $('#result').css('text-align', 'center');
-            $('#result').html('* * * Communicating with REST server * * *');
+            $('#result').html('* * * AJAX call * * *');
             console.log("MFILE.lib.AJAX", mfao);
             $.ajax({
                 'url': '/',
                 'data': JSON.stringify(mfao),
-                'type': 'POST',
+                'method': 'POST',
                 'processData': false,
                 'contentType': 'application/json'
             })
@@ -111,9 +111,6 @@ define ([
                 }
             });
         };
-    if (cf('connectToRestServer')) {
-        return rest_req;
-    }
-    return function () {};
+    return rest_req;
 
 });

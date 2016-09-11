@@ -174,7 +174,6 @@ define ([
             return r;
         },
         body: function () {
-            console.log("Entering html.body");
             var r = '';
             r += '<div class="leftright">';
 
@@ -203,7 +202,6 @@ define ([
             r += '<div id="noticesline" style="font-size: small">';
             // r += appLib.fillNoticesLine();
             r += '</div>';
-            console.log("Leaving html.body");
             return r;
         },
         //

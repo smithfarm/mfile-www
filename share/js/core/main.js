@@ -30,12 +30,10 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ************************************************************************* 
 //
-// main.js
+// main.js - JavaScript side entry point
 //
-// Entry point to JavaScript side; displays the application frame in the
-// browser window and passes off control either to the login dialog or 
-// the main menu, depending on what session data is passed in from the
-// Perl side
+// displays the application frame in the browser window, determines user and
+// privlevel, initializes targets, and loads the main menu
 //
 "use strict";
 
@@ -58,43 +56,25 @@ define ([
 ) {
 
     var dummy = Object.create(null),
-        cu,
-        main,
-        t;
+        userObject,
+        userPriv,
+        main; // as soon as we are authenticated, we start this target
+
+    console.log("mfile-www booting");
 
     //
     // throw up HTML body
     //
     $(document.body).html(html.body());
 
-    //
-    // initialize targets, get main target and pull it
-    //
-    main = targetInit();
-    t = target.pull(main);
-
-    //
-    // mode-specific setup
-    //
-    console.log( 'connectToRestServer is ' + cf('connectToRestServer') );
-    if (cf('connectToRestServer')) {
-        console.log( "Derived distribution mode" );
-    } else {
-        console.log( "Standalone mode" );
-    }
-
-    //
-    // pass control to main menu or login dialog, as appropriate
-    //
-    cu = currentUser('obj');
-    console.log('cu is ', cu);
-    if (! cf('connectToRestServer') || cu) {
-        t.start();
+    userObject = currentUser('obj');
+    userPriv = currentUser('priv');
+    if ( userObject && userPriv ) {
+        main = targetInit();
+        target.pull(main).start();
     } else {
         loginDialog();
     }
-
-    // return a dummy object
     return dummy;
 
 });

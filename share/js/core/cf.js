@@ -63,12 +63,13 @@ define ([
         var r;
         if (override) {
             state[param] = override;
+            console.log("cf() override: config param '" + param + "' reset to", state[param]);
             return override;
         }
         r = (state.hasOwnProperty(param))
             ? state[param]
             : module.config()[param];
-        console.log("cf function asked for value of parameter " + param + ", returning " + r);
+        console.log("cf(): config param '" + param + "' is", r);
         return r;
     };
 

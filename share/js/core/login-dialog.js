@@ -37,73 +37,81 @@
 define ([
     'jquery', 
     'ajax', 
+    'cf',
     'html', 
     'lib'
 ], function (
     $, 
     ajax, 
+    cf,
     html, 
     lib
 ) {
 
+    console.log("Entering loginDialog");
+
     return function () {
 
-        // submitCallback is called when user submits login dialog form 
+        var // submitCallback is called when user submits login dialog form 
 
-        var submitCallback = function (event) {
-            event.preventDefault();
-            var rest = {
-                    "method": 'LOGIN',
-                    "path": 'login',
-                    "body": { nam: $('input[name="nam"]').val(),
-                              pwd: $('input[name="pwd"]').val() }
-                },
-                // success callback
-                sc = function (st) {
-        	    // trigger GET request to the server -- no console.log messages here
-        	    // because the reload will make them go away
-                    location.reload();
-                },
-                // failure callback
-                fc = function (st) {
-                    $('#result').html('Login to REST server failed with code ' + st.payload.code + 
-                                      ' (' + st.payload.message + ')');
-                    $('input[name="nam"]').focus();
-                    $('input[name="pwd"]').val('');
-                };
-            ajax(rest, sc, fc);
-        },
+            submitCallback = function (event) {
+                console.log("Entering submitCallback()");
+                event.preventDefault();
+                var found,
+                    i,
+                    rest = {
+                        "method": 'LOGIN',
+                        "path": 'login',
+                        "body": { nam: $('input[name="nam"]').val(),
+                                  pwd: $('input[name="pwd"]').val() }
+                    },
+                    // success callback
+                    sc = function (st) {
+                        // trigger GET request to the server -- no console.log messages here
+                        // because the reload will make them go away
+                        location.reload();
+                    },
+                    // failure callback
+                    fc = function (st) {
+                        $('#result').html('Login failed: code ' + st.payload.code + 
+                                          ' (' + st.payload.message + ')');
+                        $('input[name="nam"]').focus();
+                        $('input[name="pwd"]').val('');
+                    };
+                console.log("Initiating AJAX call");
+                ajax(rest, sc, fc);
+            },
 
-        // formHandler processes user input in login dialog form
+            // formHandler processes user input in login dialog form
 
-        formHandler = function () {
-            $('input[name="nam"]').val('').focus();
-            $('input[name="pwd"]').val('');
+            formHandler = function () {
+                $('input[name="nam"]').val('').focus();
+                $('input[name="pwd"]').val('');
 
-            // Set up form submit callback
-            $('#loginform').submit(submitCallback);
+                // Set up form submit callback
+                $('#loginform').submit(submitCallback);
 
-            // Set up listener for <ENTER> keypresses in "username" field
-            $('input[name="nam"]').keydown(function (event) {
-                lib.logKeyPress(event);
-                if (event.keyCode === 13) {
-                    event.preventDefault();
-                    $('input[name="pwd"]').focus();
-                }
-            });
+                // Set up listener for <ENTER> keypresses in "username" field
+                $('input[name="nam"]').keydown(function (event) {
+                    lib.logKeyPress(event);
+                    if (event.keyCode === 13) {
+                        event.preventDefault();
+                        $('input[name="pwd"]').focus();
+                    }
+                });
 
-            // Set up listener for <ENTER> and <TAB> keypresses in "password" field
-            $('input[name="pwd"]').keydown(function (event) {
-                lib.logKeyPress(event);
-                if (event.keyCode === 13) {
-                    // event.preventDefault();
-                    submitCallback(event);
-                } else if (event.keyCode === 9) {
-                    event.preventDefault();
-                    $('input[name="nam"]').focus();
-                }
-            });
-        };
+                // Set up listener for <ENTER> and <TAB> keypresses in "password" field
+                $('input[name="pwd"]').keydown(function (event) {
+                    lib.logKeyPress(event);
+                    if (event.keyCode === 13) {
+                        // event.preventDefault();
+                        submitCallback(event);
+                    } else if (event.keyCode === 9) {
+                        event.preventDefault();
+                        $('input[name="nam"]').focus();
+                    }
+                });
+            }; // end of var list
 
         // display login dialog form HTML
         $('#mainarea').html(html.loginDialog());

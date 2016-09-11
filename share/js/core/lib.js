@@ -121,6 +121,15 @@ define ([
             var sp = '&nbsp;',
                 padSpaces = sp.repeat(padto - String(strToPad).length);
             return strToPad.concat(padSpaces);
+        },
+
+        // pause main thread for n milliseconds
+        wait: function (ms) {
+            var start = new Date().getTime();
+            var end = start;
+            while(end < start + ms) {
+                end = new Date().getTime();
+            }
         }
 
     };

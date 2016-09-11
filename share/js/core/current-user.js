@@ -81,7 +81,7 @@ define ([
         flag1;
 
     console.log("current-user: ce is ", ce);
-    console.log("current-user: currentUserPriv is " + priv);
+    console.log("current-user: priv is " + priv);
 
     if (ce) {
         $.extend(cu, ce)
@@ -94,6 +94,7 @@ define ([
             if (arg) {
                 console.log('NOTICE: setting current user object to ', arg);
                 cu = arg;
+                cf('currentUser', cu);
             }
             console.log('cu.nick is ' + cu.nick);
             return cu.nick ? cu : null;
@@ -102,6 +103,7 @@ define ([
             if (arg) {
                 console.log('NOTICE: setting current user priv to ' + arg);
                 priv = arg;
+                cf('currentUserPriv', priv);
             }
             return priv;
         }
