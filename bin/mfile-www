@@ -496,7 +496,7 @@ $runner->run(
         enable "StackTrace", force => 1;
         enable "Session";
         enable "Static", path => qr{^/(js|css)/}, root => $http_root;
-        Web::Machine->new( resource => 'App::MFILE::WWW::Resource', )->to_app;
+        Web::Machine->new( resource => $dispatch_module, )->to_app;
     }
 );
 
