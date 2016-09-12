@@ -114,9 +114,6 @@ define ([
             }
             return flag1;
         }
-        if ( ! cf('connectToRestServer')) {
-            return null;
-        }
         return {
             'obj': cu,
             'priv': priv,
