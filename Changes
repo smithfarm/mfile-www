@@ -836,3 +836,10 @@ Revision history for App::MFILE::WWW
 - Implement login/logout functionality in standalone mode
 - login dialog: fail properly on bad login creds
 
+0.141 2016-09-12 10:17 CEST
+- cleanup: remove all mentions of REST
+- doc: drop version section from README.rst
+- js: drop connectToRestServer config param
+- cleanup: drop over-verbose comments in login-dialog.js
+- Initialize currentUserPriv (fixes login dialog)
+
