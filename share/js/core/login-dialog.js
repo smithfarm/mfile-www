@@ -113,10 +113,7 @@ define ([
                 });
             }; // end of var list
 
-        // display login dialog form HTML
         $('#mainarea').html(html.loginDialog());
-
-        // pass control to the form handler
         formHandler();
 
     }
