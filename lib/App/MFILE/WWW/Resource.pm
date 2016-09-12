@@ -130,13 +130,8 @@ sub _render_response_html {
     my ( $self ) = @_;
     my $r = $self->request;
     my $session = Plack::Session->new( $r->{'env'} );
-    my $ce = $session->get('currentEmployee');
-    my $cepriv;
-    if ( $ce ) {
-        $cepriv = $ce->{'priv'} || '';
-        #delete $ce->{'priv'};
-        delete $ce->{'schedule'};
-    }
+    my $ce = $session->get('currentUser');
+    my $cepriv = $session->get('currentUserPriv');
     my $entity;
     $entity = ( $r->path_info =~ m/test/i )
         ? test_html( $ce, $cepriv )
@@ -392,7 +387,7 @@ sub _require_js {
     # standaloneMode (boolean; false means "derived distro mode")
     $r .= 'standaloneMode: \'' . ( $meta->META_WWW_STANDALONE_MODE ? 'true' : 'false' ) . '\',';
 
-    # currentEmployee 
+    # currentUser
     $r .= "currentUser: " . ( $ce ? to_json( $ce ) : 'null' ) . ',';
     $r .= 'currentUserPriv: \'' . ( $cepriv || 'null' ) . '\',';
 
