@@ -248,6 +248,8 @@ define ([
                 var r = '<form id="' + dfo.name + '">',
                     len,
                     i,
+                    allEntries,
+                    longest,
                     entry;
         
                 r += '<br><b>' + dfo.title + '</b><br><br>';
@@ -256,35 +258,44 @@ define ([
                     r += dfo.preamble + '<br><br>';
                 }
         
+                // determine longest entry
+                allEntries = dfo.entriesRead.concat(dfo.entriesWrite);
+                len = allEntries ? allEntries.length : 0;
+                console.log("allEntries has " + len + " members");
+                longest = allEntries[0].name.length;
+                for (i = 1; i < len; i += 1) {
+                    if (allEntries[i].text.length > longest) {
+                        longest = allEntries[i].text.length;
+                    }
+                }
+                longest += 2; // ': '
+                console.log("The longest entry needs " + longest + " characters total");
+
                 // READ-ONLY entries first
                 len = dfo.entriesRead ? dfo.entriesRead.length : 0;
-                if (len > 0) {
-                    for (i = 0; i < len; i += 1) {
-                        entry = dfo.entriesRead[i];
-                        if (lib.privCheck(entry.aclProfileRead)) {
-                            r += lib.rightPadSpaces(entry.text.concat(':'), 13);
-                            r += '<span id="' + entry.name + '">' + (obj[entry.prop] || '') + '</span><br>';
-                        }
+                for (i = 0; i < len; i += 1) {
+                    entry = dfo.entriesRead[i];
+                    if (lib.privCheck(entry.aclProfileRead)) {
+                        r += lib.rightPadSpaces(entry.text.concat(':'), longest);
+                        r += '<span id="' + entry.name + '">' + (obj[entry.prop] || '') + '</span><br>';
                     }
-                    r += '<br>';
                 }
+                r += '<br>';
         
                 // READ-WRITE entries second
                 len = dfo.entriesWrite ? dfo.entriesWrite.length : 0;
-                if (len > 0) {
-                    for (i = 0; i < len; i += 1) {
-                        entry = dfo.entriesWrite[i];
-                        if (lib.privCheck(entry.aclProfileWrite)) {
-                            r += lib.rightPadSpaces(entry.text.concat(':'), 13);
-                            r += '<input id="' + entry.name + '" ';
-                            r += 'name="entry' + i + '" ';
-                            r += 'value="' + (obj[entry.prop] || '') + '" ';
-                            r += 'size="' + entry.maxlen + '" ';
-                            r += 'maxlength="' + entry.maxlen + '"><br>';
-                        }
+                for (i = 0; i < len; i += 1) {
+                    entry = dfo.entriesWrite[i];
+                    if (lib.privCheck(entry.aclProfileWrite)) {
+                        r += lib.rightPadSpaces(entry.text.concat(':'), longest);
+                        r += '<input id="' + entry.name + '" ';
+                        r += 'name="entry' + i + '" ';
+                        r += 'value="' + (obj[entry.prop] || '') + '" ';
+                        r += 'size="' + entry.maxlen + '" ';
+                        r += 'maxlength="' + entry.maxlen + '"><br>';
                     }
-                    r += '<br>';
                 }
+                r += '<br>';
         
                 // miniMenu at the bottom
                 r += miniMenu(dfo.miniMenu);
