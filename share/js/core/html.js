@@ -277,7 +277,7 @@ define ([
                     entry = dfo.entriesRead[i];
                     if (lib.privCheck(entry.aclProfileRead)) {
                         r += lib.rightPadSpaces(entry.text.concat(':'), longest);
-                        r += '<span id="' + entry.name + '">' + (obj[entry.prop] || '') + '</span><br>';
+                        r += '<span id="' + entry.name + '">' + (obj[entry.prop] || '(none)') + '</span><br>';
                     }
                 }
                 r += '<br>';
