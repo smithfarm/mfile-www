@@ -319,6 +319,7 @@ define ([
                 // display entries
                 len = dbo.entries ? dbo.entries.length : 0;
                 obj = set[pos];
+                console.log('Browsing object', obj);
                 if (len > 0) {
                     for (i = 0; i < len; i += 1) {
                         entry = dbo.entries[i];

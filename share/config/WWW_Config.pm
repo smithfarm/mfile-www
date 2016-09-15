@@ -36,7 +36,7 @@
 # 
 
 # MFILE_APPNAME
-#     the name of this web client, e.g. 'MFILE-www'
+#     the name of this web front-end
 set( 'MFILE_APPNAME', 'mfile-www' );
 
 # MFILE_WWW_DEBUG_MODE

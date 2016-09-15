@@ -331,29 +331,32 @@ sub _load_config {
     my %ARGS = @_;
     my $status;
 
+    #Log::Any::Adapter->set( 'File', "$ENV{HOME}/.mfile-www-early-debug.log" );
+    #$log->init( ident => 'MFILE-WWW', debug_mode => 1 );
+
     # always load the App::MFILE::WWW distro sharedir
     my $target = File::Spec->catfile( $dist_dir, 'config' );
-    $log->debug( "About to load App::MFILE::WWW configuration parameters from $target" );
+    print "Loading App::MFILE::WWW configuration parameters from $target\n";
     $status = $CELL->load( sitedir => $target );
     return $status if $status->not_ok;
 
     # if ddist_sharedir was given, attempt to load configuration from that, too
     if ( $ARGS{ddist_sharedir} ) {
         $target = File::Spec->catfile( $ARGS{ddist_sharedir}, 'config' );
-        $log->debug( "About to load App::MFILE::WWW configuration parameters from $target" );
+        print "Loading App::MFILE::WWW configuration parameters from $target\n";
         $status = $CELL->load( sitedir => $target );
         return $status if $status->not_ok;
     }
 
     # load additional sitedir if provided by caller in argument list
     if ( $ARGS{sitedir} ) {
-        $status = $CELL->load( sitedir => $ARGS{sitedir} );
+        $target = $ARGS{sitedir};
+        print "Loading App::MFILE::WWW configuration parameters from $target\n";
+        $status = $CELL->load( sitedir => $target );
         return $status if $status->not_ok;
     }
 
-
     return $CELL->status_ok;
 }
-
 
 1;

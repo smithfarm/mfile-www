@@ -103,6 +103,9 @@ define ([
                     }
                 } else {
                     console.log("AJAX call failure:", data);
+                    if (data.hasOwnProperty('payload')) {
+                        console.log("Payload is", data.payload);
+                    }
                     if (fcb) {
                         fcb(data);
                     } else {
