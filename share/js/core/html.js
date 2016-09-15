@@ -262,12 +262,12 @@ define ([
                 allEntries = dfo.entriesRead.concat(dfo.entriesWrite);
                 len = allEntries ? allEntries.length : 0;
                 console.log("allEntries has " + len + " members");
-                longest = allEntries[0].name.length;
-                for (i = 1; i < len; i += 1) {
-                    if (allEntries[i].text.length > longest) {
-                        longest = allEntries[i].text.length;
+                longest = allEntries.reduce(function(prevVal, elem) {
+                    if (elem.text.length > prevVal) {
+                        prevVal = elem.text.length;
                     }
-                }
+                    return prevVal;
+                }, allEntries[0].name.length);
                 longest += 2; // ': '
                 console.log("The longest entry needs " + longest + " characters total");
 
