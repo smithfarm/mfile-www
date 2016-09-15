@@ -843,3 +843,9 @@ Revision history for App::MFILE::WWW
 - cleanup: drop over-verbose comments in login-dialog.js
 - Initialize currentUserPriv (fixes login dialog)
 
+0.142 2016-09-16 00:18 CEST
+- doc: improve comments and log messages
+- dform: calculate length of form entry text
+- js: replace for-loop with reduce method in core/html.js
+- js: display (none) if no value in dform
+
