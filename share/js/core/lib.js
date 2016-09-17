@@ -130,6 +130,11 @@ define ([
             while(end < start + ms) {
                 end = new Date().getTime();
             }
+        },
+
+        // convert null to empty array
+        forceArray: function (arr) {
+            return (arr === null) ? [] : arr;
         }
 
     };
