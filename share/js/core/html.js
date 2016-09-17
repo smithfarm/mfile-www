@@ -259,7 +259,8 @@ define ([
                 }
         
                 // determine longest entry
-                allEntries = dfo.entriesRead.concat(dfo.entriesWrite);
+                allEntries = lib.forceArray(dfo.entriesRead);
+                allEntries = allEntries.concat(dfo.entriesWrite);
                 len = allEntries ? allEntries.length : 0;
                 console.log("allEntries has " + len + " members");
                 longest = allEntries.reduce(function(prevVal, elem) {
