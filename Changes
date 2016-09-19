@@ -849,3 +849,7 @@ Revision history for App::MFILE::WWW
 - js: replace for-loop with reduce method in core/html.js
 - js: display (none) if no value in dform
 
+0.143 2016-09-19 12:46 CEST
+- js: add forceArray() function to core lib
+- js: handle null in array concatenation (core/html.js)
+
