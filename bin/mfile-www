@@ -72,9 +72,9 @@ Standalone mode (runs demo "app" on http://localhost:5001):
 
 Derived distribution mode with derived distro 'App::Dochazka::WWW':
 
-First, create necessary directories and symlinks by running as root:
+First, create necessary directories and symlinks by running as root with --init:
 
-    $ sudo mfile-www --ddist=App-Dochazka-WWW
+    $ sudo mfile-www --ddist=App-Dochazka-WWW --init
 
 Then, start the HTTP server
 
@@ -217,10 +217,10 @@ doesn't exist
 =item * C<css> and C<js/core> need to exist and be symlinks to the same
 directories in the L<App::MFILE::WWW> sharedir. If this is not the
 case, the script displays a message asking the user to re-run the
-script as root
+script as root with --init
 
 =item * if already running as root, the symlinks are created and the
-script displays a message asking to be re-run as a normal user
+script displays a message asking to be re-run without --init as a normal user
 
 =item * once the symlinks are in place, the script runs some sanity
 checks (mainly verifying the existence of certain files in their
@@ -267,7 +267,7 @@ operation>
 
 # global variables
 my $mfile_sharedir = File::ShareDir::dist_dir( 'App-MFILE-WWW' ); 
-my $running_as_root = ( 'root' eq getpwuid( $< ) ) || 0;
+my $sharedir_writable = ( -w $mfile_sharedir ) || 0;
 my ( $ddist_distro, $dispatch_module, $ddist_sharedir );
 
 
@@ -335,7 +335,7 @@ sub _symlinks_exist {
     
 sub _create_symlink {
     my ( $old, $new ) = @_;
-    die "Need to be root to create symlink" unless $running_as_root;
+    die "Need to be root to create symlink" unless $sharedir_writable;
     my ( undef, $path, $file ) = File::Spec->splitpath( $new );
     File::Path::make_path( $path );
     symlink( $old, $new ) ;
@@ -351,17 +351,22 @@ sub _create_symlink {
 #
 print "App::MFILE::WWW ver. $VERSION\n";
 
+my $init = '';
 my $ddist = '';
 my $sitedir = '';
 my $http_root;
 
 # Report the result
 print "Running as ";
-print "root\n" if $running_as_root;
-print "a normal user\n" if not $running_as_root;
+print "root\n" if $sharedir_writable;
+print "a normal user\n" if not $sharedir_writable;
 
 # determine if we are running in standalone or derived distribution mode
-GetOptions( 'ddist=s' => \$ddist, 'sitedir=s' => \$sitedir );
+GetOptions(
+    'ddist=s' => \$ddist,
+    'init' => \$init,
+    'sitedir=s' => \$sitedir,
+);
 
 # if the user as specified a derived distribution, we might be running in
 # derived distribution mode
@@ -373,26 +378,25 @@ if ( $ddist ) {
 
     # in derived distro mode, we need symlinks; check if they exist
     if ( ! _symlinks_exist( $ddist_sharedir ) ) {
-        print '$running_as_root == ' . $running_as_root . "\n";
-        if ( ! $running_as_root ) {
-            print "Symlinks not present; run the script again as root\n";
+        print "\$sharedir_writable == $sharedir_writable\n";
+        if ( ! $sharedir_writable ) {
+            print "Symlinks not present and sharedir not writable: run the script again as root\n";
             exit;
         }
-
-        # we are running as root; attempt to create the symlinks
-
-        # if unsuccessful, the _create_symlink routine will die and attempt
-        # to clean up after itself
-        my %sp = _symlink_paths( $ddist_sharedir );
-        _create_symlink( $sp{old_css}, $sp{new_css} );
-        _create_symlink( $sp{old_corejs}, $sp{new_corejs} ); 
+        if ( $init ) {
+            # if unsuccessful, the _create_symlink routine will die and attempt
+            # to clean up after itself
+            my %sp = _symlink_paths( $ddist_sharedir );
+            _create_symlink( $sp{old_css}, $sp{new_css} );
+            _create_symlink( $sp{old_corejs}, $sp{new_corejs} ); 
+        }
     }
 
     print "Symlinks are OK";
 
-    # symlinks are OK, but if running as root we can't continue
-    if ( $running_as_root ) {
-        print "; now run the script again as a normal user\n";
+    # symlinks are OK, but if running with --init we can't continue
+    if ( $init ) {
+        print "; now run the script again as a normal user without the --init option\n";
         exit;
     } else {
         print "\n";
@@ -401,13 +405,10 @@ if ( $ddist ) {
     # all should be green now, but we doublecheck anyway: in derived distribution mode
     # we need to fulfill the following conditions:
 
-    # 1. be running as a normal (non-root) user
-    die "Derived distro given; need to be running as a normal user" if $running_as_root;
-
-    # 2. the distro needs to have a valid sharedir
+    # 1. the distro needs to have a valid sharedir
     die "Derived distro given, but no sharedir" unless $ddist_sharedir;
 
-    # 3. the symlinks to the App::MFILE::WWW sharedir need to have been created
+    # 2. the symlinks to the App::MFILE::WWW sharedir need to have been created
     die "Derived distro given, but symlinks not created" unless _symlinks_exist( $ddist_sharedir );
 
     # all conditions fulfiled
@@ -416,7 +417,7 @@ if ( $ddist ) {
 
 } else {
 
-    die "Running as root in standalone mode; nothing to do" if $running_as_root;
+    die "Running with --init in standalone mode; nothing to do" if $init;
     print "Running in standalone mode\n";
     $http_root = $mfile_sharedir;
     $dispatch_module = 'App::MFILE::WWW::Dispatch';
