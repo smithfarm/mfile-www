@@ -278,6 +278,7 @@ FIXME: might be worth spinning this off into a separate module.
 sub main_html {
     my ( $ce, $cepriv ) = @_;
 
+    $cepriv = '' unless defined( $cepriv );
     $log->debug( "Entering " . __PACKAGE__ . "::main_html() with \$ce " .
                  Dumper($ce) . " and \$cepriv " . $cepriv );
 
