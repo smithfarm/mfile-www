@@ -89,8 +89,8 @@ define ([
 
     // current-user function
     return function (sw, arg) { 
-        console.log('current-user function called with arguments ', sw, arg);
         if (sw === 'obj') {
+            console.log('current-user function called with "obj"');
             if (arg) {
                 console.log('NOTICE: setting current user object to ', arg);
                 cu = arg;
@@ -100,6 +100,7 @@ define ([
             return cu.nick ? cu : null;
         }
         if (sw === 'priv') {
+            console.log('current-user function called with "priv"');
             if (arg) {
                 console.log('NOTICE: setting current user priv to ' + arg);
                 priv = arg;
@@ -108,12 +109,14 @@ define ([
             return priv;
         }
         if (sw === 'flag1') {
+            console.log('current-user function called with "flag1"');
             if (arg || arg === 0) {
                 console.log('NOTICE: setting current user flag1 to ' + arg);
                 flag1 = arg;
             }
             return flag1;
         }
+        console.log('current-user function called with no arguments');
         return {
             'obj': cu,
             'priv': priv,

@@ -84,7 +84,7 @@ define ([
             }
             if (entry !== undefined) {
                 //console.log("Selected " + dmn + " menu entry: " + entry.name);
-                //console.log("About to call the 'start' method of ", entry);
+                console.log("About to call the 'start' method of ", entry);
                 entry.start();
             }
         },
@@ -397,7 +397,7 @@ define ([
                 console.log('Entering start.dform with argument: ' + dfn);
                 lib.clearResult();
                 var obj = dfo.hook();
-                //console.log('The object we are working with is:', obj);
+                console.log('The object we are working with is:', obj);
                 $('#mainarea').html(dfo.source(obj));
                 dformListen(dfn, obj);
             };
