@@ -65,6 +65,15 @@ define([
             // failure callback
             fc = null;
 
-        ajax(rest, sc, fc);
+        $.ajax({
+            'url': '/',
+            'data': JSON.stringify(rest),
+            'method': 'POST',
+            'processData': false,
+            'contentType': 'application/json'
+        })
+        .done(function (data) {
+            sc({'text': data.level});
+        });
     }
 });
