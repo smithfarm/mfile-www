@@ -853,3 +853,7 @@ Revision history for App::MFILE::WWW
 - js: add forceArray() function to core lib
 - js: handle null in array concatenation (core/html.js)
 
+0.144 2016-09-25 09:46 CEST
+- bin/mfile-www: add --init option for perlbrew installs
+- Log user out if AJAX call returns 401
+
