@@ -82,6 +82,37 @@ define ([
             }
             return r;
         },        
+        valueToDisplay = function (obj, prop) {
+            // given an object and a property, return the value to display
+            if (! obj.hasOwnProperty(prop)) {
+                return '(NO_SUCH_PROP)';
+            } else if (obj[prop] === undefined) {
+                return '(undefined)';
+            } else if (obj[prop] === false) {
+                return 'NO';
+            } else if (obj[prop] === true) {
+                return 'YES';
+            } else if (obj[prop] === null) {
+                return '(none)';
+            } else if (obj[prop] === NaN) {
+                return '(NOT_A_NUMBER)';
+            }
+            return obj[prop];
+        },
+        charsNeeded = function (arr) {
+            var len, needed;
+            len = arr ? arr.length : 0;
+            console.log("arr has " + len + " members");
+            needed = arr.reduce(function(prevVal, elem) {
+                if (elem.text.length > prevVal) {
+                    prevVal = elem.text.length;
+                }
+                return prevVal;
+            }, arr[0].name.length);
+            needed += 2; // ': '
+            console.log("The longest entry needs " + needed + " characters total");
+            return needed;
+        },
         browserNavMenu = function (len, pos) {
             var r = '',
                 context = {
@@ -249,7 +280,7 @@ define ([
                     len,
                     i,
                     allEntries,
-                    longest,
+                    needed,
                     entry;
         
                 r += '<br><b>' + dfo.title + '</b><br><br>';
@@ -258,42 +289,20 @@ define ([
                     r += dfo.preamble + '<br><br>';
                 }
         
-                // determine longest entry
+                // determine characters needed for padding (based on longest
+                // entry)
                 allEntries = lib.forceArray(dfo.entriesRead);
                 allEntries = allEntries.concat(dfo.entriesWrite);
-                len = allEntries ? allEntries.length : 0;
-                console.log("allEntries has " + len + " members");
-                longest = allEntries.reduce(function(prevVal, elem) {
-                    if (elem.text.length > prevVal) {
-                        prevVal = elem.text.length;
-                    }
-                    return prevVal;
-                }, allEntries[0].name.length);
-                longest += 2; // ': '
-                console.log("The longest entry needs " + longest + " characters total");
+                needed = charsNeeded(allEntries);
 
                 // READ-ONLY entries first
                 len = dfo.entriesRead ? dfo.entriesRead.length : 0;
                 for (i = 0; i < len; i += 1) {
                     entry = dfo.entriesRead[i];
                     if (lib.privCheck(entry.aclProfileRead)) {
-                        r += lib.rightPadSpaces(entry.text.concat(':'), longest);
+                        r += lib.rightPadSpaces(entry.text.concat(':'), needed);
                         r += '<span id="' + entry.name + '">';
-                        if (! obj.hasOwnProperty(entry.prop)) {
-                            r += '(NO_SUCH_PROP)';
-                        } else if (obj[entry.prop] === undefined) {
-                            r += '(undefined)';
-                        } else if (obj[entry.prop] === false) {
-                            r += 'NO';
-                        } else if (obj[entry.prop] === true) {
-                            r += 'YES';
-                        } else if (obj[entry.prop] === null) {
-                            r += '(none)';
-                        } else if (obj[entry.prop] === NaN) {
-                            r += '(NOT_A_NUMBER)';
-                        } else {
-                            r += obj[entry.prop];
-                        }
+                        r += valueToDisplay(obj, entry.prop);
                         r += '</span><br>';
                     }
                 }
@@ -304,7 +313,7 @@ define ([
                 for (i = 0; i < len; i += 1) {
                     entry = dfo.entriesWrite[i];
                     if (lib.privCheck(entry.aclProfileWrite)) {
-                        r += lib.rightPadSpaces(entry.text.concat(':'), longest);
+                        r += lib.rightPadSpaces(entry.text.concat(':'), needed);
                         r += '<input id="' + entry.name + '" ';
                         r += 'name="entry' + i + '" ';
                         r += 'value="' + (obj[entry.prop] || '') + '" ';
@@ -336,7 +345,9 @@ define ([
                     len,
                     i,
                     obj,
-                    entry;
+                    entry,
+                    allEntries,
+                    needed;
         
                 r += '<br><b>' + dbo.title + '</b><br><br>';
         
@@ -344,6 +355,11 @@ define ([
                     r += dbo.preamble + '<br><br>';
                 }
         
+                // determine characters needed for padding (based on longest
+                // entry)
+                allEntries = lib.forceArray(dbo.entries);
+                needed = charsNeeded(allEntries);
+
                 // display entries
                 len = dbo.entries ? dbo.entries.length : 0;
                 obj = set[pos];
@@ -352,8 +368,10 @@ define ([
                     for (i = 0; i < len; i += 1) {
                         entry = dbo.entries[i];
                         if (lib.privCheck(entry.aclProfile)) {
-                            r += lib.rightPadSpaces(entry.text.concat(':'), 13);
-                            r += '<span id="' + entry.name + '">' + (obj[entry.prop] || '') + '</span><br>';
+                            r += lib.rightPadSpaces(entry.text.concat(':'), needed);
+                            r += '<span id="' + entry.name + '">';
+                            r += valueToDisplay(obj, entry.prop);
+                            r += '</span><br>';
                         }
                     }
                     r += '<br>';

@@ -117,7 +117,7 @@ define ([
                     if (fcb) {
                         fcb(data);
                     } else {
-                        $('#result').html(data.text);
+                        $('#result').html(data.payload.message);
                     }
                 }
             });
