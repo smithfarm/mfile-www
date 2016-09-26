@@ -278,7 +278,23 @@ define ([
                     entry = dfo.entriesRead[i];
                     if (lib.privCheck(entry.aclProfileRead)) {
                         r += lib.rightPadSpaces(entry.text.concat(':'), longest);
-                        r += '<span id="' + entry.name + '">' + (obj[entry.prop] || '(none)') + '</span><br>';
+                        r += '<span id="' + entry.name + '">';
+                        if (! obj.hasOwnProperty(entry.prop)) {
+                            r += '(NO_SUCH_PROP)';
+                        } else if (obj[entry.prop] === undefined) {
+                            r += '(undefined)';
+                        } else if (obj[entry.prop] === false) {
+                            r += 'NO';
+                        } else if (obj[entry.prop] === true) {
+                            r += 'YES';
+                        } else if (obj[entry.prop] === null) {
+                            r += '(none)';
+                        } else if (obj[entry.prop] === NaN) {
+                            r += '(NOT_A_NUMBER)';
+                        } else {
+                            r += obj[entry.prop];
+                        }
+                        r += '</span><br>';
                     }
                 }
                 r += '<br>';
