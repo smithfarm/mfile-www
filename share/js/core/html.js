@@ -367,7 +367,7 @@ define ([
                 if (len > 0) {
                     for (i = 0; i < len; i += 1) {
                         entry = dbo.entries[i];
-                        if (lib.privCheck(entry.aclProfile)) {
+                        if (lib.privCheck(entry.aclProfileRead)) {
                             r += lib.rightPadSpaces(entry.text.concat(':'), needed);
                             r += '<span id="' + entry.name + '">';
                             r += valueToDisplay(obj, entry.prop);
