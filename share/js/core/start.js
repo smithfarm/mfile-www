@@ -1,5 +1,5 @@
 // ************************************************************************* 
-// Copyright (c) 2014, SUSE LLC
+// Copyright (c) 2014-2016, SUSE LLC
 // 
 // All rights reserved.
 // 
@@ -241,7 +241,7 @@ define ([
         dbrowserState = {
             "obj": null,  // the dbrowser object itself
             "set": null,  // the set we are browsing
-            "pos": null   // the current position within that setn
+            "pos": null   // the current position within that set
         },
 
         //
@@ -349,6 +349,7 @@ define ([
                 pos = dbrowserState.pos;
             
             console.log("Listening in browser " + dbo.name);
+            dbo.itemHook(set[pos]);
             $('#mainarea').html(dbo.source(set, pos));
             lib.holdObject(set[pos]); // hold object so hooks can get it
             $('#result').html("Displaying no. " + (pos + 1) + " of " + set.length + " objects in result set");
