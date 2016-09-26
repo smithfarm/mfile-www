@@ -495,7 +495,7 @@ $runner->parse_options(@ARGV);
 $runner->run( 
     builder {
         enable "StackTrace", force => 1;
-        enable "Session";
+        enable "Session", store => 'File';
         enable "Static", path => qr{^/(js|css)/}, root => $http_root;
         Web::Machine->new( resource => $dispatch_module, )->to_app;
     }
