@@ -857,3 +857,12 @@ Revision history for App::MFILE::WWW
 - bin/mfile-www: add --init option for perlbrew installs
 - Log user out if AJAX call returns 401
 
+0.145 2016-09-27 17:00 CEST
+- Resource.pm: eliminate a warning
+- cleanup: improve debug messages
+- bin/mfile-www: save session data in temporary file
+- js: handle various form field values better in html.js
+- Port dform display improvements to dbrowser
+- dbrowser: rename aclProfile -> aclProfileRead
+- dbrowser: fire itemHook in listener function
+
