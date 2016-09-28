@@ -425,6 +425,8 @@ define ([
                 dbrowserListen();
             }
         },
+        dbrowserListen: dbrowserListen, // export so other modules can call it
+        dbrowserState: dbrowserState, // export so other modules can modify browser state
         dnotice: function (dnn) {
             var dno = target.pull(dnn);
             return function () {
