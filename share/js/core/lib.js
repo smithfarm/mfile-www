@@ -125,6 +125,49 @@ define ([
             return strToPad.concat(padSpaces);
         },
 
+        // convert YYYY-MM-DD string into YYYY-MMM-DD
+        readableDate: function (urd) {
+            var ymd = urd.split('-'),
+                year,
+                m,
+                day,
+                month;
+            if (ymd.length !== 3) {
+                return urd;
+            }
+            year = +ymd[0];
+            m = +ymd[1];
+            day = +ymd[2];
+            if (m === 1) {
+                month = "JAN";
+            } else if (m === 2) {
+                month = "FEB";
+            } else if (m === 3) {
+                month = "MAR";
+            } else if (m === 4) {
+                month = "APR";
+            } else if (m === 5) {
+                month = "MAY";
+            } else if (m === 6) {
+                month = "JUN";
+            } else if (m === 7) {
+                month = "JUL";
+            } else if (m === 8) {
+                month = "AUG";
+            } else if (m === 9) {
+                month = "SEP";
+            } else if (m === 10) {
+                month = "OCT";
+            } else if (m === 11) {
+                month = "NOV";
+            } else if (m === 12) {
+                month = "DEC";
+            } else {
+                return urd;
+            }
+            return year.toString() + "-" + month + "-" + day.toString();
+        },
+
         // pause main thread for n milliseconds
         wait: function (ms) {
             var start = new Date().getTime();
