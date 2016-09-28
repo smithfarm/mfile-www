@@ -349,7 +349,6 @@ define ([
                 pos = dbrowserState.pos;
             
             console.log("Listening in browser " + dbo.name);
-            dbo.itemHook(set[pos]);
             $('#mainarea').html(dbo.source(set, pos));
             lib.holdObject(set[pos]); // hold object so hooks can get it
             $('#result').html("Displaying no. " + (pos + 1) + " of " + set.length + " objects in result set");
