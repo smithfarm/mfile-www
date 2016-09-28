@@ -872,3 +872,11 @@ Revision history for App::MFILE::WWW
 - _load_config: make sitedir take priority
 - build/ops: set OBS_PROJECT to Application:Dochazka
 
+0.147 2016-09-28 22:58 CEST
+- dtable boilerplate
+- dtable: everything except table rendering
+- js: fix ACL profile property name in entry definitions
+- build/ops: fix session management
+- js: rename charsNeeded() to maxLength() and generalize
+- dtable: finalize initial feature implementation
+

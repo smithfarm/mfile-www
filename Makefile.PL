@@ -9,6 +9,7 @@ WriteMakefile
                    'App::CELL' => '0.194',
                    'App::MFILE' => '0.17',
                    'File::ShareDir' => '1.00',
+                   'File::Temp' => 0,
                    'Getopt::Long' => 0,
                    'HTTP::Request' => 0,
                    'JSON' => 0,
