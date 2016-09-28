@@ -60,7 +60,8 @@ define ([
         //
         miniMenu = function (mm) {
             // mm is the dbrowser miniMenu object
-            var len = mm.entries.length,
+            var entries = (mm.entries === null) ? [] : mm.entries,
+                len = entries.length,
                 entry,
                 i,
                 r;
@@ -70,8 +71,8 @@ define ([
                 r = 'Menu:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                 for (i = 0; i < len; i += 1) {
                     //console.log("i === " + i);
-                    console.log("Attempting to pull target " + mm.entries[i] + " from miniMenu");
-                    entry = target.pull(mm.entries[i]);
+                    console.log("Attempting to pull target " + entries[i] + " from miniMenu");
+                    entry = target.pull(entries[i]);
                     if (lib.privCheck(entry.aclProfile)) {
                         r += i + '. ' + entry.menuText + '&nbsp;&nbsp;';
                     }
