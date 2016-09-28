@@ -414,6 +414,8 @@ define ([
                     column,
                     row,
                     col,
+                    headingsentry = {},
+                    superset,
                     maxl = [];
 
                 r += '<br><b>' + dto.title + '</b><br><br>';
@@ -423,10 +425,15 @@ define ([
                 }
 
                 // populate maxl array
+                dto.entries.map(function (e) {
+                    headingsentry[e.prop] = e.text;
+                })
+                superset = set.concat([headingsentry]);
+                console.log("superset", superset);
                 for (column = 0; column < dto.entries.length; column += 1) {
                     console.log("Column " + column);
                     entry = dto.entries[column];
-                    var elems = set.map(function (obj) {
+                    var elems = superset.map(function (obj) {
                         return obj[entry.prop];
                     });
                     var elemlengths = elems.map(function (elem) {
