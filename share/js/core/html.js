@@ -99,19 +99,18 @@ define ([
             }
             return obj[prop];
         },
-        charsNeeded = function (arr) {
-            var len, needed;
+        maxLength = function (arr) {
+            var len, max;
             len = arr ? arr.length : 0;
             console.log("arr has " + len + " members");
-            needed = arr.reduce(function(prevVal, elem) {
+            max = arr.reduce(function(prevVal, elem) {
                 if (elem.text.length > prevVal) {
                     prevVal = elem.text.length;
                 }
                 return prevVal;
             }, arr[0].name.length);
-            needed += 2; // ': '
-            console.log("The longest entry needs " + needed + " characters total");
-            return needed;
+            console.log("The longest entry is " + max + " characters long");
+            return max;
         },
         browserNavMenu = function (len, pos) {
             var r = '',
@@ -287,7 +286,7 @@ define ([
                 // entry)
                 allEntries = lib.forceArray(dfo.entriesRead);
                 allEntries = allEntries.concat(dfo.entriesWrite);
-                needed = charsNeeded(allEntries);
+                needed = maxLength(allEntries);
 
                 // READ-ONLY entries first
                 len = dfo.entriesRead ? dfo.entriesRead.length : 0;
@@ -352,7 +351,7 @@ define ([
                 // determine characters needed for padding (based on longest
                 // entry)
                 allEntries = lib.forceArray(dbo.entries);
-                needed = charsNeeded(allEntries);
+                needed = maxLength(allEntries) + 2;
 
                 // display entries
                 len = dbo.entries ? dbo.entries.length : 0;
@@ -407,10 +406,12 @@ define ([
             var dto = target.pull(dtn);
             return function (set) {
 
-                console.log("Generating source code of dtabl " + dtn);
+                console.log("Generating source code of dtable " + dtn);
+                console.log("dto", dto);
                 var r = '<form id="' + dto.name + '">',
-                    len,
-                    i;
+                    entry,
+                    i,
+                    j;
 
                 r += '<br><b>' + dto.title + '</b><br><br>';
 
@@ -419,16 +420,19 @@ define ([
                 }
 
                 // display table
-                len = set.length;
-                if (len > 0) {
-                    for (i = 0; i < len; i += 1) {
-                        // entry = dto.entries[i];
-                        // if (lib.privCheck(entry.aclProfileRead)) {
-                        //     r += lib.rightPadSpaces(entry.text.concat(':'), needed);
-                        //     r += '<span id="' + entry.name + '">';
-                        //     r += valueToDisplay(obj, entry.prop);
-                        //     r += '</span> ';
-                        // }
+                if (set.length > 0) {
+                    for (i = 0; i < set.length; i += 1) {
+                        for (j = 0; j < dto.entries.length; j += 1) {
+                            entry = dto.entries[j];
+                            if (lib.privCheck(entry.aclProfileRead)) {
+                                r += "entry" + i + " ";
+                            //     r += lib.rightPadSpaces(entry.text.concat(':'), needed);
+                            //     r += '<span id="' + entry.name + '">';
+                            //     r += valueToDisplay(obj, entry.prop);
+                            //     r += '</span> ';
+                            }
+                        }
+                        r += '<br>';
                     }
                     r += '<br>';
                 }
