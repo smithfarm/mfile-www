@@ -410,8 +410,10 @@ define ([
                 console.log("dto", dto);
                 var r = '<form id="' + dto.name + '">',
                     entry,
-                    i,
-                    j;
+                    column,
+                    row,
+                    col,
+                    maxl = [];
 
                 r += '<br><b>' + dto.title + '</b><br><br>';
 
@@ -419,17 +421,50 @@ define ([
                     r += dto.preamble + '<br><br>';
                 }
 
-                // display table
+                // populate maxl array
+                for (column = 0; column < dto.entries.length; column += 1) {
+                    console.log("Column " + column);
+                    entry = dto.entries[column];
+                    var elems = set.map(function (obj) {
+                        return obj[entry.prop];
+                    });
+                    var elemlengths = elems.map(function (elem) {
+                        var ep = ((elem === null) ? '' : elem).toString();
+                        return ep.length;
+                    });
+                    maxl[column] = elemlengths.reduce(function (a, b) {
+                        return (a > b) ? a : b;
+                    });
+                }
+
+                // display table header
+                for (column = 0; column < dto.entries.length; column += 1) {
+                    entry = dto.entries[column];
+                    if (lib.privCheck(entry.aclProfileRead)) {
+                        r += '<span style="text-decoration: underline">';
+                        r += lib.rightPadSpaces(entry.text, maxl[column]);
+                        r += '</span>';
+                    }
+                    if (column !== dto.entries.length - 1) {
+                        r += ' ';
+                    }
+                }
+                r += '<br>';
+
+                // display table rows
                 if (set.length > 0) {
-                    for (i = 0; i < set.length; i += 1) {
-                        for (j = 0; j < dto.entries.length; j += 1) {
-                            entry = dto.entries[j];
+                    for (row = 0; row < set.length; row += 1) {
+                        var obj = set[row];
+                        for (column = 0; column < dto.entries.length; column += 1) {
+                            entry = dto.entries[column];
+                            console.log("entry", entry);
                             if (lib.privCheck(entry.aclProfileRead)) {
-                                r += "entry" + i + " ";
-                            //     r += lib.rightPadSpaces(entry.text.concat(':'), needed);
-                            //     r += '<span id="' + entry.name + '">';
-                            //     r += valueToDisplay(obj, entry.prop);
-                            //     r += '</span> ';
+                                var val = obj[entry.prop];
+                                console.log("value", val);
+                                r += lib.rightPadSpaces(val, maxl[column]);
+                            }
+                            if (column !== dto.entries.length - 1) {
+                                r += ' ';
                             }
                         }
                         r += '<br>';

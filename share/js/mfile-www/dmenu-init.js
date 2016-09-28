@@ -50,7 +50,7 @@ define ([
             'menuText': 'Demo menu',
             'title': 'Demo menu',
             'aclProfile': 'passerby',
-            'entries': ['demoActionFromMenu', 'demoNotice', 'demoSubmenu', 'demoTable' ],
+            'entries': ['demoActionFromMenu', 'demoNotice', 'demoSubmenu' ],
             'back': 'logout'
         });
 
@@ -60,7 +60,8 @@ define ([
             'menuText': 'Demo submenu',
             'title': 'Demo submenu',
             'aclProfile': 'passerby',
-            'entries': ['demoActionFromSubmenu', 'demoForm', 'demoBrowser' ],
+            'entries': ['demoActionFromSubmenu', 'demoForm', 'demoBrowser',
+                        'demoTable'],
             'back': 'demoMenu'
         });
 
