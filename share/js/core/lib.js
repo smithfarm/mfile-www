@@ -125,9 +125,11 @@ define ([
             return strToPad.concat(padSpaces);
         },
 
-        // convert YYYY-MM-DD string into YYYY-MMM-DD
+        // convert "YYYY-MM-DD HH:DD:SS+TZ" string into YYYY-MMM-DD
         readableDate: function (urd) {
-            var ymd = urd.split('-'),
+            var ymd = urd.substr(
+                    0, urd.indexOf(" ")
+                ).split('-'),
                 year,
                 m,
                 day,
