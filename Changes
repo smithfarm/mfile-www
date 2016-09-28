@@ -880,3 +880,9 @@ Revision history for App::MFILE::WWW
 - js: rename charsNeeded() to maxLength() and generalize
 - dtable: finalize initial feature implementation
 
+0.148 2016-09-29 00:43 CEST
+- html.js: handle null entries prop in miniMenu()
+- js: take headings into account when calculating column widths
+- js: grammatically correct "Displaying table" message
+- js: add readableDate() function to core lib
+
