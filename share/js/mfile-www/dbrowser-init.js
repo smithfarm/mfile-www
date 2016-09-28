@@ -52,7 +52,7 @@ define ([
         // read-only form entry no. 1
         'browserEntry1': {
             name: 'browserEntry1',
-            aclProfile: 'passerby',
+            aclProfileRead: 'passerby',
             text: 'Entry 1',
             prop: 'prop1',
             maxlen: 20
@@ -61,7 +61,7 @@ define ([
         // read-write form entry no. 1
         'browserEntry2': {
             name: 'browserEntry2',
-            aclProfile: 'passerby',
+            aclProfileRead: 'passerby',
             text: 'Entry 2',
             prop: 'prop2',
             maxlen: 20

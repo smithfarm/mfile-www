@@ -48,7 +48,7 @@ define ([
 
         'tableEntry1': {
             name: 'tableEntry1',
-            aclProfile: 'passerby',
+            aclProfileRead: 'passerby',
             text: 'Entry 1',
             prop: 'prop1',
             maxlen: 20
@@ -56,7 +56,7 @@ define ([
 
         'tableEntry2': {
             name: 'tableEntry2',
-            aclProfile: 'passerby',
+            aclProfileRead: 'passerby',
             text: 'Entry 2',
             prop: 'prop2',
             maxlen: 20
