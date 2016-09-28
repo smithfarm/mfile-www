@@ -36,6 +36,7 @@ my $builder = Module::Build->new(
         'App::MFILE'     => 0.170,
         'Getopt::Long'   => 0,
         'File::ShareDir' => 0,
+        'File::Temp'     => 0,
         'JSON'           => 0,
         'Log::Any::Adapter' => 0,
         'LWP::UserAgent' => 0,
