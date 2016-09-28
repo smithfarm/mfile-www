@@ -380,10 +380,22 @@ define ([
         //
         // dtable handlers
         // 
-        dtableSubmit = function (dto) {
-            target.pull(dto.back).start();
+        dtableState = {
+            "obj": null,
+            "set": null,
         },
-        dtableListen = function (dto) {
+        dtableSubmit = function (dto) {
+            target.pull(dto.miniMenu.back[1]).start();
+        },
+        dtableListen = function () {
+            var dto = dtableState.obj,
+                set = dtableState.set;
+            console.log("Listening in table " + dto.name);
+            $('#mainarea').html(dto.source(set));
+            lib.holdObject(set); // hold object so hooks can get it
+            $('#result').html("Displaying table with " + set.length + " objects");
+            $('#' + dto.name).submit(suppressSubmitEvent);
+            $('input[name="sel"]').val('').focus();
             $('#submitButton').on("click", function (event) {
                 event.preventDefault;
                 console.log("Submitting table " + dto.name);
@@ -453,14 +465,29 @@ define ([
                 dnoticeListen(dno);
             };
         },
+        dtableListen: dtableListen, // export so other modules can call it
+        dtableState: dtableState, // export so other modules can modify browser state
         dtable: function (dtn) {
             var dto = target.pull(dtn);
-            return function () {
-                console.log("Entering start.dtable with argument: " + dtn);
-                lib.clearResult();
-                $('#mainarea').html(dto.source()); // write HTML to screen
-                $('input[name="sel"]').focus();
-                dtableListen(dto);
+            if (dtn) {
+                // when called with dtn (dtable name) argument, we assume
+                // that we are being called from the second stage of dtable
+                // initialization (i.e., one-time event) -- generate and
+                // return the start function for this dtable
+                return function () {
+                    lib.clearResult();
+                    console.log('Starting new ' + dtn + ' dtable');
+                    // (re)initialize dtable state
+                    dtableState.obj = target.pull(dtn);
+                    dtableState.set = dto.hook();
+                    // start browsing
+                    dtableListen();
+                };
+            } else {
+                // when called _without_ an argument, we assume that there
+                // is an existing browser state to return to
+                console.log('Returning to previous ' + dtableState.obj.name + ' dtable state');
+                dtableListen();
             }
         }
     }

@@ -405,14 +405,43 @@ define ([
         },
         dtable: function (dtn) {
             var dto = target.pull(dtn);
-            return function () {
-                var r = '';
-                r += '<div id="' + dtn + '"><br><b>' + dto.title + '</b><br><br>';
-                r += dto.preamble + '<br>';
-                r += '<div id="tableText"></div><br>';
-                r += "To leave this page, press ENTER or click the Submit button";
+            return function (set) {
+
+                console.log("Generating source code of dtabl " + dtn);
+                var r = '<form id="' + dto.name + '">',
+                    len,
+                    i;
+
+                r += '<br><b>' + dto.title + '</b><br><br>';
+
+                if (dto.preamble) {
+                    r += dto.preamble + '<br><br>';
+                }
+
+                // display table
+                len = set.length;
+                if (len > 0) {
+                    for (i = 0; i < len; i += 1) {
+                        // entry = dto.entries[i];
+                        // if (lib.privCheck(entry.aclProfileRead)) {
+                        //     r += lib.rightPadSpaces(entry.text.concat(':'), needed);
+                        //     r += '<span id="' + entry.name + '">';
+                        //     r += valueToDisplay(obj, entry.prop);
+                        //     r += '</span> ';
+                        // }
+                    }
+                    r += '<br>';
+                }
+
+		// miniMenu at the bottom: selections are target names defined
+		// in the 'miniMenu' property of the dform object
+                r += miniMenu(dto.miniMenu);
+
+                // your choice section
                 r += yourChoice();
-                r += '</div>';
+
+                r += '</form>';
+                console.log("Assembled source code for " + dtn + " - it has " + r.length + " characters");
                 return r;
             }
         }

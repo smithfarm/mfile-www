@@ -37,12 +37,43 @@
 "use strict";
 
 define ([
+    'lib',
     'target'
 ], function (
+    lib,
     target
 ) {
 
+    var entries = {
+
+        'tableEntry1': {
+            name: 'tableEntry1',
+            aclProfile: 'passerby',
+            text: 'Entry 1',
+            prop: 'prop1',
+            maxlen: 20
+        },
+
+        'tableEntry2': {
+            name: 'tableEntry2',
+            aclProfile: 'passerby',
+            text: 'Entry 2',
+            prop: 'prop2',
+            maxlen: 20
+        }
+
+    };
+
     return function () {
+
+        lib.holdObject([
+            { prop1: 'Some information here', prop2: 1234 },
+            { prop1: null, prop2: 'Some other info' },
+            { prop1: 'Mangled crab crackers', prop2: 'Umpteen whizzles' },
+            { prop1: 'Fandango', prop2: 'Professor!' },
+            { prop1: 'Emfeebled whipple weepers', prop2: 'A godg' },
+            { prop1: 'Wuppo wannabe', prop2: 'Jumbo jamb' }
+        ]);
 
         target.push('demoTable', {
             'name': 'demoTable',
@@ -51,7 +82,12 @@ define ([
             'title': 'Demo table',
             'preamble': 'This is just an illustration',
             'aclProfile': 'passerby',
-            'back': 'demoMenu'
+            'entries': [ entries.tableEntry1, entries.tableEntry2 ],
+            'hook': lib.holdObject,
+            'miniMenu': {
+                entries: ['demoEditFromBrowser'],
+                back: ['Done', 'demoMenu']
+            }
         });
 
     };
