@@ -886,3 +886,7 @@ Revision history for App::MFILE::WWW
 - js: grammatically correct "Displaying table" message
 - js: add readableDate() function to core lib
 
+0.149 2016-09-29 01:09 CEST
+- html.js: restore proper padding in dform
+- js: make readableDate() take full "YYYY-MM-DD HH:DD:SS+TZ"
+
