@@ -866,3 +866,9 @@ Revision history for App::MFILE::WWW
 - dbrowser: rename aclProfile -> aclProfileRead
 - dbrowser: fire itemHook in listener function
 
+0.146 2016-09-28 18:58 CEST
+- Remove dbrowser "itemHook", bad idea
+- js: export dbrowserListen and dbrowserState in start.js
+- _load_config: make sitedir take priority
+- build/ops: set OBS_PROJECT to Application:Dochazka
+
