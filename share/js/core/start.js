@@ -389,11 +389,15 @@ define ([
         },
         dtableListen = function () {
             var dto = dtableState.obj,
-                set = dtableState.set;
+                set = dtableState.set,
+                msg = 'Displaying table with ';
             console.log("Listening in table " + dto.name);
             $('#mainarea').html(dto.source(set));
             lib.holdObject(set); // hold object so hooks can get it
-            $('#result').html("Displaying table with " + set.length + " objects");
+            msg += (set.length === 1) ?
+                '1 object' :
+                set.length + " objects";
+            $('#result').text(msg);
             $('#' + dto.name).submit(suppressSubmitEvent);
             $('input[name="sel"]').val('').focus();
             $('#submitButton').on("click", function (event) {
