@@ -287,7 +287,7 @@ define ([
                 // entry)
                 allEntries = lib.forceArray(dfo.entriesRead);
                 allEntries = allEntries.concat(dfo.entriesWrite);
-                needed = maxLength(allEntries);
+                needed = maxLength(allEntries) + 2;
 
                 // READ-ONLY entries first
                 len = dfo.entriesRead ? dfo.entriesRead.length : 0;
