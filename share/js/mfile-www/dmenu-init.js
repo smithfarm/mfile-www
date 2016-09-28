@@ -1,5 +1,5 @@
 // ************************************************************************* 
-// Copyright (c) 2014, SUSE LLC
+// Copyright (c) 2014-2016, SUSE LLC
 // 
 // All rights reserved.
 // 
@@ -50,7 +50,7 @@ define ([
             'menuText': 'Demo menu',
             'title': 'Demo menu',
             'aclProfile': 'passerby',
-            'entries': ['demoActionFromMenu', 'demoNotice', 'demoSubmenu' ],
+            'entries': ['demoActionFromMenu', 'demoNotice', 'demoSubmenu', 'demoTable' ],
             'back': 'logout'
         });
 

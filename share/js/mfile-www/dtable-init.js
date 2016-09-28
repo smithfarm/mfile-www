@@ -30,55 +30,30 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ************************************************************************* 
 //
-// app/target-init
+// app/dtable-init.js
 //
-// Initialization of targets (round one)
+// Round one of dtable initialization - called from app/target-init.js
 //
 "use strict";
 
 define ([
-    'target',
-    'app/daction-init',
-    'app/dform-init',
-    'app/dmenu-init',
-    'app/dbrowser-init',
-    'app/dnotice-init',
-    'app/dtable-init',
-    'init2'
+    'target'
 ], function (
-    target,
-    dactionInitRoundOne,
-    dformInitRoundOne,
-    dmenuInitRoundOne,
-    dbrowserInitRoundOne,
-    dnoticeInitRoundOne,
-    dtableInitRoundOne,
-    initRoundTwo
+    target
 ) {
 
     return function () {
 
-        console.log("Entering app/target-init (mfile-www version)");
+        target.push('demoTable', {
+            'name': 'demoTable',
+            'type': 'dtable',
+            'menuText': 'Demo table',
+            'title': 'Demo table',
+            'preamble': 'This is just an illustration',
+            'aclProfile': 'passerby',
+            'back': 'demoMenu'
+        });
 
-        // round one - set up the targets
-        dactionInitRoundOne();
-        dformInitRoundOne();
-        dmenuInitRoundOne();
-        dbrowserInitRoundOne();
-        dnoticeInitRoundOne();
-        dtableInitRoundOne();
-
-        // round two - add 'source' and 'start' properties
-        // (widget targets only)
-        initRoundTwo('dform');
-        initRoundTwo('dmenu');
-        initRoundTwo('dbrowser');
-        initRoundTwo('dnotice');
-        initRoundTwo('dtable');
-
-        // return name of target to be called first (in main.js)
-        return 'demoMenu';
     };
 
 });
-

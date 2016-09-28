@@ -235,9 +235,6 @@ define ([
             r += '</div>';
             return r;
         },
-        //
-        // dmenu target
-        //
         dmenu: function (dmn) {
             console.log("Entering html.dmenu with argument " + dmn);
             // dmn is dmenu name
@@ -266,9 +263,6 @@ define ([
             r += '</form>';
             return r;
         },
-        //
-        // dform target
-        //
         dform: function (dfn) {
             // dfn is dform name
             // dfo is dform object
@@ -393,9 +387,6 @@ define ([
                 return r;
             };
         },
-        //
-        // dnotice target
-        //
         dnotice: function (dnn) {
             console.log("Entering html.dnotice with argument " + dnn);
             // dnn is dnotice name
@@ -411,6 +402,19 @@ define ([
                 r += '</div>';
                 return r;
             };
+        },
+        dtable: function (dtn) {
+            var dto = target.pull(dtn);
+            return function () {
+                var r = '';
+                r += '<div id="' + dtn + '"><br><b>' + dto.title + '</b><br><br>';
+                r += dto.preamble + '<br>';
+                r += '<div id="tableText"></div><br>';
+                r += "To leave this page, press ENTER or click the Submit button";
+                r += yourChoice();
+                r += '</div>';
+                return r;
+            }
         }
     };
 });

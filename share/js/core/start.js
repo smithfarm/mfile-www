@@ -375,6 +375,21 @@ define ([
                 dnoticeSubmit(dno);
             });
             $('#' + dno.name).on("keypress", mmKeyListener);
+        },
+
+        //
+        // dtable handlers
+        // 
+        dtableSubmit = function (dto) {
+            target.pull(dto.back).start();
+        },
+        dtableListen = function (dto) {
+            $('#submitButton').on("click", function (event) {
+                event.preventDefault;
+                console.log("Submitting table " + dto.name);
+                dtableSubmit(dto);
+            });
+            $('#' + dto.name).on("keypress", mmKeyListener);
         };
 
     return {
@@ -437,6 +452,16 @@ define ([
                 $('input[name="sel"]').focus();
                 dnoticeListen(dno);
             };
+        },
+        dtable: function (dtn) {
+            var dto = target.pull(dtn);
+            return function () {
+                console.log("Entering start.dtable with argument: " + dtn);
+                lib.clearResult();
+                $('#mainarea').html(dto.source()); // write HTML to screen
+                $('input[name="sel"]').focus();
+                dtableListen(dto);
+            }
         }
     }
 });
