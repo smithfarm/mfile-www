@@ -285,8 +285,12 @@ define ([
         
                 // determine characters needed for padding (based on longest
                 // entry)
-                allEntries = lib.forceArray(dfo.entriesRead);
-                allEntries = allEntries.concat(dfo.entriesWrite);
+                if (dfo.entriesRead !== undefined) {
+                    allEntries = lib.forceArray(dfo.entriesRead);
+                }
+                if (dfo.entriesWrite !== undefined) {
+                    allEntries = allEntries.concat(dfo.entriesWrite);
+                }
                 needed = maxLength(allEntries) + 2;
 
                 // READ-ONLY entries first
