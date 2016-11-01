@@ -397,6 +397,9 @@ sub _require_js {
     $r .= 'loginDialogMaxLengthUsername: ' . $site->MFILE_WWW_LOGIN_DIALOG_MAXLENGTH_USERNAME . ',';
     $r .= 'loginDialogMaxLengthPassword: ' . $site->MFILE_WWW_LOGIN_DIALOG_MAXLENGTH_PASSWORD . ',';
 
+    # REST server URI
+    $r .= 'restURI: \'' . $site->DOCHAZKA_WWW_BACKEND_URI . '\',';
+
     # dummyParam in last position so we don't have to worry about comma/no comma
     $r .= 'dummyParam: null';
 
