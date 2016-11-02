@@ -86,7 +86,7 @@ define ([
             'hook': lib.holdObject,
             'miniMenu': {
                 entries: ['demoEditFromBrowser'],
-                back: ['Done', 'demoMenu']
+                back: ['Done', 'demoSubmenu']
             }
         });
 
