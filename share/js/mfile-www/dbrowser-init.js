@@ -49,36 +49,40 @@ define ([
     //
     var entries = {        
 
-        // read-only form entry no. 1
-        'browserEntry1': {
-            name: 'browserEntry1',
-            aclProfileRead: 'passerby',
-            text: 'Entry 1',
-            prop: 'prop1',
-            maxlen: 20
+            // read-only form entry no. 1
+            'browserEntry1': {
+                name: 'browserEntry1',
+                aclProfileRead: 'passerby',
+                text: 'Entry 1',
+                prop: 'prop1',
+                maxlen: 20
+            },
+
+            // read-write form entry no. 2
+            'browserEntry2': {
+                name: 'browserEntry2',
+                aclProfileRead: 'passerby',
+                text: 'Entry 2',
+                prop: 'prop2',
+                maxlen: 20
+            }
+
         },
 
-        // read-write form entry no. 1
-        'browserEntry2': {
-            name: 'browserEntry2',
-            aclProfileRead: 'passerby',
-            text: 'Entry 2',
-            prop: 'prop2',
-            maxlen: 20
-        }
-
-    };
-    
-    return function () {
-        // initialize sample result set
-        lib.holdObject([
+        // set of objects to browse
+        browserSet = [
             { prop1: 'Some information here', prop2: 1234 },
             { prop1: null, prop2: 'Some other info' },
             { prop1: 'Mangled crab crackers', prop2: 'Umpteen whizzles' },
             { prop1: 'Fandango', prop2: 'Professor!' },
             { prop1: 'Emfeebled whipple weepers', prop2: 'A godg' },
             { prop1: 'Wuppo wannabe', prop2: 'Jumbo jamb' }
-        ]);
+        ],
+        getBrowserSet = function () {
+            return browserSet;
+        };
+    
+    return function () {
 
         //
         // push dbrowser object definitions onto 'target' here
@@ -91,7 +95,7 @@ define ([
             'preamble': 'This is just an illustration',
             'aclProfile': 'passerby',
             'entries': [ entries.browserEntry1, entries.browserEntry2 ],
-            'hook': lib.holdObject,
+            'hook': getBrowserSet,
             'miniMenu': {
                 entries: ['demoEditFromBrowser'],
                 back: ['Done', 'demoSubmenu']
