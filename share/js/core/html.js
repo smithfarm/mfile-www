@@ -176,12 +176,15 @@ define ([
         };
 
     return {
+
         demoActionFromMenu: function () {
             return '<br><br>SAMPLE ACTION - SOMETHING IS HAPPENING<br><br><br>';
         },
+
         demoActionFromSubmenu: function () {
             return '<br><br>SAMPLE ACTION - foo bar actioning bazness<br><br><br>';
         },
+
         loginDialog: function () {
             var r = '';
             r += '<form id="loginform">';
@@ -196,14 +199,16 @@ define ([
             r += '<input type="submit" value="Submit"><br><br>';
             r += '</form>';
             return r;
-        },
+        }, // loginDialog
+
         logout: function () {
             var r = '';
             r += '<br><br><br>';
             r += 'You have been logged out of our humble application<br><br>';
             r += 'Have a lot of fun!<br><br><br>';
             return r;
-        },
+        }, // logout
+
         body: function () {
             var r = '';
             r += '<div class="leftright">';
@@ -234,7 +239,8 @@ define ([
             // r += appLib.fillNoticesLine();
             r += '</div>';
             return r;
-        },
+        }, // body
+
         dmenu: function (dmn) {
             console.log("Entering html.dmenu with argument " + dmn);
             // dmn is dmenu name
@@ -262,7 +268,8 @@ define ([
 
             r += '</form>';
             return r;
-        },
+        }, // dmenu
+
         dform: function (dfn) {
             // dfn is dform name
             // dfo is dform object
@@ -331,7 +338,8 @@ define ([
                 //console.log("Assembled source code for " + dfn + " - it has " + r.length + " characters");
                 return r;
             };
-        },
+        }, // dform
+
         dbrowser: function (dbn) {
             // dfn is dform name
             // dfo is dform object
@@ -390,7 +398,8 @@ define ([
                 console.log("Assembled source code for " + dbn + " - it has " + r.length + " characters");
                 return r;
             };
-        },
+        }, // dbrowser
+
         dnotice: function (dnn) {
             console.log("Entering html.dnotice with argument " + dnn);
             // dnn is dnotice name
@@ -406,7 +415,8 @@ define ([
                 r += '</div>';
                 return r;
             };
-        },
+        }, // dnotice
+
         dtable: function (dtn) {
             var dto = target.pull(dtn);
             return function (set) {
@@ -495,6 +505,11 @@ define ([
                 console.log("Assembled source code for " + dtn + " - it has " + r.length + " characters");
                 return r;
             }
-        }
+        }, // dtable
+
+        drowselect: function (drsn) {
+            return dtable(drsn);
+        } // dtable
+
     };
 });
