@@ -402,6 +402,29 @@ define ([
         drowselectState = {
             "obj": null,
             "set": null,
+            "pos": null
+        },
+        drowselectSubmit = function () {
+            var drso = drowselectState.obj;
+            target.pull(drso.miniMenu.back[1]).start();
+        },
+        drowselectListen = function () {
+            var obj = drowselectState.obj,
+                set = drowselectState.set;
+            $('#mainarea').html(obj.source(set));
+            msg += (set.length === 1) ?
+                '1 object' :
+                set.length + " objects";
+            $('#result').text(msg);
+            console.log("Listening in rowselect " + obj.name);
+            $('#' + obj.name).submit(suppressSubmitEvent);
+            $('input[name="sel"]').val('').focus();
+            $('#submitButton').on("click", function (event) {
+                event.preventDefault;
+                console.log("Submitting rowselect " + obj.name);
+                drowselectSubmit();
+            });
+            $('#' + name).on("keypress", mmKeyListener);
         };
 
     return {
@@ -506,15 +529,15 @@ define ([
                 };
             } else {
                 // when called _without_ an argument, we assume that there
-                // is an existing browser state to return to
-                console.log('Returning to previous ' + dtableState.obj.name + ' dtable state');
-                dtableListen();
+                // is an existing state to return to
+                console.log('Returning to previous ' + dtableState.obj.name + ' drowselect state');
+                drowselectListen();
             }
-        }, // dtable
+        }, // drowselect
 
-        // drowselectListen: drowselectListen, // export so other modules can call it
+        drowselectListen: drowselectListen, // export so other modules can call it
 
-        drowselectState: drowselectState, // export so other modules can modify drowselect state
+        drowselectState: drowselectState  // export so other modules can modify drowselect state
 
     }
 });
