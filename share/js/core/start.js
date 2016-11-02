@@ -380,24 +380,12 @@ define ([
         //
         // dtable handlers
         // 
-        dtableState = {
-            "obj": null,
-            "set": null,
-        },
         dtableSubmit = function (dto) {
             target.pull(dto.miniMenu.back[1]).start();
         },
-        dtableListen = function () {
-            var dto = dtableState.obj,
-                set = dtableState.set,
-                msg = 'Displaying table with ';
+        dtableListen = function (dto) {
+            var set = dto.hook();
             console.log("Listening in table " + dto.name);
-            $('#mainarea').html(dto.source(set));
-            lib.holdObject(set); // hold object so hooks can get it
-            msg += (set.length === 1) ?
-                '1 object' :
-                set.length + " objects";
-            $('#result').text(msg);
             $('#' + dto.name).submit(suppressSubmitEvent);
             $('input[name="sel"]').val('').focus();
             $('#submitButton').on("click", function (event) {
@@ -406,9 +394,18 @@ define ([
                 dtableSubmit(dto);
             });
             $('#' + dto.name).on("keypress", mmKeyListener);
+        },
+
+        //
+        // drowselect handlers
+        //
+        drowselectState = {
+            "obj": null,
+            "set": null,
         };
 
     return {
+
         dmenu: function (dmn) {
             // dmn is dmenu name
             // dmo is dmenu object
@@ -421,7 +418,8 @@ define ([
                 $('#' + dmn).submit(dmenuSubmitKey(dmn));
                 $('input[name="sel"]').keydown(dmenuKeyListener(dmn));
             };
-        },
+        }, // dmenu
+
         dform: function (dfn) {
             var dfo = target.pull(dfn);
             return function () {
@@ -432,7 +430,8 @@ define ([
                 $('#mainarea').html(dfo.source(obj));
                 dformListen(dfn, obj);
             };
-        },
+        }, // dform
+
         dbrowser: function (dbn) {
             if (dbn) {
                 // when called with dbn (dbrowser name) argument, we assume
@@ -455,9 +454,12 @@ define ([
                 console.log('Returning to previous ' + dbrowserState.obj.name + ' dbrowser state');
                 dbrowserListen();
             }
-        },
+        }, // dbrowser
+
         dbrowserListen: dbrowserListen, // export so other modules can call it
+
         dbrowserState: dbrowserState, // export so other modules can modify browser state
+
         dnotice: function (dnn) {
             var dno = target.pull(dnn);
             return function () {
@@ -468,24 +470,39 @@ define ([
                 $('input[name="sel"]').focus();
                 dnoticeListen(dno);
             };
-        },
-        dtableListen: dtableListen, // export so other modules can call it
-        dtableState: dtableState, // export so other modules can modify browser state
+        }, // dnotice
+
         dtable: function (dtn) {
             var dto = target.pull(dtn);
-            if (dtn) {
-                // when called with dtn (dtable name) argument, we assume
-                // that we are being called from the second stage of dtable
+            return function () {
+                var set = dto.hook(),
+                    msg = 'Displaying table with ';
+                lib.clearResult();
+                console.log('Starting new ' + dtn + ' dtable');
+                $('#mainarea').html(dto.source(set));
+                msg += (set.length === 1) ?
+                    '1 object' :
+                    set.length + " objects";
+                $('#result').text(msg);
+                dtableListen(dto);
+            };
+        }, // dtable
+
+        drowselect: function (drsn) {
+            var drso = target.pull(drsn);
+            if (drsn) {
+                // when called with drsn (drowselect name) argument, we assume
+                // that we are being called from the second stage of drowselect
                 // initialization (i.e., one-time event) -- generate and
-                // return the start function for this dtable
+                // return the start function for this drowselect
                 return function () {
                     lib.clearResult();
-                    console.log('Starting new ' + dtn + ' dtable');
-                    // (re)initialize dtable state
-                    dtableState.obj = target.pull(dtn);
-                    dtableState.set = dto.hook();
+                    console.log('Starting new ' + drsn + ' drowselect');
+                    // (re)initialize drowselect state
+                    drowselectState.obj = target.pull(drsn);
+                    drowselectState.set = drso.hook();
                     // start browsing
-                    dtableListen();
+                    drowselectListen();
                 };
             } else {
                 // when called _without_ an argument, we assume that there
@@ -493,6 +510,11 @@ define ([
                 console.log('Returning to previous ' + dtableState.obj.name + ' dtable state');
                 dtableListen();
             }
-        }
+        }, // dtable
+
+        // drowselectListen: drowselectListen, // export so other modules can call it
+
+        drowselectState: drowselectState, // export so other modules can modify drowselect state
+
     }
 });
