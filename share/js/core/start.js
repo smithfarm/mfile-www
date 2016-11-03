@@ -351,7 +351,8 @@ define ([
             console.log("Listening in browser " + dbo.name);
             $('#mainarea').html(dbo.source(set, pos));
             lib.holdObject(set[pos]); // hold object so hooks can get it
-            $('#result').html("Displaying no. " + (pos + 1) + " of " + set.length + " objects in result set");
+            $('#result').html("Displaying no. " + (pos + 1) + " of " + 
+                              lib.genObjStr(set.length) + " in result set");
             $('#' + dbo.name).submit( suppressSubmitEvent );
             $('input[name="sel"]').val('').focus();
             $('#submitButton').on("click", function (event) {
@@ -412,10 +413,7 @@ define ([
             var obj = drowselectState.obj,
                 set = drowselectState.set;
             $('#mainarea').html(obj.source(set));
-            msg += (set.length === 1) ?
-                '1 object' :
-                set.length + " objects";
-            $('#result').text(msg);
+            $('#result').text("Displaying rowselect with " + lib.genObjStr(set.length));
             console.log("Listening in rowselect " + obj.name);
             $('#' + obj.name).submit(suppressSubmitEvent);
             $('input[name="sel"]').val('').focus();
@@ -498,15 +496,11 @@ define ([
         dtable: function (dtn) {
             var dto = target.pull(dtn);
             return function () {
-                var set = dto.hook(),
-                    msg = 'Displaying table with ';
+                var set = dto.hook();
                 lib.clearResult();
                 console.log('Starting new ' + dtn + ' dtable');
                 $('#mainarea').html(dto.source(set));
-                msg += (set.length === 1) ?
-                    '1 object' :
-                    set.length + " objects";
-                $('#result').text(msg);
+                $('#result').text('Displaying table with ' + lib.genObjStr(set.length));
                 dtableListen(dto);
             };
         }, // dtable

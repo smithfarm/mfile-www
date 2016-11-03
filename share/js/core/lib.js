@@ -182,6 +182,13 @@ define ([
         // convert null to empty array
         forceArray: function (arr) {
             return (arr === null) ? [] : arr;
+        },
+
+        // generate string "n objects" based on array length
+        genObjStr: function (len) {
+            return (len === 1) ?
+                '1 object' :
+                len + " objects";
         }
 
     };

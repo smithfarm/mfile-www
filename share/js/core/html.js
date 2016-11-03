@@ -178,7 +178,8 @@ define ([
             return function (set) {
 
                 console.log("Generating source code of dtable " + tname);
-                console.log("tobj", tobj);
+                // console.log("tobj", tobj);
+                // console.log("set", set);
                 var r = '<form id="' + tobj.name + '">',
                     entry,
                     column,
