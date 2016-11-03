@@ -233,6 +233,7 @@ define ([
                 // display table rows
                 if (set.length > 0) {
                     for (row = 0; row < set.length; row += 1) {
+                        r += '<span id="row' + row + '">';
                         var obj = set[row];
                         for (column = 0; column < tobj.entries.length; column += 1) {
                             entry = tobj.entries[column];
@@ -246,6 +247,7 @@ define ([
                                 r += ' ';
                             }
                         }
+                        r += '</span>';
                         r += '<br>';
                     }
                     r += '<br>';
