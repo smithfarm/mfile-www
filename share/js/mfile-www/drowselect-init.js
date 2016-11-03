@@ -30,9 +30,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // ************************************************************************* 
 //
-// app/dtable-init.js
+// app/drowselect-init.js
 //
-// Round one of dtable initialization - called from app/target-init.js
+// Round one of drowselect initialization (called from app/target-init)
 //
 "use strict";
 
@@ -44,18 +44,23 @@ define ([
     target
 ) {
 
+    //
+    // define drowselect entries here
+    //
     var entries = {
 
-            'tableEntry1': {
-                name: 'tableEntry1',
+            // read-only form entry no. 1
+            'rowselectEntry1': {
+                name: 'rowselectEntry1',
                 aclProfileRead: 'passerby',
                 text: 'Entry 1',
                 prop: 'prop1',
                 maxlen: 20
             },
-
-            'tableEntry2': {
-                name: 'tableEntry2',
+    
+            // read-write form entry no. 1
+            'rowselectEntry2': {
+                name: 'rowselectEntry2',
                 aclProfileRead: 'passerby',
                 text: 'Entry 2',
                 prop: 'prop2',
@@ -63,9 +68,9 @@ define ([
             }
     
         },
-        
-        // set of objects from which to construct the table
-        tableSet = [
+
+        // set of objects from which to construct the rowselect
+        rowselectSet = [
             { prop1: 'Some information here', prop2: 1234 },
             { prop1: null, prop2: 'Some other info' },
             { prop1: 'Mangled crab crackers', prop2: 'Umpteen whizzles' },
@@ -73,21 +78,24 @@ define ([
             { prop1: 'Emfeebled whipple weepers', prop2: 'A godg' },
             { prop1: 'Wuppo wannabe', prop2: 'Jumbo jamb' }
         ],
-        getTableSet = function () {
-            return tableSet;
+        getRowselectSet = function () {
+            return rowselectSet;
         };
     
     return function () {
 
-        target.push('demoTable', {
-            'name': 'demoTable',
-            'type': 'dtable',
-            'menuText': 'Demo table',
-            'title': 'Demo table',
+        //
+        // push drowselect object definitions onto 'target' here
+        //
+        target.push('demoRowselect', {
+            'name': 'demoRowselect',
+            'type': 'drowselect',
+            'menuText': 'Demonstrate rowselect',
+            'title': 'Demo rowselect',
             'preamble': 'This is just an illustration',
             'aclProfile': 'passerby',
-            'entries': [ entries.tableEntry1, entries.tableEntry2 ],
-            'hook': getTableSet,
+            'entries': [ entries.rowselectEntry1, entries.rowselectEntry2 ],
+            'hook': getRowselectSet,
             'miniMenu': {
                 entries: ['demoEditFromBrowser'],
                 back: ['Done', 'demoSubmenu']
@@ -95,5 +103,5 @@ define ([
         });
 
     };
-
+    
 });

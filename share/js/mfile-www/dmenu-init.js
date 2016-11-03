@@ -50,7 +50,8 @@ define ([
             'menuText': 'Demo menu',
             'title': 'Demo menu',
             'aclProfile': 'passerby',
-            'entries': ['demoActionFromMenu', 'demoNotice', 'demoSubmenu' ],
+            'entries': ['demoActionFromMenu', 'demoNotice', 'demoSubmenu',
+                        'demoRowselect' ],
             'back': 'logout'
         });
 

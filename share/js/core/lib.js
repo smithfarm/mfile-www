@@ -182,6 +182,25 @@ define ([
         // convert null to empty array
         forceArray: function (arr) {
             return (arr === null) ? [] : arr;
+        },
+
+        // generate string "n objects" based on array length
+        genObjStr: function (len) {
+            return (len === 1) ?
+                '1 object' :
+                len + " objects";
+        },
+
+        // reverse-video a row (on/off)
+        reverseVideo: function (row, onoff) {
+            if (onoff === true) {
+                $('#row' + row).css('background-color','#000000');
+                $('#row' + row).css('color','#ffffff');
+            }
+            if (onoff === false) {
+                $('#row' + row).css('background-color','#d0e4fe');
+                $('#row' + row).css('color','#000000');
+            }
         }
 
     };

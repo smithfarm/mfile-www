@@ -44,6 +44,7 @@ define ([
     'app/dbrowser-init',
     'app/dnotice-init',
     'app/dtable-init',
+    'app/drowselect-init',
     'init2'
 ], function (
     target,
@@ -53,6 +54,7 @@ define ([
     dbrowserInitRoundOne,
     dnoticeInitRoundOne,
     dtableInitRoundOne,
+    drowselectInitRoundOne,
     initRoundTwo
 ) {
 
@@ -67,6 +69,7 @@ define ([
         dbrowserInitRoundOne();
         dnoticeInitRoundOne();
         dtableInitRoundOne();
+        drowselectInitRoundOne();
 
         // round two - add 'source' and 'start' properties
         // (widget targets only)
@@ -75,6 +78,7 @@ define ([
         initRoundTwo('dbrowser');
         initRoundTwo('dnotice');
         initRoundTwo('dtable');
+        initRoundTwo('drowselect');
 
         // return name of target to be called first (in main.js)
         return 'demoMenu';

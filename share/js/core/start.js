@@ -351,7 +351,8 @@ define ([
             console.log("Listening in browser " + dbo.name);
             $('#mainarea').html(dbo.source(set, pos));
             lib.holdObject(set[pos]); // hold object so hooks can get it
-            $('#result').html("Displaying no. " + (pos + 1) + " of " + set.length + " objects in result set");
+            $('#result').html("Displaying no. " + (pos + 1) + " of " + 
+                              lib.genObjStr(set.length) + " in result set");
             $('#' + dbo.name).submit( suppressSubmitEvent );
             $('input[name="sel"]').val('').focus();
             $('#submitButton').on("click", function (event) {
@@ -402,6 +403,70 @@ define ([
         drowselectState = {
             "obj": null,
             "set": null,
+            "pos": null
+        },
+        drowselectSubmit = function () {
+            var drso = drowselectState.obj;
+            target.pull(drso.miniMenu.back[1]).start();
+        },
+        drowselectKeyListener = function () {
+            var set = drowselectState.set,
+                pos = drowselectState.pos;
+
+            return function (evt) {
+
+                console.log("Entering drowselectKeyListener");
+                lib.logKeyPress(evt);
+
+                if (evt.keyCode === 37) { // up arrow
+                    if (evt.ctrlKey) {
+                        console.log('Listener detected CTRL-up arrow keypress');
+                        lib.reverseVideo(drowselectState.pos, false);
+                        drowselectState.pos = 0;
+                        drowselectListen();
+                    } else {
+                        console.log('Listener detected up arrow keypress');
+                        if (drowselectState.pos > 0) {
+                            lib.reverseVideo(drowselectState.pos, false);
+                            drowselectState.pos -= 1;
+                            drowselectListen();
+                        }
+                    }
+                } else if (evt.keyCode === 39) { // down arrow
+                    if (evt.ctrlKey) {
+                        console.log('Listener detected CTRL-down arrow keypress');
+                        lib.reverseVideo(drowselectState.pos, false);
+                        drowselectState.pos = set.length - 1;
+                        drowselectListen();
+                    } else {
+                        console.log('Listener detected down arrow keypress');
+                        if (drowselectState.pos < set.length - 1) {
+                            lib.reverseVideo(drowselectState.pos, false);
+                            drowselectState.pos += 1;
+                            drowselectListen();
+                        }
+                    }
+                } else {
+                    mmKeyListener(evt);
+                }
+            };
+        },
+        drowselectListen = function () {
+            var drso = drowselectState.obj,
+                set = drowselectState.set,
+                pos = drowselectState.pos;
+            $('#mainarea').html(drso.source(set));
+            lib.reverseVideo(pos, true);
+            $('#result').text("Displaying rowselect with " + lib.genObjStr(set.length));
+            console.log("Listening in rowselect " + drso.name);
+            $('#' + drso.name).submit(suppressSubmitEvent);
+            $('input[name="sel"]').val('').focus();
+            $('#submitButton').on("click", function (event) {
+                event.preventDefault;
+                console.log("Submitting rowselect " + drso.name);
+                drowselectSubmit();
+            });
+            $('#' + drso.name).on("keypress", drowselectKeyListener());
         };
 
     return {
@@ -475,15 +540,11 @@ define ([
         dtable: function (dtn) {
             var dto = target.pull(dtn);
             return function () {
-                var set = dto.hook(),
-                    msg = 'Displaying table with ';
+                var set = dto.hook();
                 lib.clearResult();
                 console.log('Starting new ' + dtn + ' dtable');
                 $('#mainarea').html(dto.source(set));
-                msg += (set.length === 1) ?
-                    '1 object' :
-                    set.length + " objects";
-                $('#result').text(msg);
+                $('#result').text('Displaying table with ' + lib.genObjStr(set.length));
                 dtableListen(dto);
             };
         }, // dtable
@@ -501,20 +562,21 @@ define ([
                     // (re)initialize drowselect state
                     drowselectState.obj = target.pull(drsn);
                     drowselectState.set = drso.hook();
+                    drowselectState.pos = 0;
                     // start browsing
                     drowselectListen();
                 };
             } else {
                 // when called _without_ an argument, we assume that there
-                // is an existing browser state to return to
-                console.log('Returning to previous ' + dtableState.obj.name + ' dtable state');
-                dtableListen();
+                // is an existing state to return to
+                console.log('Returning to previous ' + dtableState.obj.name + ' drowselect state');
+                drowselectListen();
             }
-        }, // dtable
+        }, // drowselect
 
-        // drowselectListen: drowselectListen, // export so other modules can call it
+        drowselectListen: drowselectListen, // export so other modules can call it
 
-        drowselectState: drowselectState, // export so other modules can modify drowselect state
+        drowselectState: drowselectState  // export so other modules can modify drowselect state
 
     }
 });

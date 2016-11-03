@@ -1,5 +1,5 @@
 // ************************************************************************* 
-// Copyright (c) 2014, SUSE LLC
+// Copyright (c) 2014-2016, SUSE LLC
 // 
 // All rights reserved.
 // 
@@ -109,7 +109,7 @@ define ([
                     prevVal = elem.text.length;
                 }
                 return prevVal;
-            }, arr[0].name.length);
+            }, arr[0].text.length);
             console.log("The longest entry is " + max + " characters long");
             return max;
         },
@@ -173,7 +173,109 @@ define ([
                 r = '';
             }
             return r;
-        };
+        },
+        genericTable = function (tname, tobj, targetType) {
+            return function (set) {
+
+                console.log("Generating source code of " + tname);
+                // console.log("tobj", tobj);
+                // console.log("set", set);
+                var r = '<form id="' + tobj.name + '">',
+                    entry,
+                    column,
+                    row,
+                    col,
+                    headingsentry = {},
+                    superset,
+                    maxl = [];
+
+                r += '<br><b>' + tobj.title + '</b><br><br>';
+
+                if (tobj.preamble) {
+                    r += tobj.preamble + '<br><br>';
+                }
+
+                // populate maxl array
+                tobj.entries.map(function (e) {
+                    headingsentry[e.prop] = e.text;
+                })
+                superset = set.concat([headingsentry]);
+                console.log("superset", superset);
+                for (column = 0; column < tobj.entries.length; column += 1) {
+                    console.log("Column " + column);
+                    entry = tobj.entries[column];
+                    var elems = superset.map(function (obj) {
+                        return obj[entry.prop];
+                    });
+                    var elemlengths = elems.map(function (elem) {
+                        var ep = ((elem === null) ? '' : elem).toString();
+                        return ep.length;
+                    });
+                    maxl[column] = elemlengths.reduce(function (a, b) {
+                        return (a > b) ? a : b;
+                    });
+                }
+
+                // display table header
+                for (column = 0; column < tobj.entries.length; column += 1) {
+                    entry = tobj.entries[column];
+                    if (lib.privCheck(entry.aclProfileRead)) {
+                        r += '<span style="text-decoration: underline">';
+                        r += lib.rightPadSpaces(entry.text, maxl[column]);
+                        r += '</span>';
+                    }
+                    if (column !== tobj.entries.length - 1) {
+                        r += ' ';
+                    }
+                }
+                r += '<br>';
+
+                // display table rows
+                if (set.length > 0) {
+                    for (row = 0; row < set.length; row += 1) {
+                        r += '<span id="row' + row + '">';
+                        var obj = set[row];
+                        for (column = 0; column < tobj.entries.length; column += 1) {
+                            entry = tobj.entries[column];
+                            console.log("entry", entry);
+                            if (lib.privCheck(entry.aclProfileRead)) {
+                                var val = obj[entry.prop];
+                                console.log("value", val);
+                                r += lib.rightPadSpaces(val, maxl[column]);
+                            }
+                            if (column !== tobj.entries.length - 1) {
+                                r += ' ';
+                            }
+                        }
+                        r += '</span>';
+                        r += '<br>';
+                    }
+                    r += '<br>';
+                }
+
+                // Navigation menu (drowselect only)
+                if (targetType === 'drowselect') {
+                    r += 'Navigation:&nbsp;&nbsp;';
+                    r += '<span id="navBack">[\u2190] Previous </span>';
+                    r += '<span id="navForward">[\u2192] Next </span>';
+                    r += '<span id="navJumpToBegin">[\u2303\u2190] Jump to first </span>';
+                    r += '<span id="navJumpToEnd">[\u2303\u2192] Jump to last </span>';
+                    r += '<br>';
+                }
+
+		// miniMenu at the bottom: selections are target names defined
+		// in the 'miniMenu' property of the dform object
+                r += miniMenu(tobj.miniMenu);
+
+                // your choice section
+                r += yourChoice();
+
+                r += '</form>';
+                console.log("Assembled source code for " + tname + " - it has " + r.length + " characters");
+                return r;
+            }
+        }; // genericTable
+
 
     return {
 
@@ -346,7 +448,7 @@ define ([
             var dbo = target.pull(dbn);
             return function (set, pos) {
         
-                //console.log("Generating source code of dbrowser " + dbn);
+                // console.log("Generating source code of dbrowser " + dbn);
                 var r = '<form id="' + dbo.name + '">',
                     len,
                     i,
@@ -419,96 +521,12 @@ define ([
 
         dtable: function (dtn) {
             var dto = target.pull(dtn);
-            return function (set) {
-
-                console.log("Generating source code of dtable " + dtn);
-                console.log("dto", dto);
-                var r = '<form id="' + dto.name + '">',
-                    entry,
-                    column,
-                    row,
-                    col,
-                    headingsentry = {},
-                    superset,
-                    maxl = [];
-
-                r += '<br><b>' + dto.title + '</b><br><br>';
-
-                if (dto.preamble) {
-                    r += dto.preamble + '<br><br>';
-                }
-
-                // populate maxl array
-                dto.entries.map(function (e) {
-                    headingsentry[e.prop] = e.text;
-                })
-                superset = set.concat([headingsentry]);
-                console.log("superset", superset);
-                for (column = 0; column < dto.entries.length; column += 1) {
-                    console.log("Column " + column);
-                    entry = dto.entries[column];
-                    var elems = superset.map(function (obj) {
-                        return obj[entry.prop];
-                    });
-                    var elemlengths = elems.map(function (elem) {
-                        var ep = ((elem === null) ? '' : elem).toString();
-                        return ep.length;
-                    });
-                    maxl[column] = elemlengths.reduce(function (a, b) {
-                        return (a > b) ? a : b;
-                    });
-                }
-
-                // display table header
-                for (column = 0; column < dto.entries.length; column += 1) {
-                    entry = dto.entries[column];
-                    if (lib.privCheck(entry.aclProfileRead)) {
-                        r += '<span style="text-decoration: underline">';
-                        r += lib.rightPadSpaces(entry.text, maxl[column]);
-                        r += '</span>';
-                    }
-                    if (column !== dto.entries.length - 1) {
-                        r += ' ';
-                    }
-                }
-                r += '<br>';
-
-                // display table rows
-                if (set.length > 0) {
-                    for (row = 0; row < set.length; row += 1) {
-                        var obj = set[row];
-                        for (column = 0; column < dto.entries.length; column += 1) {
-                            entry = dto.entries[column];
-                            console.log("entry", entry);
-                            if (lib.privCheck(entry.aclProfileRead)) {
-                                var val = obj[entry.prop];
-                                console.log("value", val);
-                                r += lib.rightPadSpaces(val, maxl[column]);
-                            }
-                            if (column !== dto.entries.length - 1) {
-                                r += ' ';
-                            }
-                        }
-                        r += '<br>';
-                    }
-                    r += '<br>';
-                }
-
-		// miniMenu at the bottom: selections are target names defined
-		// in the 'miniMenu' property of the dform object
-                r += miniMenu(dto.miniMenu);
-
-                // your choice section
-                r += yourChoice();
-
-                r += '</form>';
-                console.log("Assembled source code for " + dtn + " - it has " + r.length + " characters");
-                return r;
-            }
+            return genericTable(dtn, dto, 'dtable');
         }, // dtable
 
         drowselect: function (drsn) {
-            return dtable(drsn);
+            var drso = target.pull(drsn);
+            return genericTable(drsn, drso, 'drowselect');
         } // dtable
 
     };
