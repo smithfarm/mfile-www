@@ -174,10 +174,10 @@ define ([
             }
             return r;
         },
-        genericTable = function (tname, tobj) {
+        genericTable = function (tname, tobj, targetType) {
             return function (set) {
 
-                console.log("Generating source code of dtable " + tname);
+                console.log("Generating source code of " + tname);
                 // console.log("tobj", tobj);
                 // console.log("set", set);
                 var r = '<form id="' + tobj.name + '">',
@@ -250,6 +250,16 @@ define ([
                         r += '</span>';
                         r += '<br>';
                     }
+                    r += '<br>';
+                }
+
+                // Navigation menu (drowselect only)
+                if (targetType === 'drowselect') {
+                    r += 'Navigation:&nbsp;&nbsp;';
+                    r += '<span id="navBack">[\u2190] Previous </span>';
+                    r += '<span id="navForward">[\u2192] Next </span>';
+                    r += '<span id="navJumpToBegin">[\u2303\u2190] Jump to first </span>';
+                    r += '<span id="navJumpToEnd">[\u2303\u2192] Jump to last </span>';
                     r += '<br>';
                 }
 
@@ -438,7 +448,7 @@ define ([
             var dbo = target.pull(dbn);
             return function (set, pos) {
         
-                //console.log("Generating source code of dbrowser " + dbn);
+                // console.log("Generating source code of dbrowser " + dbn);
                 var r = '<form id="' + dbo.name + '">',
                     len,
                     i,
@@ -511,12 +521,12 @@ define ([
 
         dtable: function (dtn) {
             var dto = target.pull(dtn);
-            return genericTable(dtn, dto);
+            return genericTable(dtn, dto, 'dtable');
         }, // dtable
 
         drowselect: function (drsn) {
             var drso = target.pull(drsn);
-            return genericTable(drsn, drso);
+            return genericTable(drsn, drso, 'drowselect');
         } // dtable
 
     };

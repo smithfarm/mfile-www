@@ -409,20 +409,64 @@ define ([
             var drso = drowselectState.obj;
             target.pull(drso.miniMenu.back[1]).start();
         },
+        drowselectKeyListener = function () {
+            var set = drowselectState.set,
+                pos = drowselectState.pos;
+
+            return function (evt) {
+
+                console.log("Entering drowselectKeyListener");
+                lib.logKeyPress(evt);
+
+                if (evt.keyCode === 37) { // up arrow
+                    if (evt.ctrlKey) {
+                        console.log('Listener detected CTRL-up arrow keypress');
+                        lib.reverseVideo(drowselectState.pos, false);
+                        drowselectState.pos = 0;
+                        drowselectListen();
+                    } else {
+                        console.log('Listener detected up arrow keypress');
+                        if (drowselectState.pos > 0) {
+                            lib.reverseVideo(drowselectState.pos, false);
+                            drowselectState.pos -= 1;
+                            drowselectListen();
+                        }
+                    }
+                } else if (evt.keyCode === 39) { // down arrow
+                    if (evt.ctrlKey) {
+                        console.log('Listener detected CTRL-down arrow keypress');
+                        lib.reverseVideo(drowselectState.pos, false);
+                        drowselectState.pos = set.length - 1;
+                        drowselectListen();
+                    } else {
+                        console.log('Listener detected down arrow keypress');
+                        if (drowselectState.pos < set.length - 1) {
+                            lib.reverseVideo(drowselectState.pos, false);
+                            drowselectState.pos += 1;
+                            drowselectListen();
+                        }
+                    }
+                } else {
+                    mmKeyListener(evt);
+                }
+            };
+        },
         drowselectListen = function () {
-            var obj = drowselectState.obj,
-                set = drowselectState.set;
-            $('#mainarea').html(obj.source(set));
+            var drso = drowselectState.obj,
+                set = drowselectState.set,
+                pos = drowselectState.pos;
+            $('#mainarea').html(drso.source(set));
+            lib.reverseVideo(pos, true);
             $('#result').text("Displaying rowselect with " + lib.genObjStr(set.length));
-            console.log("Listening in rowselect " + obj.name);
-            $('#' + obj.name).submit(suppressSubmitEvent);
+            console.log("Listening in rowselect " + drso.name);
+            $('#' + drso.name).submit(suppressSubmitEvent);
             $('input[name="sel"]').val('').focus();
             $('#submitButton').on("click", function (event) {
                 event.preventDefault;
-                console.log("Submitting rowselect " + obj.name);
+                console.log("Submitting rowselect " + drso.name);
                 drowselectSubmit();
             });
-            $('#' + name).on("keypress", mmKeyListener);
+            $('#' + drso.name).on("keypress", drowselectKeyListener());
         };
 
     return {
@@ -518,6 +562,7 @@ define ([
                     // (re)initialize drowselect state
                     drowselectState.obj = target.pull(drsn);
                     drowselectState.set = drso.hook();
+                    drowselectState.pos = 0;
                     // start browsing
                     drowselectListen();
                 };
