@@ -890,3 +890,21 @@ Revision history for App::MFILE::WWW
 - html.js: restore proper padding in dform
 - js: make readableDate() take full "YYYY-MM-DD HH:DD:SS+TZ"
 
+0.150 2016-11-03 19:22 CET
+- Resource.pm: expose REST server URI to JavaScript side
+- Resource.pm: export foreign site params only if defined
+- js demo: dtable return to demoSubmenu instead of demoMenu
+- js demo: implement a proper hook for dbrowser demo
+- html.js: do not concatenate undefined entries
+- html.js: use text prop to determine max length
+- html.js: implement and use getObjStr()
+- start.js: simplify dtable start/listen code
+- Implement a drowselect target (widget)
+  - demo: plumb in the new "drowselect" widget
+  - demo: implement proper dtable, drowselect hooks
+  - html.js: initial HTML for drowselect widget
+  - start.js: add drowselect start and listen functions
+  - html.js: put spans around table/rowselect rows
+  - core: implement drowselect reverse video, arrow-key navigation
+  - html.js: remove potential code duplication (dtable/drowselect)
+

@@ -23,7 +23,7 @@ name: App-MFILE-WWW
 provides:
   App::MFILE::WWW:
     file: lib/App/MFILE/WWW.pm
-    version: '0.149'
+    version: '0.150'
   App::MFILE::WWW::Dispatch:
     file: lib/App/MFILE/WWW/Dispatch.pm
   App::MFILE::WWW::Resource:
@@ -50,5 +50,5 @@ requires:
   perl: '5.012'
 resources:
   license: http://opensource.org/licenses/bsd-license.php
-version: '0.149'
+version: '0.150'
 x_serialization_backend: 'CPAN::Meta::YAML version 0.012'
