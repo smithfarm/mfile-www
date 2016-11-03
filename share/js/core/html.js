@@ -1,5 +1,5 @@
 // ************************************************************************* 
-// Copyright (c) 2014, SUSE LLC
+// Copyright (c) 2014-2016, SUSE LLC
 // 
 // All rights reserved.
 // 
@@ -109,7 +109,7 @@ define ([
                     prevVal = elem.text.length;
                 }
                 return prevVal;
-            }, arr[0].name.length);
+            }, arr[0].text.length);
             console.log("The longest entry is " + max + " characters long");
             return max;
         },
