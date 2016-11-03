@@ -46,34 +46,38 @@ define ([
 
     var entries = {
 
-        'tableEntry1': {
-            name: 'tableEntry1',
-            aclProfileRead: 'passerby',
-            text: 'Entry 1',
-            prop: 'prop1',
-            maxlen: 20
+            'tableEntry1': {
+                name: 'tableEntry1',
+                aclProfileRead: 'passerby',
+                text: 'Entry 1',
+                prop: 'prop1',
+                maxlen: 20
+            },
+
+            'tableEntry2': {
+                name: 'tableEntry2',
+                aclProfileRead: 'passerby',
+                text: 'Entry 2',
+                prop: 'prop2',
+                maxlen: 20
+            }
+    
         },
-
-        'tableEntry2': {
-            name: 'tableEntry2',
-            aclProfileRead: 'passerby',
-            text: 'Entry 2',
-            prop: 'prop2',
-            maxlen: 20
-        }
-
-    };
-
-    return function () {
-
-        lib.holdObject([
+        
+        // set of objects from which to construct the table
+        tableSet = [
             { prop1: 'Some information here', prop2: 1234 },
             { prop1: null, prop2: 'Some other info' },
             { prop1: 'Mangled crab crackers', prop2: 'Umpteen whizzles' },
             { prop1: 'Fandango', prop2: 'Professor!' },
             { prop1: 'Emfeebled whipple weepers', prop2: 'A godg' },
             { prop1: 'Wuppo wannabe', prop2: 'Jumbo jamb' }
-        ]);
+        ],
+        getTableSet = function () {
+            return tableSet;
+        };
+    
+    return function () {
 
         target.push('demoTable', {
             'name': 'demoTable',
@@ -83,7 +87,7 @@ define ([
             'preamble': 'This is just an illustration',
             'aclProfile': 'passerby',
             'entries': [ entries.tableEntry1, entries.tableEntry2 ],
-            'hook': lib.holdObject,
+            'hook': getTableSet,
             'miniMenu': {
                 entries: ['demoEditFromBrowser'],
                 back: ['Done', 'demoSubmenu']

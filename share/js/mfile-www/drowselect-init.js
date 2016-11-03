@@ -49,36 +49,40 @@ define ([
     //
     var entries = {
 
-        // read-only form entry no. 1
-        'rowselectEntry1': {
-            name: 'rowselectEntry1',
-            aclProfileRead: 'passerby',
-            text: 'Entry 1',
-            prop: 'prop1',
-            maxlen: 20
+            // read-only form entry no. 1
+            'rowselectEntry1': {
+                name: 'rowselectEntry1',
+                aclProfileRead: 'passerby',
+                text: 'Entry 1',
+                prop: 'prop1',
+                maxlen: 20
+            },
+    
+            // read-write form entry no. 1
+            'rowselectEntry2': {
+                name: 'rowselectEntry2',
+                aclProfileRead: 'passerby',
+                text: 'Entry 2',
+                prop: 'prop2',
+                maxlen: 20
+            }
+    
         },
 
-        // read-write form entry no. 1
-        'rowselectEntry2': {
-            name: 'rowselectEntry2',
-            aclProfileRead: 'passerby',
-            text: 'Entry 2',
-            prop: 'prop2',
-            maxlen: 20
-        }
-
-    };
-
-    return function () {
-        // initialize sample result set
-        lib.holdObject([
+        // set of objects from which to construct the rowselect
+        rowselectSet = [
             { prop1: 'Some information here', prop2: 1234 },
             { prop1: null, prop2: 'Some other info' },
             { prop1: 'Mangled crab crackers', prop2: 'Umpteen whizzles' },
             { prop1: 'Fandango', prop2: 'Professor!' },
             { prop1: 'Emfeebled whipple weepers', prop2: 'A godg' },
             { prop1: 'Wuppo wannabe', prop2: 'Jumbo jamb' }
-        ]);
+        ],
+        getRowselectSet = function () {
+            return rowselectSet;
+        };
+    
+    return function () {
 
         //
         // push drowselect object definitions onto 'target' here
@@ -91,7 +95,7 @@ define ([
             'preamble': 'This is just an illustration',
             'aclProfile': 'passerby',
             'entries': [ entries.rowselectEntry1, entries.rowselectEntry2 ],
-            'hook': lib.holdObject,
+            'hook': getRowselectSet,
             'miniMenu': {
                 entries: ['demoEditFromBrowser'],
                 back: ['Done', 'demoSubmenu']
