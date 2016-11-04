@@ -908,3 +908,9 @@ Revision history for App::MFILE::WWW
   - core: implement drowselect reverse video, arrow-key navigation
   - html.js: remove potential code duplication (dtable/drowselect)
 
+0.151 2016-11-04 22:02 CET
+- demo: storage and accessors for dbrowser data set
+- demo: move rowselect demo to submenu
+- demo: enable editing in dbrowser/drowselect demos
+- core: refactor to eliminate code duplication (and fix a bug)
+
