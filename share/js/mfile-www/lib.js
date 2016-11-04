@@ -42,6 +42,8 @@ define ([
     currentUser
 ) {
 
+    var browserSet;
+
     return {
 
         //
@@ -85,7 +87,14 @@ define ([
             r += '<a href="http://sourceforge.net/p/mfile/tickets/new/">';
             r += 'http://sourceforge.net/p/mfile/tickets/new/</a>';
             return r;
-        }   
+        },
+
+        getBrowserSet: function () {
+            return browserSet;
+        },
+        setBrowserSet: function (newBrowserSet) {
+            browserSet = newBrowserSet;
+        }
 
     };
 });

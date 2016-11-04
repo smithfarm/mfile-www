@@ -38,9 +38,11 @@
 
 define ([
     'lib',
+    'app/lib',
     'target'
 ], function (
     lib,
+    appLib,
     target
 ) {
 
@@ -68,19 +70,14 @@ define ([
             }
 
         },
-
-        // set of objects to browse
-        browserSet = [
-            { prop1: 'Some information here', prop2: 1234 },
-            { prop1: null, prop2: 'Some other info' },
-            { prop1: 'Mangled crab crackers', prop2: 'Umpteen whizzles' },
-            { prop1: 'Fandango', prop2: 'Professor!' },
-            { prop1: 'Emfeebled whipple weepers', prop2: 'A godg' },
-            { prop1: 'Wuppo wannabe', prop2: 'Jumbo jamb' }
-        ],
-        getBrowserSet = function () {
-            return browserSet;
-        };
+    appLib.setBrowserSet([
+        { prop1: 'Some information here', prop2: 1234 },
+        { prop1: null, prop2: 'Some other info' },
+        { prop1: 'Mangled crab crackers', prop2: 'Umpteen whizzles' },
+        { prop1: 'Fandango', prop2: 'Professor!' },
+        { prop1: 'Emfeebled whipple weepers', prop2: 'A godg' },
+        { prop1: 'Wuppo wannabe', prop2: 'Jumbo jamb' }
+    ]);
     
     return function () {
 
@@ -95,7 +92,7 @@ define ([
             'preamble': 'This is just an illustration',
             'aclProfile': 'passerby',
             'entries': [ entries.browserEntry1, entries.browserEntry2 ],
-            'hook': getBrowserSet,
+            'hook': appLib.getBrowserSet,
             'miniMenu': {
                 entries: ['demoEditFromBrowser'],
                 back: ['Done', 'demoSubmenu']
