@@ -279,14 +279,6 @@ define ([
 
     return {
 
-        demoActionFromMenu: function () {
-            return '<br><br>SAMPLE ACTION - SOMETHING IS HAPPENING<br><br><br>';
-        },
-
-        demoActionFromSubmenu: function () {
-            return '<br><br>SAMPLE ACTION - foo bar actioning bazness<br><br><br>';
-        },
-
         loginDialog: function () {
             var r = '';
             r += '<form id="loginform">';
@@ -358,8 +350,8 @@ define ([
 
             for (i = 0; i < len; i += 1) {
                 // the entries are names of targets
-                console.log("Attempting to pull target " + dmo.entries[i]);
                 entry = target.pull(dmo.entries[i]);
+                console.log("Pulled target " + dmo.entries[i] + " with result ", entry);
                 if (lib.privCheck(entry.aclProfile)) {
                     r += i + '. ' + entry.menuText + '<br>';
                 }

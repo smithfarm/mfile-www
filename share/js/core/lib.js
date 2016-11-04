@@ -44,7 +44,18 @@ define ([
     prototypes
 ) {
 
-    var heldObject = null;
+    var heldObject = null,
+        dbrowserState = {
+            "obj": null,  // the dbrowser object itself
+            "set": null,  // the dataset (array) we are browsing
+            "pos": null   // the current position within that array
+        },
+        drowselectState = {
+            "obj": null,  // the drowselect object itself
+            "set": null,  // the dataset (array) we are selecting from
+            "pos": null   // the current position within that array
+        };
+
 
     return {
 
@@ -201,7 +212,11 @@ define ([
                 $('#row' + row).css('background-color','#d0e4fe');
                 $('#row' + row).css('color','#000000');
             }
-        }
+        },
+
+        // dbrowser, drowselect states
+        dbrowserState: dbrowserState,
+        drowselectState: drowselectState
 
     };
 });
