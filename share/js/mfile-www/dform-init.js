@@ -122,11 +122,27 @@ define ([
             'preamble': 'This is just an illustration',
             'aclProfile': 'passerby',
             'entriesRead': null,
-            'entriesWrite': [ entries.RWprop1, entries.RWprop2 ],
+            'entriesWrite': [entries.RWprop1, entries.RWprop2],
             'hook': lib.holdObject,
             'miniMenu': {
-                entries: ['demoActionFromForm'],
+                entries: ['saveToBrowser'],
                 back: ['Back', 'returnToBrowser']
+            }
+        });
+
+        target.push('demoEditFromRowselect', {
+            'name': 'demoEditFromRowselect',
+            'type': 'dform',
+            'menuText': 'Edit',
+            'title': 'Demo edit from rowselect',
+            'preamble': 'This is just an illustration',
+            'aclProfile': 'passerby',
+            'entriesRead': null,
+            'entriesWrite': [entries.RWprop1, entries.RWprop2],
+            'hook': lib.holdObject,
+            'miniMenu': {
+                entries: ['saveToRowselect'],
+                back: ['Back', 'returnToRowselect']
             }
         });
 

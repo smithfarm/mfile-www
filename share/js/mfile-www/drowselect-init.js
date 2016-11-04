@@ -97,7 +97,7 @@ define ([
             'entries': [ entries.rowselectEntry1, entries.rowselectEntry2 ],
             'hook': getRowselectSet,
             'miniMenu': {
-                entries: ['demoEditFromBrowser'],
+                entries: ['demoEditFromRowselect'],
                 back: ['Done', 'demoSubmenu']
             }
         });

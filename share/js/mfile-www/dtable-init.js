@@ -89,7 +89,7 @@ define ([
             'entries': [ entries.tableEntry1, entries.tableEntry2 ],
             'hook': getTableSet,
             'miniMenu': {
-                entries: ['demoEditFromBrowser'],
+                entries: ['demoActionFromTable'],
                 back: ['Done', 'demoSubmenu']
             }
         });

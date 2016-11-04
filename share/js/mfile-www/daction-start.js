@@ -42,34 +42,54 @@
 
 define ([
     "jquery",
-    "html",
     "logout",
     "start",
-    "target"
+    "target",
+    "lib"
 ], function (
     $,
-    html,
     logout,
     start,
-    target
+    target,
+    lib
 ) {
 
     var act = {
             "demoActionFromMenu": function () {
-                $('#mainarea').html(html.demoActionFromMenu);
-                setTimeout(function () { 
-                        target.pull('demoMenu').start(); 
-                    }, 1500);
+                $('#mainarea').html(
+                    '<br><br>SAMPLE ACTION - SOMETHING IS HAPPENING<br><br><br>'
+                );
+                setTimeout(function () { target.pull('demoMenu').start(); }, 1500);
             },
             "demoActionFromSubmenu": function () {
-                $('#mainarea').html(html.demoActionFromSubmenu);
-                setTimeout(function () { 
-                        target.pull('demoSubmenu').start(); 
-                    }, 1500);
+                $('#mainarea').html(
+                    '<br><br>SAMPLE ACTION - foo bar actioning bazness<br><br><br>'
+                );
+                setTimeout(function () { target.pull('demoSubmenu').start(); }, 1500);
+            },
+            "saveToBrowser": function () { 
+                console.log("Now in saveToBrowser daction");
+                lib.dbrowserState.set[lib.dbrowserState.pos] = {
+                    "prop1": $("#RWProp1").val(),
+                    "prop2": $("#RWProp2").val()
+                };
+                start.dbrowserListen();
             },
             "returnToBrowser": function () { 
                 console.log("Now in returnToBrowser daction");
-                start.dbrowser(); 
+                start.dbrowserListen(); 
+            },
+            "saveToRowselect": function () {
+                console.log("Now in saveToRowselect daction");
+                lib.drowselectState.set[lib.drowselectState.pos] = {
+                    "prop1": $("#RWProp1").val(),
+                    "prop2": $("#RWProp2").val()
+                };
+                start.drowselectListen();
+            },
+            "returnToRowselect": function () {
+                console.log("Now in returnToRowselect daction");
+                start.drowselectListen();
             },
             "logout": logout
         };

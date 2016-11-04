@@ -71,15 +71,43 @@ define ([
             'aclProfile': 'passerby',
             'start': dactionStart('demoActionFromSubmenu')
         }),
+        target.push('demoActionFromTable', {
+            'name': 'demoActionFromTable',
+            'type': 'daction',
+            'menuText': 'Action!',
+            'aclProfile': 'passerby',
+            'start': dactionStart('demoActionFromSubmenu')
+        }),
         //
         // dactions that you will probably want to use in your app
         //
+        target.push('saveToBrowser', {
+            'name': 'saveToBrowser',
+            'type': 'daction',
+            'menuText': 'Save',
+            'aclProfile': 'passerby',
+            'start': dactionStart('saveToBrowser')
+        }),
+        target.push('saveToRowselect', {
+            'name': 'saveToRowselect',
+            'type': 'daction',
+            'menuText': 'Save',
+            'aclProfile': 'passerby',
+            'start': dactionStart('saveToRowselect')
+        }),
         target.push('returnToBrowser', {
             'name': 'returnToBrowser',
             'type': 'daction',
             'menuText': 'Return to browser',
             'aclProfile': 'passerby',
             'start': dactionStart('returnToBrowser')
+        }),
+        target.push('returnToRowselect', {
+            'name': 'returnToRowselect',
+            'type': 'daction',
+            'menuText': 'Return to rowselect',
+            'aclProfile': 'passerby',
+            'start': dactionStart('returnToRowselect')
         }),
         target.push('logout', {
             'name': 'logout',

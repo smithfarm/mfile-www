@@ -69,7 +69,8 @@ define ([
                 maxlen: 20
             }
 
-        },
+        };
+
     appLib.setBrowserSet([
         { prop1: 'Some information here', prop2: 1234 },
         { prop1: null, prop2: 'Some other info' },
