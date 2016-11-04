@@ -151,18 +151,23 @@ define ([
                 selection,
                 entry,
                 item,
-                wlen;
-        
+                wlen,
+                entries = tgt.miniMenu.entries;
+
             // if miniMenu has zero or one entries, 'Back' is the only option
-            len = tgt.miniMenu.entries.length;
-            if (len === 0) {
+            console.log("entries", entries);
+            if (entries === null || entries === undefined || entries.length === 0) {
                 console.log("Setting sel to 'X' by default because miniMenu has no entries");
                 sel = 'X';
-            } else if (sel === '') {
-                // user hit ENTER ambiguously
+                len = 0;
+            } else {
+                len = entries.length;
+            }
+            if (len > 0 && sel === '') {
+                console.log("User hit ENTER ambiguously; doing nothing");
                 return;
             }
-        
+
             if (obj !== undefined) {
                 newObj = $.extend({}, obj);
         
