@@ -257,7 +257,7 @@ define ([
                 }
 
                 // Navigation menu (drowselect only)
-                if (targetType === 'drowselect') {
+                if (targetType === 'drowselect' && set.length > 1) {
                     r += 'Navigation:&nbsp;&nbsp;';
                     r += '<span id="navBack">[\u2190] Previous </span>';
                     r += '<span id="navForward">[\u2192] Next </span>';
