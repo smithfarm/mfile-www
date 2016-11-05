@@ -396,6 +396,7 @@ define ([
 
                 // READ-ONLY entries first
                 len = dfo.entriesRead ? dfo.entriesRead.length : 0;
+                console.log("Processing " + len + "read-only dform entries");
                 for (i = 0; i < len; i += 1) {
                     entry = dfo.entriesRead[i];
                     if (lib.privCheck(entry.aclProfileRead)) {
@@ -409,6 +410,7 @@ define ([
         
                 // READ-WRITE entries second
                 len = dfo.entriesWrite ? dfo.entriesWrite.length : 0;
+                console.log("Processing " + len + "read-write dform entries");
                 for (i = 0; i < len; i += 1) {
                     entry = dfo.entriesWrite[i];
                     if (lib.privCheck(entry.aclProfileWrite)) {

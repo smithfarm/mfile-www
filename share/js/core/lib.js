@@ -216,7 +216,15 @@ define ([
 
         // dbrowser, drowselect states
         dbrowserState: dbrowserState,
-        drowselectState: drowselectState
+        drowselectState: drowselectState,
+
+        // display error message
+        displayError: function (msg) {
+            console.log(msg);
+            $("#result").html(msg);
+            $('input[name="sel"]').val('');
+            $('input[name="entry0"]').focus();
+        }
 
     };
 });
