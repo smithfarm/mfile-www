@@ -231,6 +231,9 @@ define ([
                 r += '<br>';
 
                 // display table rows
+                if (set.length === 0) {
+                    r += '<br>(empty table, nothing to display)<br><br><br>';
+                }
                 if (set.length > 0) {
                     for (row = 0; row < set.length; row += 1) {
                         r += '<span id="row' + row + '">';
