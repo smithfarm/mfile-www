@@ -914,3 +914,9 @@ Revision history for App::MFILE::WWW
 - demo: enable editing in dbrowser/drowselect demos
 - core: refactor to eliminate code duplication (and fix a bug)
 
+0.152 2016-11-05 21:18 CET
+- core: prevent miniMenu entries from being undefined in start.js
+- core: library function for displaying error messages
+- core: improve display of empty table/rowselect in html.js
+- core: display drowselect navigation only if rows > 1
+
