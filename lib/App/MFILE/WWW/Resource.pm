@@ -155,8 +155,8 @@ sub _render_response_html {
     my $cepriv = $session->{'currentUserPriv'};
     my $entity;
     $entity = ( $r->path_info =~ m/test/i )
-        ? test_html( $ce, $cepriv )
-        : main_html( $ce, $cepriv );
+        ? $self->test_html( $ce, $cepriv )
+        : $self->main_html( $ce, $cepriv );
     return $entity;
 }
 
@@ -297,7 +297,7 @@ FIXME: might be worth spinning this off into a separate module.
 =cut
 
 sub main_html {
-    my ( $ce, $cepriv ) = @_;
+    my ( $self, $ce, $cepriv ) = @_;
 
     $cepriv = '' unless defined( $cepriv );
     $log->debug( "Entering " . __PACKAGE__ . "::main_html() with \$ce " .
@@ -310,7 +310,7 @@ sub main_html {
     $r .= '<link rel="stylesheet" type="text/css" href="/css/start.css" />';
 
     # Bring in RequireJS
-    $r .= _require_js($ce, $cepriv);
+    $r .= $self->_require_js($ce, $cepriv);
 
     $r .= '</head>';
     $r .= '<body>';
@@ -331,7 +331,7 @@ Generate html for running unit tests
 =cut
 
 sub test_html {
-    my ( $ce, $cepriv ) = @_;
+    my ( $self, $ce, $cepriv ) = @_;
 
     my $r = '';
     
@@ -341,7 +341,7 @@ sub test_html {
     $r .= '<link rel="stylesheet" type="text/css" href="/css/qunit.css" />';
 
     # Bring in RequireJS
-    $r .= _require_js($ce, $cepriv);
+    $r .= $self->_require_js($ce, $cepriv);
 
     $r .= '</head><body>';
     $r .= '<div id="qunit"></div>';
@@ -357,7 +357,7 @@ sub test_html {
 
 # HTML necessary for RequireJS
 sub _require_js {
-    my ( $ce, $cepriv ) = @_;
+    my ( $self, $ce, $cepriv ) = @_;
 
     my $r = '';
 
@@ -417,6 +417,10 @@ sub _require_js {
     $r .= 'loginDialogChallengeText: \'' . $site->MFILE_WWW_LOGIN_DIALOG_CHALLENGE_TEXT . '\',';
     $r .= 'loginDialogMaxLengthUsername: ' . $site->MFILE_WWW_LOGIN_DIALOG_MAXLENGTH_USERNAME . ',';
     $r .= 'loginDialogMaxLengthPassword: ' . $site->MFILE_WWW_LOGIN_DIALOG_MAXLENGTH_PASSWORD . ',';
+
+    # session data
+    $r .= 'sessionID: \'' . $self->session_id . '\',';
+    $r .= 'sessionLastSeen: \'' . ( exists $self->session->{'last_seen'} ? $self->session->{'last_seen'} : 'never' ) . '\',';
 
     # REST server URI
     if ( defined( $site->DOCHAZKA_WWW_BACKEND_URI ) ) {

@@ -335,6 +335,8 @@ define ([
             r += '<div id="noticesline" style="font-size: small">';
             // r += appLib.fillNoticesLine();
             r += '</div>';
+            r += 'Session: &nbsp&nbsp' + cf('sessionID') + '<br>';
+            r += 'Last seen: ' + cf('sessionLastSeen') + '<br>';
             return r;
         }, // body
 
