@@ -100,6 +100,26 @@ sub context {
 }
 
 
+=head2 session
+
+=cut
+
+sub session {
+    my $self = shift;
+    return $self->request->{'env'}->{'psgix.session'};
+}
+
+
+=head2 session_id
+
+=cut
+
+sub session_id {
+    my $self = shift;
+    return $self->request->{'env'}->{'psgix.session.options'}->{'id'};
+}
+
+
 =head2 service_available
 
 This is the first method called on every incoming request.
@@ -127,10 +147,12 @@ sub content_types_provided {
 
 sub _render_response_html { 
     my ( $self ) = @_;
+    $log->debug( "Entering " . __PACKAGE__ . "::_render_response_html" );
+
     my $r = $self->request;
-    my $session = $r->{'env'};
-    my $ce = $session->get('currentUser');
-    my $cepriv = $session->get('currentUserPriv');
+    my $session = $r->{'env'}->{'psgix.session'};
+    my $ce = $session->{'currentUser'};
+    my $cepriv = $session->{'currentUserPriv'};
     my $entity;
     $entity = ( $r->path_info =~ m/test/i )
         ? test_html( $ce, $cepriv )
