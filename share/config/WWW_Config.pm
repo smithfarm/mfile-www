@@ -36,7 +36,9 @@
 # 
 
 # MFILE_APPNAME
-#     the name of this web front-end
+#     the name of this web front-end (no colons; must match the directory
+#     name where application-specific JavaScript files are stored - e.g.
+#     share/js/mfile-www)
 set( 'MFILE_APPNAME', 'mfile-www' );
 
 # MFILE_WWW_DEBUG_MODE
