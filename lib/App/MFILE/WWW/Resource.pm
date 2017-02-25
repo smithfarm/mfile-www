@@ -419,6 +419,7 @@ sub _require_js {
     $r .= 'loginDialogMaxLengthPassword: ' . $site->MFILE_WWW_LOGIN_DIALOG_MAXLENGTH_PASSWORD . ',';
 
     # session data
+    $r .= 'displaySessionData: ' . ( $site->MFILE_WWW_DISPLAY_SESSION_DATA ? 'true' : 'false' ) . ',';
     if ( $site->MFILE_WWW_DISPLAY_SESSION_DATA ) {
         $r .= 'sessionID: \'' . $self->session_id . '\',';
         $r .= 'sessionLastSeen: \'' . ( exists $self->session->{'last_seen'} ? $self->session->{'last_seen'} : 'never' ) . '\',';
