@@ -920,3 +920,15 @@ Revision history for App::MFILE::WWW
 - core: improve display of empty table/rowselect in html.js
 - core: display drowselect navigation only if rows > 1
 
+0.153 2017-02-25 09:30 CET
+- Refrain from making a new Plack::Session object
+- doc: tweak log messages
+- Resource.pm: implement session and session_id methods
+- script: store sessions in a dedicated directory in /tmp
+- Display session data on all screens
+- login: do not trigger page reload when bad credentials
+- Dispatch.pm: remove dead code
+- Control display of session data by config parameter
+- doc: better description of MFILE_APPNAME config param
+- Control display of session data via configuration parameter
+
