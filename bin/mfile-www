@@ -44,13 +44,14 @@ use App::CELL qw( $meta $site );
 use App::CELL::Util qw( is_directory_viable );
 use App::MFILE::WWW qw( $VERSION );
 use Getopt::Long;
-use File::Path;
+use File::Path qw( make_path remove_tree );
 use File::ShareDir;
 use File::Spec;
 use Module::Load;
 use Module::Runtime qw( is_module_name require_module );
 use Plack::Builder;
 use Plack::Runner;
+use Plack::Session::Store::File;
 use Try::Tiny;
 use Web::Machine;
  
@@ -337,7 +338,7 @@ sub _create_symlink {
     my ( $old, $new ) = @_;
     die "Need to be root to create symlink" unless $sharedir_writable;
     my ( undef, $path, $file ) = File::Spec->splitpath( $new );
-    File::Path::make_path( $path );
+    make_path( $path );
     symlink( $old, $new ) ;
     if ( ! stat( $new ) ) {
         unlink( $new );
@@ -491,11 +492,16 @@ push @ARGV, (
 );
 
 $runner->parse_options(@ARGV);
+remove_tree( '/tmp/mfile-www-sessions' );
+mkdir '/tmp/mfile-www-sessions';
 
 $runner->run( 
     builder {
         enable "StackTrace", force => 1;
-        enable "Session", store => 'File';
+#        enable "Session", store => 'File';
+        enable "Session", store => Plack::Session::Store::File->new(
+            dir => '/tmp/mfile-www-sessions',
+        );
         enable "Static", path => qr{^/(js|css)/}, root => $http_root;
         Web::Machine->new( resource => $dispatch_module, )->to_app;
     }
