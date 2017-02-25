@@ -42,7 +42,6 @@ use warnings;
 
 use App::CELL qw( $CELL $log $meta $site );
 use Data::Dumper;
-use File::Temp qw( tempdir );
 use JSON;
 use LWP::UserAgent;
 use Params::Validate qw(:all);
@@ -50,9 +49,7 @@ use Params::Validate qw(:all);
 # methods/attributes not defined in this module will be inherited from:
 use parent 'App::MFILE::WWW::Resource';
 
-our $ua = LWP::UserAgent->new(
-              cookie_jar => { file => tempdir( CLEANUP => 0 ) }
-          );
+
 
 
 =head1 NAME
