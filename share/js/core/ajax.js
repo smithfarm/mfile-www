@@ -109,8 +109,10 @@ define ([
                         console.log("Payload is", data.payload);
                         if (data.payload.hasOwnProperty('code')) {
                             if (data.payload.code === "401" ) {
-                                console.log("401 encountered: logging out");
-                                logout();
+                                if (mfao.method !== 'LOGIN') {
+                                    console.log("401 encountered: logging out");
+                                    logout();
+                                }
                             }
                         }
                     }
