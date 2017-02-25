@@ -47,7 +47,6 @@ use Encode qw( decode_utf8 );
 use JSON;
 use LWP::UserAgent;
 use Params::Validate qw(:all);
-use Plack::Session;
 use Try::Tiny;
 
 # methods/attributes not defined in this module will be inherited from:
@@ -129,7 +128,7 @@ sub content_types_provided {
 sub _render_response_html { 
     my ( $self ) = @_;
     my $r = $self->request;
-    my $session = Plack::Session->new( $r->{'env'} );
+    my $session = $r->{'env'};
     my $ce = $session->get('currentUser');
     my $cepriv = $session->get('currentUserPriv');
     my $entity;
