@@ -419,8 +419,10 @@ sub _require_js {
     $r .= 'loginDialogMaxLengthPassword: ' . $site->MFILE_WWW_LOGIN_DIALOG_MAXLENGTH_PASSWORD . ',';
 
     # session data
-    $r .= 'sessionID: \'' . $self->session_id . '\',';
-    $r .= 'sessionLastSeen: \'' . ( exists $self->session->{'last_seen'} ? $self->session->{'last_seen'} : 'never' ) . '\',';
+    if ( $site->MFILE_WWW_DISPLAY_SESSION_DATA ) {
+        $r .= 'sessionID: \'' . $self->session_id . '\',';
+        $r .= 'sessionLastSeen: \'' . ( exists $self->session->{'last_seen'} ? $self->session->{'last_seen'} : 'never' ) . '\',';
+    }
 
     # REST server URI
     if ( defined( $site->DOCHAZKA_WWW_BACKEND_URI ) ) {

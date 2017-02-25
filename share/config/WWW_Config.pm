@@ -109,6 +109,10 @@ set( 'MFILE_WWW_SESSION_EXPIRATION_TIME', 3600 );
 #     message that will be displayed for 1 second upon logout
 set( 'MFILE_WWW_LOGOUT_MESSAGE', '<br><br><br><br>App::MFILE::WWW over and out.<br><br>Have a lot of fun.<br><br><br><br>' );
 
+# MFILE_WWW_DISPLAY_SESSION_DATA
+#     controls whether session data will be displayed on all screens
+set( 'MFILE_WWW_DISPLAY_SESSION_DATA', 0 );
+
 # JAVASCRIPT (REQUIREJS)
 #     we use RequireJS to bring in dependencies - the following configuration
 #     parameters are required to bring in RequireJS
