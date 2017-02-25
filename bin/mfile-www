@@ -288,7 +288,7 @@ sub _get_sharedir {
     my $module = join( '::', @tmp_c );
     my $app_module = $module . '::Dispatch';
     die "$app_module is not a module name" unless is_module_name( $app_module );
-    print "Derived distro is $app_distro\n";
+    print "_get_sharedir: Derived distro is $app_distro\n";
 
     my $status = undef;
     try {
