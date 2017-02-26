@@ -336,8 +336,8 @@ define ([
             // r += appLib.fillNoticesLine();
             r += '</div>';
             if (cf('displaySessionData') === true) {
-                r += 'Session: &nbsp&nbsp' + cf('sessionID') + '<br>';
-                r += 'Last seen: ' + cf('sessionLastSeen') + '<br>';
+                r += 'Plack session ID: ' + cf('sessionID');
+                r += ' (last_seen ' + cf('sessionLastSeen') + ')</br>';
             }
             return r;
         }, // body
