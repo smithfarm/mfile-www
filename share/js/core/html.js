@@ -412,7 +412,7 @@ define ([
                 for (i = 0; i < len; i += 1) {
                     entry = dfo.entriesRead[i];
                     if (entry.name === 'divider') {
-                        r += Array(entry.maxLength).join(entry.text) + '<br>';
+                        r += Array(entry.maxlen).join(entry.text) + '<br>';
                     } else if (lib.privCheck(entry.aclProfileRead)) {
                         r += lib.rightPadSpaces(entry.text.concat(':'), needed);
                         r += '<span id="' + entry.name + '">';
