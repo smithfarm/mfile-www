@@ -411,7 +411,9 @@ define ([
                 console.log("Processing " + len + "read-only dform entries");
                 for (i = 0; i < len; i += 1) {
                     entry = dfo.entriesRead[i];
-                    if (lib.privCheck(entry.aclProfileRead)) {
+                    if (entry.name === 'divider') {
+                        r += Array(entry.maxLength).join(array.text) + '<br>';
+                    } else if (lib.privCheck(entry.aclProfileRead)) {
                         r += lib.rightPadSpaces(entry.text.concat(':'), needed);
                         r += '<span id="' + entry.name + '">';
                         r += valueToDisplay(obj, entry.prop);

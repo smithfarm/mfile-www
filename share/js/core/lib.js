@@ -59,6 +59,16 @@ define ([
 
     return {
 
+        // special entries
+        dividerEntry: {
+            name: 'divider',
+            aclProfileRead: 'passerby',
+            aclProfileWrite: null,
+            text: '-',
+            prop: null,
+            maxlen: 20
+        },
+
         // clear the result line
         clearResult: function () {
             $('#result').css('text-align', 'left');
