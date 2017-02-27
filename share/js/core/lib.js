@@ -148,7 +148,7 @@ define ([
         // right pad a string with spaces 
         rightPadSpaces: function (toPad, padto) {
             var strToPad = ((toPad === null) ? '' : toPad).toString();
-            console.log("Padding " + strToPad + " to " + padto + " spaces.");
+            // console.log("Padding " + strToPad + " to " + padto + " spaces.");
             var sp = '&nbsp;',
                 padSpaces = sp.repeat(padto - String(strToPad).length);
             return strToPad.concat(padSpaces);
