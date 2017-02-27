@@ -413,6 +413,8 @@ define ([
                     entry = dfo.entriesRead[i];
                     if (entry.name === 'divider') {
                         r += Array(entry.maxlen).join(entry.text) + '<br>';
+                    } else if (entry.name === 'emptyLine') {
+                        r += '<br>';
                     } else if (lib.privCheck(entry.aclProfileRead)) {
                         r += lib.rightPadSpaces(entry.text.concat(':'), needed);
                         r += '<span id="' + entry.name + '">';

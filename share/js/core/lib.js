@@ -68,6 +68,14 @@ define ([
             prop: null,
             maxlen: 20
         },
+        emptyLineEntry: {
+            name: 'emptyLine',
+            aclProfileRead: 'passerby',
+            aclProfileWrite: null,
+            text: null,
+            prop: null,
+            maxlen: 20
+        },
 
         // clear the result line
         clearResult: function () {
