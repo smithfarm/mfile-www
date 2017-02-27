@@ -6,8 +6,8 @@ WriteMakefile
   'NAME' => 'App::MFILE::WWW',
   'VERSION_FROM' => 'lib/App/MFILE/WWW.pm',
   'PREREQ_PM' => {
-                   'App::CELL' => '0.194',
-                   'App::MFILE' => '0.17',
+                   'App::CELL' => '0.222',
+                   'App::MFILE' => '0.181',
                    'File::ShareDir' => '1.00',
                    'File::Temp' => 0,
                    'Getopt::Long' => 0,

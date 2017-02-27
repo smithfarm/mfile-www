@@ -3,8 +3,8 @@ abstract: 'Web UI development toolkit with prototype demo app'
 author:
   - 'Nathan Cutler <ncutler@suse.cz>'
 build_requires:
-  App::CELL: 0.194
-  App::MFILE: 0.17
+  App::CELL: 0.222
+  App::MFILE: 0.181
   HTTP::Request: 0
   Plack::Test: 0
   Scalar::Util: 0
@@ -22,7 +22,7 @@ name: App-MFILE-WWW
 provides:
   App::MFILE::WWW:
     file: lib/App/MFILE/WWW.pm
-    version: 0.153
+    version: 0.154
   App::MFILE::WWW::Dispatch:
     file: lib/App/MFILE/WWW/Dispatch.pm
     version: 0
@@ -30,8 +30,8 @@ provides:
     file: lib/App/MFILE/WWW/Resource.pm
     version: 0
 requires:
-  App::CELL: 0.194
-  App::MFILE: 0.17
+  App::CELL: 0.222
+  App::MFILE: 0.181
   File::ShareDir: 1.00
   File::Temp: 0
   Getopt::Long: 0
@@ -50,4 +50,4 @@ requires:
   perl: 5.012
 resources:
   license: http://opensource.org/licenses/BSD-3-Clause
-version: 0.153
+version: 0.154

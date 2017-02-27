@@ -932,3 +932,11 @@ Revision history for App::MFILE::WWW
 - doc: better description of MFILE_APPNAME config param
 - Control display of session data via configuration parameter
 
+0.154 2017-02-27 15:40 CET
+- build/ops: require recent versions of dependencies
+- Cleanup session data display
+- html.js: handle null entriesWrite array
+- Implement a special divider dform entry, including rendering
+- Implement a special dform entry that is just an empty line
+- html: handle null elem.text in maxLength
+
