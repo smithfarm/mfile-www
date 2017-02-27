@@ -394,11 +394,16 @@ define ([
                 // determine characters needed for padding (based on longest
                 // entry)
                 if (dfo.entriesRead !== undefined) {
+                    console.log("entriesRead", dfo.entriesRead);
                     allEntries = lib.forceArray(dfo.entriesRead);
                 }
                 if (dfo.entriesWrite !== undefined) {
-                    allEntries = allEntries.concat(dfo.entriesWrite);
+                    console.log("entriesWrite", dfo.entriesWrite);
+                    allEntries = allEntries.concat(
+                        dfo.entriesWrite === null ? [] : dfo.entriesWrite
+                    );
                 }
+                console.log("About to call maxLength() on allEntries", allEntries);
                 needed = maxLength(allEntries) + 2;
 
                 // READ-ONLY entries first
