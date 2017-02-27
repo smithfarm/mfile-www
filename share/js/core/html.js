@@ -104,10 +104,10 @@ define ([
             var len, max;
             len = arr ? arr.length : 0;
             console.log("arr has " + len + " members");
-            if (elem.text === null) {
-                elem.text = '';
-            }
             max = arr.reduce(function(prevVal, elem) {
+                if (elem.text === null) {
+                    elem.text = '';
+                }
                 if (elem.text.length > prevVal) {
                     prevVal = elem.text.length;
                 }
