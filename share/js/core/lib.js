@@ -258,7 +258,19 @@ define ([
                 );
             }
             return clone;
-        }
+        },
+
+        // boolean function for existing, non-empty string, from 
+        // https://www.safaribooksonline.com/library/view/javascript-cookbook/9781449390211/ch01s07.html
+        // true if variable exists, is a string, and has a length greater than zero
+        isStringNotEmpty: function (unknownVariable) {
+            if (((typeof unknownVariable !== "undefined") &&
+                 (typeof unknownVariable.valueOf() === "string")) &&
+                 (unknownVariable.length > 0)) {
+                return true;
+            }
+            return false;
+        };
     };
 });
 
