@@ -79,6 +79,7 @@ define ([
             console.log("Popped " + stackObj.target.name);
             type = stackObj.target.type;
             if (start) {
+                lib.clearResult();
                 stackObj.target.start();
             }
         },
@@ -102,6 +103,7 @@ define ([
                     "state": obj,
                 });
             }
+            lib.clearResult();
             tgt.start(obj);
         },
 

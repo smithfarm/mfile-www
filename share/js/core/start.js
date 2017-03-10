@@ -428,7 +428,7 @@ define ([
             var dmo = target.pull(dmn);
             return function (obj) {
                 console.log('Entering start.dmenu with argument: ' + dmn);
-                lib.clearResult();
+                // lib.clearResult();
                 $('#mainarea').html(dmo.source);
                 $('input[name="sel"]').val('').focus();
                 $('#' + dmn).submit(dmenuSubmitKey(dmn));
