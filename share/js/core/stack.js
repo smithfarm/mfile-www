@@ -157,7 +157,8 @@ define ([
         "push": push,
         "rollback": rollback,
         "setState": setState,
-        "setTarget": setTarget
+        "setTarget": setTarget,
+        "unwindToFlag": unwindToFlag
     };
 
 });
