@@ -85,10 +85,11 @@ define ([
         },
 
         // push a target and its state onto the stack
-        push = function (tgt, obj) {
+        push = function (tgt, obj, flag) {
             console.log("Entering stack.push() with target", tgt, "and object", obj);
-            console.log("and stack", _stack);
+            // console.log("and stack", _stack);
             var targetName;
+            flag = flag ? true : false;
             if (typeof tgt === "string") {
                 targetName = tgt;
                 tgt = target.pull(tgt);
@@ -101,6 +102,7 @@ define ([
                 _stack.push({
                     "target": tgt,
                     "state": obj,
+                    "flag": flag
                 });
             }
             lib.clearResult();
@@ -121,17 +123,31 @@ define ([
             return _stack[_stack.length - 1].newTarget;
         },
 
-        // roll back the stack - pop until the given target name
+        // unwind stack until given target is reached
         rollback = function (tname) {
-            console.log("Rolling back the stack to " + tname);
+            console.log("Unwinding the stack to target " + tname);
+            var tgt;
             for (var i = _stack.length; i > 0; i--) {
-                var tgt = _stack[i - 1].target;
+                tgt = _stack[i - 1].target;
                 if (tgt.name === tname) {
                    break;
                 }
                 pop(null, false);
             }
             tgt.start();
+        },
+        
+        unwindToFlag = function () {
+            console.log("Unwinding the stack to flag");
+            var flag;
+            for (var i = _stack.length; i > 0; i--) {
+                flag = _stack[i - 1].flag;
+                if (flag) {
+                   break;
+                }
+                pop(null, false);
+            }
+            _stack[_stack.length - 1].target.start();
         };
 
     return {
