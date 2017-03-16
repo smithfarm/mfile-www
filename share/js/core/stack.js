@@ -115,12 +115,19 @@ define ([
         getTarget = function () {
             return _stack[_stack.length - 1].target;
         },
+        getFlag = function () {
+            return _stack[_stack.length - 1].flag;
+        },
+
 
         setState = function (newState) {
             _stack[_stack.length - 1].state = newState;
         },
         setTarget = function (newTarget) {
             return _stack[_stack.length - 1].newTarget;
+        },
+        setFlag = function (newFlag) {
+            return _stack[_stack.length - 1].newFlag;
         },
 
         // unwind stack until given target is reached
@@ -153,10 +160,12 @@ define ([
     return {
         "getState": getState,
         "getTarget": getTarget,
+        "getFlag": getFlag,
         "pop": pop,
         "push": push,
         "setState": setState,
         "setTarget": setTarget,
+        "setFlag": setFlag,
         "unwindToFlag": unwindToFlag,
         "unwindToTarget": unwindToTarget
     };
