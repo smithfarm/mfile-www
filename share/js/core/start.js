@@ -195,7 +195,12 @@ define ([
                     item = selection;
                 }
             } else if (sel === 'X' || sel === 'x') {
-                stack.pop();
+                var xtgt = target.getXTarget();
+                if (typeof xtgt === "string") {
+                    stack.unwindToTarget(xtgt);
+                } else {
+                    stack.pop();
+                }
                 return;
             } else {
                 console.log('Selection is ' + sel + ' (invalid) -- doing nothing');

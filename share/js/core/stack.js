@@ -85,10 +85,20 @@ define ([
         },
 
         // push a target and its state onto the stack
-        push = function (tgt, obj, flag) {
-            console.log("Entering stack.push() with target", tgt, "and object", obj);
+        push = function (tgt, obj, opts) {
+            console.log("Entering stack.push() with target", tgt, "object", obj, "and opts", opts);
             // console.log("and stack", _stack);
-            var targetName;
+            var targetName,
+                flag,
+                xtarget;
+            if (typeof opts === "object") {
+                if (opts.hasOwnProperty('flag')) {
+                    flag = opts.flag;
+                }
+                if (opts.hasOwnProperty('xtarget'))
+                    xtarget = opts.xtarget;
+                }
+            }
             flag = flag ? true : false;
             if (typeof tgt === "string") {
                 targetName = tgt;
@@ -102,7 +112,8 @@ define ([
                 _stack.push({
                     "target": tgt,
                     "state": obj,
-                    "flag": flag
+                    "flag": flag,
+                    "xtarget": xtarget
                 });
             }
             lib.clearResult();
