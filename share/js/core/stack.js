@@ -124,7 +124,7 @@ define ([
         },
 
         // unwind stack until given target is reached
-        rollback = function (tname) {
+        unwindToTarget = function (tname) {
             console.log("Unwinding the stack to target " + tname);
             var tgt;
             for (var i = _stack.length; i > 0; i--) {
@@ -155,10 +155,10 @@ define ([
         "getTarget": getTarget,
         "pop": pop,
         "push": push,
-        "rollback": rollback,
         "setState": setState,
         "setTarget": setTarget,
-        "unwindToFlag": unwindToFlag
+        "unwindToFlag": unwindToFlag,
+        "unwindToTarget": unwindToTarget
     };
 
 });
