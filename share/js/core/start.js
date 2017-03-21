@@ -195,7 +195,7 @@ define ([
                     item = selection;
                 }
             } else if (sel === 'X' || sel === 'x') {
-                var xtgt = target.getXTarget();
+                var xtgt = stack.getXTarget();
                 if (typeof xtgt === "string") {
                     stack.unwindToTarget(xtgt);
                 } else {
@@ -207,16 +207,6 @@ define ([
             }
             if (item !== undefined) {
                 //console.log("Selected " + dfn + " menu item: " + item.name);
-                // WARNING about the next line: we send the new object
-                // to the selected target's start method, but it will only 
-                // be available to the start method if the target is a
-                // daction. If the target is a dform or a dbrowser, nothing
-                // will be passed in because the start methods of these
-                // target types do not have an argument. If you want to use
-                // this new value in a form or browser target (??), you will need
-                // to define a daction that sets up that target's hook to
-                // provide this value to the form/browser, and _then_ calls
-                // the intended target.
                 newObj.mm = true;
                 if (tgt.type === 'dform') {
                     console.log("Changing stack state to", newObj);
