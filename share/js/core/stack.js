@@ -91,15 +91,6 @@ define ([
             var targetName,
                 flag,
                 xtarget;
-            if (typeof opts === "object") {
-                if (opts.hasOwnProperty('flag')) {
-                    flag = opts.flag;
-                }
-                if (opts.hasOwnProperty('xtarget'))
-                    xtarget = opts.xtarget;
-                }
-            }
-            flag = flag ? true : false;
             if (typeof tgt === "string") {
                 targetName = tgt;
                 tgt = target.pull(tgt);
@@ -107,6 +98,11 @@ define ([
             if (typeof tgt !== "object") {
                 console.log("ERROR in stack.push() - found no target object");
                 return;
+            }
+            if (typeof opts === "object") {
+                flag = opts.hasOwnProperty('flag') ? opts.flag : false;
+                xtarget = opts.hasOwnProperty('xtarget') ? opts.xtarget : null;
+                console.log("In stack.push(), setting flag", flag, "and xtarget", xtarget);
             }
             if (tgt.pushable) {
                 _stack.push({
@@ -129,16 +125,22 @@ define ([
         getFlag = function () {
             return _stack[_stack.length - 1].flag;
         },
+        getXTarget = function () {
+            return _stack[_stack.length - 1].xtarget;
+        },
 
 
         setState = function (newState) {
             _stack[_stack.length - 1].state = newState;
         },
         setTarget = function (newTarget) {
-            return _stack[_stack.length - 1].newTarget;
+            _stack[_stack.length - 1].target = newTarget;
         },
         setFlag = function (newFlag) {
-            return _stack[_stack.length - 1].newFlag;
+            _stack[_stack.length - 1].flag = newFlag;
+        },
+        setXTarget = function (newXTarget) {
+            _stack[_stack.length - 1].xtarget = newXTarget;
         },
 
         // unwind stack until given target is reached
@@ -172,11 +174,13 @@ define ([
         "getState": getState,
         "getTarget": getTarget,
         "getFlag": getFlag,
+        "getXTarget": getXTarget,
         "pop": pop,
         "push": push,
         "setState": setState,
         "setTarget": setTarget,
         "setFlag": setFlag,
+        "setXTarget": setXTarget,
         "unwindToFlag": unwindToFlag,
         "unwindToTarget": unwindToTarget
     };
