@@ -276,6 +276,11 @@ define ([
                 return true;
             }
             return false;
+        },
+
+        isObjEmpty: function (obj) {
+            if (Object.getOwnPropertyNames(obj).length > 0) return false;
+            return true;
         }
     };
 });
