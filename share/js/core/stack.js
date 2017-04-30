@@ -97,6 +97,9 @@ define ([
             var targetName,
                 flag,
                 xtarget;
+            if (obj === undefined || obj === null) {
+                obj = {};
+            }
             if (typeof tgt === "string") {
                 targetName = tgt;
                 tgt = target.pull(tgt);
