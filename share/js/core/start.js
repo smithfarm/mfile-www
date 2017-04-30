@@ -228,7 +228,7 @@ define ([
             var dfo = target.pull(dfn);
             $('#' + dfn).submit( suppressSubmitEvent );
             $('input[name="sel"]').val('');
-            if (! obj.mm && $('input[name="entry0"]').length) {
+            if (stack.getPush() === true && $('input[name="entry0"]').length) {
                 $('input[name="entry0"]').focus();
             } else {
                 $('input[name="sel"]').focus();
@@ -424,6 +424,7 @@ define ([
             return function (obj) {
                 console.log('Entering start.dmenu with argument: ' + dmn);
                 // lib.clearResult();
+                stack.setFlag();
                 $('#mainarea').html(dmo.source);
                 $('input[name="sel"]').val('').focus();
                 $('#' + dmn).submit(dmenuSubmitKey(dmn));

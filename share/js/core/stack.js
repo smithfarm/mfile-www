@@ -32,9 +32,9 @@
 //
 // stack.js -- stack enabling targets (dialogs) to be "push"ed and "pop"ped
 //
-// Before calling the start() method on a target, call stack.push(target)
+// To initiate a new target (dialog), call stack.push(target)
 //
-// To return to the previous dialog, just call stack.pop()
+// To return to the previous target (dialog), call stack.pop()
 //
 // Each target type (dmenu, dform, etc.) needs to have methods for saving
 // and restoring the target state. These can range from very simple (dmenu)
@@ -59,7 +59,8 @@ define ([
         _stack = [],
 
         // pop a target and its state off the stack
-        // takes an optional argument - object to be merged into stateObj
+        // ARG1 (optional) - object to be merged into stateObj
+        // ARG2 (optional) - boolean, whether to call start() (default: true)
         pop = function (mo, start) {
             start = (start === false) ? false : true;
             console.log("Entering stack.pop() with stack", _stack);
@@ -76,12 +77,17 @@ define ([
                 console.log("pop() was passed an object", mo);
                 $.extend(stackObj.state, mo);
             }
+            stackObj.pushed = false;
             console.log("Popped " + stackObj.target.name);
             type = stackObj.target.type;
             if (start) {
                 lib.clearResult();
                 stackObj.target.start();
             }
+        },
+
+        popWithoutStart = function (mo) {
+            pop(mo, false);
         },
 
         // push a target and its state onto the stack
@@ -106,9 +112,10 @@ define ([
             }
             if (tgt.pushable) {
                 _stack.push({
-                    "target": tgt,
-                    "state": obj,
                     "flag": flag,
+                    "push": true,
+                    "state": obj,
+                    "target": tgt,
                     "xtarget": xtarget
                 });
             }
@@ -116,31 +123,53 @@ define ([
             tgt.start(obj);
         },
 
+        getFlag = function () {
+            return _stack[_stack.length - 1].flag;
+        },
+        getPush = function () {
+            return _stack[_stack.length - 1].push;
+        },
         getState = function () {
             return _stack[_stack.length - 1].state;
         },
         getTarget = function () {
             return _stack[_stack.length - 1].target;
         },
-        getFlag = function () {
-            return _stack[_stack.length - 1].flag;
-        },
         getXTarget = function () {
             return _stack[_stack.length - 1].xtarget;
         },
 
 
+        setFlag = function () {
+            _stack[_stack.length - 1].flag = true;
+        },
+        setPush = function (newPush) {
+            _stack[_stack.length - 1].push = newPush;
+        },
         setState = function (newState) {
             _stack[_stack.length - 1].state = newState;
         },
         setTarget = function (newTarget) {
             _stack[_stack.length - 1].target = newTarget;
         },
-        setFlag = function (newFlag) {
-            _stack[_stack.length - 1].flag = newFlag;
-        },
         setXTarget = function (newXTarget) {
             _stack[_stack.length - 1].xtarget = newXTarget;
+        },
+
+        unsetFlag = function () {
+            _stack[_stack.length - 1].flag = false;
+        },
+        unsetPush = function (newPush) {
+            _stack[_stack.length - 1].push = undefined;
+        },
+        unsetState = function (newState) {
+            _stack[_stack.length - 1].state = undefined;
+        },
+        unsetTarget = function (newTarget) {
+            _stack[_stack.length - 1].target = undefined;
+        },
+        unsetXTarget = function (newXTarget) {
+            _stack[_stack.length - 1].xtarget = undefined;
         },
 
         // unwind stack until given target is reached
@@ -152,7 +181,7 @@ define ([
                 if (tgt.name === tname) {
                    break;
                 }
-                pop(null, false);
+                popWithoutStart();
             }
             tgt.start();
         },
@@ -165,22 +194,30 @@ define ([
                 if (flag) {
                    break;
                 }
-                pop(null, false);
+                popWithoutStart();
             }
             _stack[_stack.length - 1].target.start();
         };
 
     return {
+        "getFlag": getFlag,
+        "getPush": getPush,
         "getState": getState,
         "getTarget": getTarget,
-        "getFlag": getFlag,
         "getXTarget": getXTarget,
         "pop": pop,
+        "popWithoutStart": popWithoutStart,
         "push": push,
+        "setFlag": setFlag,
+        "setPush": setPush,
         "setState": setState,
         "setTarget": setTarget,
-        "setFlag": setFlag,
         "setXTarget": setXTarget,
+        "unsetFlag": unsetFlag,
+        "unsetPush": unsetPush,
+        "unsetState": unsetState,
+        "unsetTarget": unsetTarget,
+        "unsetXTarget": unsetXTarget,
         "unwindToFlag": unwindToFlag,
         "unwindToTarget": unwindToTarget
     };
