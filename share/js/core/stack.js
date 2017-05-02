@@ -199,6 +199,17 @@ define ([
                 popWithoutStart();
             }
             _stack[_stack.length - 1].target.start();
+        },
+
+        // grep stack for a target name (exact match)
+        grep = function (tname) {
+            var retval = false;
+            for (var i=0; i<_stack.length; i++) {
+                if (_stack[i].target.name === tname) {
+                    return true;
+                }
+            }
+            return false;
         };
 
     return {
