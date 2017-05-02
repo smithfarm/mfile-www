@@ -208,7 +208,7 @@ define ([
             if (item !== undefined) {
                 //console.log("Selected " + dfn + " menu item: " + item.name);
                 newObj.mm = true;
-                if (tgt.type === 'dform') {
+                if (tgt.type === 'dform' && tgt.rememberState) {
                     console.log("Changing stack state to", newObj);
                     stack.setState(newObj);
                 }
