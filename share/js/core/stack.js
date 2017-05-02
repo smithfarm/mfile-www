@@ -94,14 +94,12 @@ define ([
         push = function (tgt, obj, opts) {
             console.log("Entering stack.push() with target", tgt, "object", obj, "and opts", opts);
             // console.log("and stack", _stack);
-            var targetName,
-                flag,
+            var flag,
                 xtarget;
             if (obj === undefined || obj === null) {
                 obj = {};
             }
             if (typeof tgt === "string") {
-                targetName = tgt;
                 tgt = target.pull(tgt);
             }
             if (typeof tgt !== "object") {
@@ -162,16 +160,16 @@ define ([
         unsetFlag = function () {
             _stack[_stack.length - 1].flag = false;
         },
-        unsetPush = function (newPush) {
+        unsetPush = function () {
             _stack[_stack.length - 1].push = undefined;
         },
-        unsetState = function (newState) {
+        unsetState = function () {
             _stack[_stack.length - 1].state = undefined;
         },
-        unsetTarget = function (newTarget) {
+        unsetTarget = function () {
             _stack[_stack.length - 1].target = undefined;
         },
-        unsetXTarget = function (newXTarget) {
+        unsetXTarget = function () {
             _stack[_stack.length - 1].xtarget = undefined;
         },
 
