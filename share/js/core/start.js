@@ -304,11 +304,12 @@ define ([
             // lib.holdObject(set[pos]); // hold object so hooks can get it
             $('#result').html("Displaying no. " + (pos + 1) + " of " + 
                               lib.genObjStr(set.length) + " in result set");
-            $('#' + dbo.name).submit( suppressSubmitEvent );
+            $('#' + dbo.name).submit(suppressSubmitEvent);
             $('input[name="sel"]').val('').focus();
             $('#submitButton').on("click", function (event) {
                 event.preventDefault;
                 //console.log("Submitting browser " + dbo.name);
+                stack.getState().pos = pos;
                 dbrowserSubmit();
             });
             $('#' + dbo.name).on("keypress", dbrowserKeyListener());
@@ -440,7 +441,7 @@ define ([
                     obj = stack.getState();
                 }
                 console.log('The object we are working with is:', obj);
-                lib.clearResult();
+                // lib.clearResult();
                 $('#mainarea').html(dfo.source(obj));
                 dformListen(dfn, obj);
             };
@@ -454,7 +455,7 @@ define ([
                 // return the start function for this dbrowser
                 return function (obj) { 
                     lib.clearResult();
-                    console.log('Starting new ' + dbn + ' dbrowser');
+                    console.log('Starting new ' + dbn + ' dbrowser with object', obj);
                     if (! obj) {
                         obj = stack.getState();
                     }

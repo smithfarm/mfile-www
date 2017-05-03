@@ -218,6 +218,7 @@ define ([
         "getState": getState,
         "getTarget": getTarget,
         "getXTarget": getXTarget,
+        "grep": grep,
         "pop": pop,
         "popWithoutStart": popWithoutStart,
         "push": push,
