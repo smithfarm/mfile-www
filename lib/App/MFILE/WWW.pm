@@ -167,6 +167,7 @@ Control passes from the Perl side to the JavaScript side
 
 =item * B<asynchronously> whenever the user triggers an AJAX call
 
+=back
 
 =head2 Perl side
 
@@ -234,6 +235,7 @@ interacting with the JavaScript code running in her browser, which will
 communicate asynchronously as needed with the back-end (which must be
 implemented separately) via AJAX calls.
 
+=back
 
 
 =head2 JavaScript side
