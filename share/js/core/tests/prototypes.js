@@ -46,20 +46,14 @@ define ([
 
             // target
             strictEqual(typeof t, 'object', 't is an object');
-            strictEqual(typeof t.name, 'string', 'target.name OK');
-            strictEqual(t.name, 'targetPrototype', 't.name OK');
-            strictEqual(typeof t.get_name, 'function', 'target.get_name OK');
+            strictEqual(typeof t.name, 'object', 'target.name OK');
+            strictEqual(t.name, null, 't.name OK');
             strictEqual(typeof t.menuText, 'string', 'target.menuText OK');
-            strictEqual(t.menuText, 'Target prototype', 't.menuText OK');
-            strictEqual(typeof t.get_menuText, 'function', 'target.get_menuText OK');
-            strictEqual(typeof t.aclProfile, 'string', 'target.aclProfile OK');
-            strictEqual(t.aclProfile, 'passerby', 't.aclProfile OK');
-            strictEqual(typeof t.get_aclProfile, 'function', 'target.get_aclProfile OK');
+            strictEqual(t.menuText, '(none)', 't.menuText OK');
             strictEqual(typeof t.source, 'string', 'target.source OK');
-            strictEqual(t.source, '', 't.source OK');
-            strictEqual(typeof t.get_source, 'function', 'target.get_source OK');
-            strictEqual(typeof t.start, 'function', 'target.start OK');
-            strictEqual(typeof t.get_start, 'function', 'target.get_start OK');
+            strictEqual(t.source, '(none)', 't.source OK');
+            strictEqual(typeof t.pushable, 'boolean', 'target.pushable OK');
+            strictEqual(t.pushable, true, 't.pushable OK');
 
             // user
             strictEqual(typeof u, 'object', 'u is an object');

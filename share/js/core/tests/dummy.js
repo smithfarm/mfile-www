@@ -42,7 +42,7 @@ define ([
     cf
 ) {
     return function () {
-        test('unit testing framework present', function () {
+        test('unit testing framework present in mfile-www core', function () {
             ok(true, "Passed!");
         });
     };
