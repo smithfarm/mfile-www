@@ -126,6 +126,7 @@ happens when the start-up script is run, see the POD of C<mfile-www> itself
 - e.g. "man mfile-www".
 
 
+
 =head1 DERIVED WWW CLIENTS
 
 When you write your own web frontend using this distro, from
@@ -319,6 +320,17 @@ The C<dtable> primitive is similar to C<dbrowser> in that it takes a set of
 objects and allows the user to choose one and perform actions on it via a
 C<miniMenu>. Unlike C<dbrowser>, however, it display the objects in table form.
 The currently-selected object is displayed in reverse video.
+
+
+
+=head1 JAVASCRIPT UNIT TESTS
+
+The JavaScript side has unit tests and functional tests that can be run by
+starting the application and then pointing the browser to a URL like:
+
+    http://localhost:5001/test
+
+The tests are implemented using QUnit.
 
 
 
