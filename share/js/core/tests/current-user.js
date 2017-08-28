@@ -44,8 +44,10 @@ define ([
     currentUser
 ) {
 
+    var prefix = "core: ";
+
     return function () {
-        test('currentUser object', function () {
+        test(prefix + 'currentUser object', function () {
 
             ok(currentUser().hasOwnProperty('obj'), "currentUser.obj OK");
             ok(currentUser().hasOwnProperty('priv'), "currentUser.priv OK");

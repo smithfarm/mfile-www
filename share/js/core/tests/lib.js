@@ -43,11 +43,14 @@ define ([
     currentUser,
     lib 
 ) {
+
+    var prefix = "core: ";
+
     return function () {
         //
         // hairCut
         //
-        test('internal library functions: hairCut', function () {
+        test(prefix + 'internal library functions: hairCut', function () {
             var obj = Object.create(null);
             obj = { a: 1, b: 2, c: 3, bogusProp: "bogus" };
             ok(obj.hasOwnProperty("a"), "a");
@@ -63,7 +66,7 @@ define ([
         //
         // privCheck
         //
-        test('internal library functions: privCheck', function () {
+        test(prefix + 'internal library functions: privCheck', function () {
             currentUser('priv', 'passerby');
             strictEqual(currentUser('priv'), 'passerby', "currentUserPriv override");
             equal(lib.privCheck('passerby'), true, "user passerby, ACL passerby");

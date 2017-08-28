@@ -40,9 +40,11 @@ define ([
     cf
 ) {
 
+    var prefix = 'core: ';
+
     return function () {
         var priv = cf('currentUserPriv');
-        test('cf sees parameters sent from Perl side', function () {
+        test(prefix + 'cf sees parameters sent from Perl side', function () {
             strictEqual(typeof cf('appName'), 'string', "appName");
             strictEqual(typeof cf('appVersion'), 'string', "appVersion");
             strictEqual(typeof cf('currentUser'), 'object', "currentUser");
@@ -72,7 +74,7 @@ define ([
             strictEqual(typeof cf('dummyParam'), 'object', "dummyParam is an object");
             strictEqual(cf('nonExistentdummyParam'), undefined, "nonExistentDummyParam is undefined");
         });
-        test('cf parameter values can be overridden', function () {
+        test(prefix + 'cf parameter values can be overridden', function () {
             // override dummyParam
             cf('dummyParam', { test: 'test' });
             deepEqual(cf('dummyParam'), { test: 'test' }, 'dummyParam value override');

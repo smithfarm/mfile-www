@@ -39,10 +39,15 @@ define ([
 ], function (
     prototypes 
 ) {
+
+    var prefix = "core: ";
+
     return function () {
+
         var t = Object.create(prototypes.target),
             u = Object.create(prototypes.user);
-        test('prototypes prototyping?', function () {
+
+        test(prefix + 'prototypes prototyping?', function () {
 
             // target
             strictEqual(typeof t, 'object', 't is an object');

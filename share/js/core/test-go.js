@@ -28,24 +28,20 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-// ************************************************************************* 
+// *************************************************************************
 //
-// tests/dummy.js
+// test-go.js
 //
-// demo unit test file
+// Unit testing script - calls QUnit to load and start tests that have
+// been defined by previous calls to require
 //
 "use strict";
 
-define ([
+require ([
+    'QUnit',
 ], function (
+    qunit,
 ) {
-
-    var prefix = "core: ";
-
-    return function () {
-        test(prefix + 'unit testing framework present', function () {
-            ok(true, "Passed!");
-        });
-    };
+    qunit.load();
+    qunit.start();
 });
-
