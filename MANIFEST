@@ -50,6 +50,8 @@ share/js/mfile-www/drowselect-init.js
 share/js/mfile-www/dtable-init.js
 share/js/mfile-www/lib.js
 share/js/mfile-www/target-init.js
+share/js/mfile-www/test.js
+share/js/mfile-www/tests/dummy.js
 t/00-load.t
 t/manifest.t
 t/pod-coverage.t
