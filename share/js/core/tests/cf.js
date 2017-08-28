@@ -79,6 +79,9 @@ define ([
             cf('dummyParam', { test: 'test' });
             deepEqual(cf('dummyParam'), { test: 'test' }, 'dummyParam value override');
         });
+        test(prefix + 'cf testing is set to true', function () {
+            strictEqual(cf('testing'), true, 'cf testing is set to true');
+        });
     };
 
 });

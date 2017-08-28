@@ -314,8 +314,8 @@ sub main_html {
     $r .= "<title>App::MFILE::WWW " . $meta->META_MFILE_APPVERSION . "</title>";
     $r .= '<link rel="stylesheet" type="text/css" href="/css/start.css" />';
 
-    # Bring in RequireJS
-    $r .= $self->_require_js($ce, $cepriv);
+    # Bring in RequireJS with test == 0 (false)
+    $r .= $self->_require_js($ce, $cepriv, 0);
 
     $r .= '</head>';
     $r .= '<body>';
@@ -357,8 +357,8 @@ sub test_html {
     $r .= "<title>App::MFILE::WWW " . $meta->META_MFILE_APPVERSION . " (Unit testing)</title>";
     $r .= '<link rel="stylesheet" type="text/css" href="/css/qunit.css" />';
 
-    # Bring in RequireJS
-    $r .= $self->_require_js($ce, $cepriv);
+    # Bring in RequireJS with test == 1 (true)
+    $r .= $self->_require_js($ce, $cepriv, 1);
 
     $r .= '</head><body>';
     $r .= '<div id="qunit"></div>';
@@ -377,7 +377,7 @@ sub test_html {
 
 # HTML necessary for RequireJS
 sub _require_js {
-    my ( $self, $ce, $cepriv ) = @_;
+    my ( $self, $ce, $cepriv, $test ) = @_;
 
     my $r = '';
 
@@ -451,7 +451,10 @@ sub _require_js {
     }
 
     # dummyParam in last position so we don't have to worry about comma/no comma
-    $r .= 'dummyParam: null';
+    $r .= 'dummyParam: null,';
+
+    # unit tests running?
+    $r .= "testing: " . ( $test ? 'true' : 'false' );
 
     $r .= '} } });';
     $r .= '</script>';
