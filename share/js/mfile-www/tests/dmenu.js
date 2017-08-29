@@ -30,21 +30,38 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // *************************************************************************
 //
-// test.js
+// app/tests/dmenu.js
 //
-// runs routines in tests/ directory to declare unit tests
+// dmenu unit tests
 //
 "use strict";
 
-require ([
-    'QUnit',
-    'app/tests/dummy',
-    'app/tests/dmenu',
+define ([
+  'jquery',
+  'current-user',
+  'root',
 ], function (
-    qunit,
-    dummyTests,
-    dmenuTests
+  $,
+  currentUser,
+  root
 ) {
-    dummyTests();
-    dmenuTests();
+
+    var prefix = "mfile-www: ";
+
+    return function () {
+
+        test(prefix + 'main menu appears', function () {
+            ok(currentUser('obj'), 'There is a currentUser object');
+            console.log("Current user", currentUser('obj'));
+            ok(currentUser('priv'), 'Current user has a priv value');
+            console.log("Current user\'s priv", currentUser('priv'));
+            // populate #mainarea, etc. just like the real app does,
+            // except in the QUnit fixture
+            root();
+            console.log($('#mainarea').html());
+        });
+
+    };
+
 });
+
