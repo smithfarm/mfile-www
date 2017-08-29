@@ -47,27 +47,27 @@ define ([
         var t = Object.create(prototypes.target),
             u = Object.create(prototypes.user);
 
-        test(prefix + 'prototypes prototyping?', function () {
+        test(prefix + 'prototypes prototyping?', function (assert) {
 
             // target
-            strictEqual(typeof t, 'object', 't is an object');
-            strictEqual(typeof t.name, 'object', 'target.name OK');
-            strictEqual(t.name, null, 't.name OK');
-            strictEqual(typeof t.menuText, 'string', 'target.menuText OK');
-            strictEqual(t.menuText, '(none)', 't.menuText OK');
-            strictEqual(typeof t.source, 'string', 'target.source OK');
-            strictEqual(t.source, '(none)', 't.source OK');
-            strictEqual(typeof t.pushable, 'boolean', 'target.pushable OK');
-            strictEqual(t.pushable, true, 't.pushable OK');
+            assert.strictEqual(typeof t, 'object', 't is an object');
+            assert.strictEqual(typeof t.name, 'object', 'target.name OK');
+            assert.strictEqual(t.name, null, 't.name OK');
+            assert.strictEqual(typeof t.menuText, 'string', 'target.menuText OK');
+            assert.strictEqual(t.menuText, '(none)', 't.menuText OK');
+            assert.strictEqual(typeof t.source, 'string', 'target.source OK');
+            assert.strictEqual(t.source, '(none)', 't.source OK');
+            assert.strictEqual(typeof t.pushable, 'boolean', 'target.pushable OK');
+            assert.strictEqual(t.pushable, true, 't.pushable OK');
 
             // user
-            strictEqual(typeof u, 'object', 'u is an object');
-            strictEqual(typeof u.nick, 'string', 'user.nick OK');
-            strictEqual(u.nick, '', 'user.nick OK');
-            strictEqual(typeof u.passhash, 'string', 'user.passhash OK');
-            strictEqual(u.passhash, '', 'user.nick OK');
-            strictEqual(typeof u.salt, 'string', 'user.salt OK');
-            strictEqual(u.salt, '', 'user.nick OK');
+            assert.strictEqual(typeof u, 'object', 'u is an object');
+            assert.strictEqual(typeof u.nick, 'string', 'user.nick OK');
+            assert.strictEqual(u.nick, '', 'user.nick OK');
+            assert.strictEqual(typeof u.passhash, 'string', 'user.passhash OK');
+            assert.strictEqual(u.passhash, '', 'user.nick OK');
+            assert.strictEqual(typeof u.salt, 'string', 'user.salt OK');
+            assert.strictEqual(u.salt, '', 'user.nick OK');
 
         });
 

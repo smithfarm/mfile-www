@@ -50,13 +50,13 @@ define ([
 
     return function () {
 
-        test(prefix + 'main menu appears', function () {
+        test(prefix + 'main menu appears', function (assert) {
 
             var mainarea;
 
-            ok(currentUser('obj'), 'There is a currentUser object');
+            assert.ok(currentUser('obj'), 'There is a currentUser object');
             console.log("Current user", currentUser('obj'));
-            ok(currentUser('priv'), 'Current user has a priv value');
+            assert.ok(currentUser('priv'), 'Current user has a priv value');
             console.log("Current user\'s priv", currentUser('priv'));
 
             // populate #mainarea, etc. just like the real app does,
@@ -64,9 +64,9 @@ define ([
             root();
 
             mainarea = $('#mainarea');
-            ok(mainarea.html(), "#mainarea contains: " + mainarea.html());
-            strictEqual($('form', mainarea).length, 1, "#mainarea contains 1 form");
-            strictEqual($('form', mainarea)[0].id, 'demoMenu', "#mainarea form id is demoMenu");
+            assert.ok(mainarea.html(), "#mainarea contains: " + mainarea.html());
+            assert.strictEqual($('form', mainarea).length, 1, "#mainarea contains 1 form");
+            assert.strictEqual($('form', mainarea)[0].id, 'demoMenu', "#mainarea form id is demoMenu");
 
         });
 

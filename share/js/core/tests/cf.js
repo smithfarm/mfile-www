@@ -44,43 +44,41 @@ define ([
 
     return function () {
         var priv = cf('currentUserPriv');
-        test(prefix + 'cf sees parameters sent from Perl side', function () {
-            strictEqual(typeof cf('appName'), 'string', "appName");
-            strictEqual(typeof cf('appVersion'), 'string', "appVersion");
-            strictEqual(typeof cf('currentUser'), 'object', "currentUser");
+        test(prefix + 'cf sees parameters sent from Perl side', function (assert) {
+            assert.strictEqual(typeof cf('appName'), 'string', "appName");
+            assert.strictEqual(typeof cf('appVersion'), 'string', "appVersion");
+            assert.strictEqual(typeof cf('currentUser'), 'object', "currentUser");
 
             // currentUser can either be null or a user/employee object
             if (cf('currentUser') === null) {
-                strictEqual(cf('currentUser'), null, "currentUser is null");
+                assert.strictEqual(cf('currentUser'), null, "currentUser is null");
+                assert.strictEqual(cf('currentUserPriv'), null, "currentUserPriv is null when currentUser is null");
             } else {
-                ok(cf('currentUser').hasOwnProperty('nick'), "currentUser has nick property");
-                equal(cf('currentUser').hasOwnProperty('priv'), false, "currentUser does NOT have priv property");
+                assert.ok(cf('currentUser').hasOwnProperty('nick'), "currentUser has nick property");
+                assert.strictEqual(cf('currentUser').hasOwnProperty('priv'), false, "currentUser does NOT have priv property");
+                assert.strictEqual(typeof priv, 'string', "currentUserPriv");
+                assert.ok( 
+                    (priv === 'passerby') ||
+                    (priv === 'inactive') ||
+                    (priv === 'active') ||
+                    (priv === 'admin')
+                    , "currentUserPriv value is valid (" + priv + ")");
             }
 
-            strictEqual(typeof priv, 'string', "currentUserPriv");
-
-            // currentUserPriv must be a valid privlevel
-            ok( 
-                (priv === 'passerby') ||
-                (priv === 'inactive') ||
-                (priv === 'active') ||
-                (priv === 'admin')
-                , "currentUserPriv value is valid (" + priv + ")");
-
-            strictEqual(typeof cf('loginDialogChallengeText'), 'string', "loginDialogChallengeText (1)");
-            ok(cf('loginDialogChallengeText').length > 0, "loginDialogChallengeText (2)");
-            strictEqual(typeof cf('loginDialogMaxLengthUsername'), 'number', "loginDialogMaxLengthUsername");
-            strictEqual(typeof cf('loginDialogMaxLengthPassword'), 'number', "loginDialogMaxLengthPassword");
-            strictEqual(typeof cf('dummyParam'), 'object', "dummyParam is an object");
-            strictEqual(cf('nonExistentdummyParam'), undefined, "nonExistentDummyParam is undefined");
+            assert.strictEqual(typeof cf('loginDialogChallengeText'), 'string', "loginDialogChallengeText (1)");
+            assert.ok(cf('loginDialogChallengeText').length > 0, "loginDialogChallengeText (2)");
+            assert.strictEqual(typeof cf('loginDialogMaxLengthUsername'), 'number', "loginDialogMaxLengthUsername");
+            assert.strictEqual(typeof cf('loginDialogMaxLengthPassword'), 'number', "loginDialogMaxLengthPassword");
+            assert.strictEqual(typeof cf('dummyParam'), 'object', "dummyParam is an object");
+            assert.strictEqual(cf('nonExistentdummyParam'), undefined, "nonExistentDummyParam is undefined");
         });
-        test(prefix + 'cf parameter values can be overridden', function () {
+        test(prefix + 'cf parameter values can be overridden', function (assert) {
             // override dummyParam
             cf('dummyParam', { test: 'test' });
-            deepEqual(cf('dummyParam'), { test: 'test' }, 'dummyParam value override');
+            assert.deepEqual(cf('dummyParam'), { test: 'test' }, 'dummyParam value override');
         });
-        test(prefix + 'cf testing is set to true', function () {
-            strictEqual(cf('testing'), true, 'cf testing is set to true');
+        test(prefix + 'cf testing is set to true', function (assert) {
+            assert.strictEqual(cf('testing'), true, 'cf testing is set to true');
         });
     };
 

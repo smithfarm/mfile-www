@@ -43,7 +43,7 @@ define ([
     var prefix = "core: ";
 
     return function () {
-        test(prefix + 'unit testing framework present', function () {
+        test(prefix + 'unit testing framework present', function (assert) {
             ok(true, "Passed!");
         });
     };
