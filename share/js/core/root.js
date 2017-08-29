@@ -30,23 +30,55 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // *************************************************************************
 //
-// main.js - JavaScript side entry point
+// root.js
 //
+// displays the application frame in the browser window or QUnit fixture,
+// determines user and privlevel, initializes targets, and loads the main menu
+//
+
 "use strict";
 
 define ([
-    'root'
+    'jquery',
+    'cf',
+    'current-user',
+    'html', 
+    'login-dialog',
+    'app/target-init',
+    'target'
 ], function (
-    root
+    $,
+    cf,
+    currentUser,
+    html, 
+    loginDialog,
+    targetInit,
+    target
 ) {
 
-    var dummy = Object.create(null);
+    return function () {
 
-    console.log("mfile-www booting");
+        var dummy = Object.create(null),
+            userObject,
+            userPriv;
 
-    root();
+        if ( cf('testing') ) {
+            $('#qunit-fixture').append(html.body());
+        } else {
+            $(document.body).html(html.body());
+        }
+    
+        userObject = currentUser('obj');
+        userPriv = currentUser('priv');
+        if ( userObject && userPriv ) {
+            targetInit();
+        } else {
+            loginDialog();
+        }
+    
+        return dummy;
 
-    return dummy;
+    }
 
 });
 
