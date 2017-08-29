@@ -37,14 +37,16 @@
 "use strict";
 
 define ([
+    'QUnit'
 ], function (
+    qunit
 ) {
 
     var prefix = "core: ";
 
     return function () {
-        test(prefix + 'unit testing framework present', function (assert) {
-            ok(true, "Passed!");
+        qunit.test(prefix + 'unit testing framework present', function (assert) {
+            assert.ok(true, "Passed!");
         });
     };
 });

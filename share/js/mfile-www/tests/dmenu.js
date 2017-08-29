@@ -37,10 +37,12 @@
 "use strict";
 
 define ([
+  'QUnit',
   'jquery',
   'current-user',
   'root',
 ], function (
+  qunit,
   $,
   currentUser,
   root
@@ -50,7 +52,7 @@ define ([
 
     return function () {
 
-        test(prefix + 'main menu appears', function (assert) {
+        qunit.test(prefix + 'main menu appears', function (assert) {
 
             var mainarea;
 

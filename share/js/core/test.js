@@ -37,14 +37,12 @@
 "use strict";
 
 require ([
-    'QUnit',
     'tests/dummy',
     'tests/cf',
     'tests/current-user',
     'tests/lib',
     'tests/prototypes'
 ], function (
-    qunit,
     dummyTests,
     cfTests,
     currentUserTests,

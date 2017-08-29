@@ -37,9 +37,11 @@
 "use strict";
 
 define ([
+    'QUnit',
     'cf',
     'current-user'
 ], function (
+    qunit,
     cf,
     currentUser
 ) {
@@ -47,11 +49,11 @@ define ([
     var prefix = "core: ";
 
     return function () {
-        test(prefix + 'currentUser object', function (assert) {
+        qunit.test(prefix + 'currentUser object', function (assert) {
 
-            ok(currentUser().hasOwnProperty('obj'), "currentUser.obj OK");
-            ok(currentUser().hasOwnProperty('priv'), "currentUser.priv OK");
-            ok(currentUser().obj.hasOwnProperty('nick'), "currentUser.obj.nick OK");
+            assert.ok(currentUser().hasOwnProperty('obj'), "currentUser.obj OK");
+            assert.ok(currentUser().hasOwnProperty('priv'), "currentUser.priv OK");
+            assert.ok(currentUser().obj.hasOwnProperty('nick'), "currentUser.obj.nick OK");
 
         });
     };

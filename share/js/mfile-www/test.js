@@ -37,11 +37,9 @@
 "use strict";
 
 require ([
-    'QUnit',
     'app/tests/dummy',
     'app/tests/dmenu',
 ], function (
-    qunit,
     dummyTests,
     dmenuTests
 ) {
