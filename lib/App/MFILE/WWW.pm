@@ -333,6 +333,26 @@ starting the application and then pointing the browser to a URL like:
 The tests are implemented using QUnit.
 
 
+=head2 Adding new test cases
+
+There are separate sets of JavaScript unit tests for each of the following
+three components:
+
+=over
+
+=item mfile-www core
+
+=item mfile-www demo app
+
+=item derived application (e.g. dochazka-www)
+
+=back
+
+To add a new test case, go to the appropriate C<tests/> directory (in mfile-www
+core, in the mfile-www demo app, or in your derived application, as
+appropriate) and create a js file (use one of the other C<tests/*.js> files
+as a model). Then add this file to C<../test.js>.
+
 
 =head1 DEVELOPMENT NOTES
 
