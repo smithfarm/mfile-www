@@ -88,10 +88,10 @@ define ([
                 stack.push(entry, {});
             }
         },
-        dmenuSubmitKey = function (dmn) {
+        dmenuSubmitEvent = function (dmn) {
             return function (event) {
+                console.log(dmn + " form submission event");
                 event.preventDefault();
-                //console.log("Submitting: " + dmn);
                 dmenuSubmit(dmn);
             };
         },
@@ -99,7 +99,9 @@ define ([
             return function (event) {
                 lib.logKeyPress(event);
                 if (event.keyCode === 13) {
-                    dmenuSubmitKey(dmn);
+                    console.log("Detected ENTER keypress; submitting " + dmn + " form");
+                    event.preventDefault();
+                    dmenuSubmit(dmn);
                 } else if (event.keyCode === 9) {
                     event.preventDefault();
                 }
@@ -428,7 +430,7 @@ define ([
                 stack.setFlag();
                 $('#mainarea').html(dmo.source);
                 $('input[name="sel"]').val('').focus();
-                $('#' + dmn).submit(dmenuSubmitKey(dmn));
+                $('#' + dmn).submit(dmenuSubmitEvent(dmn));
                 $('input[name="sel"]').keydown(dmenuKeyListener(dmn));
             };
         }, // dmenu
