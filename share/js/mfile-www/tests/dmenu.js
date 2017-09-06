@@ -53,23 +53,43 @@ define ([
     return function () {
 
         QUnit.test(prefix + 'main menu appears', function (assert) {
-
             var mainarea;
-
             assert.ok(currentUser('obj'), 'There is a currentUser object');
             console.log("Current user", currentUser('obj'));
             assert.ok(currentUser('priv'), 'Current user has a priv value');
             console.log("Current user\'s priv", currentUser('priv'));
-
-            // populate #mainarea, etc. just like the real app does,
-            // except in the QUnit fixture
-            root();
-
+            root(); // start mfile-www demo app in QUnit fixture
             mainarea = $('#mainarea');
             assert.ok(mainarea.html(), "#mainarea contains: " + mainarea.html());
             assert.strictEqual($('form', mainarea).length, 1, "#mainarea contains 1 form");
             assert.strictEqual($('form', mainarea)[0].id, 'demoMenu', "#mainarea form id is demoMenu");
+        });
 
+        QUnit.test(prefix + 'press 0 in main menu', function (assert) {
+            var done = assert.async(),
+                sel;
+            assert.timeout(200);
+            root(); // start mfile-www demo app in QUnit fixture
+            sel = $('input[name="sel"]').val();
+            assert.strictEqual(sel, '', "Selection form field is empty");
+            // press '0' key in sel, but value does not change?
+            $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 48})); // press '0' key
+            sel = $('input[name="sel"]').val();
+            assert.strictEqual(sel, '', "Selection form field is empty even after simulating 0 keypress");
+            // simulating keypress doesn't work, so just set the value to "0"
+            $('input[name="sel"]').val('0');
+            // press ENTER -> submit the form
+            $('input[name="sel"]').trigger($.Event("keydown", {keyCode: 13}));
+            setTimeout(function() {
+                var mainarea = $('#mainarea').html();
+                assert.ok(mainarea, "#mainarea has non-empty html: " + mainarea);
+                assert.notStrictEqual(
+                    mainarea.indexOf('SOMETHING IS HAPPENING'),
+                    -1,
+                    "#mainarea html contains substring \"SOMETHING IS HAPPENING\""
+                );
+                done();
+            });
         });
 
     };
