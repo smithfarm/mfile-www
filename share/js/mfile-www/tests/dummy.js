@@ -39,14 +39,14 @@
 define ([
     'QUnit'
 ], function (
-    qunit
+    QUnit
 ) {
 
     var prefix = "mfile-www: ";
 
     return function () {
 
-        qunit.test(prefix + 'unit testing framework present', function (assert) {
+        QUnit.test(prefix + 'unit testing framework present', function (assert) {
             assert.ok(true, "Passed!");
         });
 

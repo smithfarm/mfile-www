@@ -42,7 +42,7 @@ define ([
   'current-user',
   'root',
 ], function (
-  qunit,
+  QUnit,
   $,
   currentUser,
   root
@@ -52,7 +52,7 @@ define ([
 
     return function () {
 
-        qunit.test(prefix + 'main menu appears', function (assert) {
+        QUnit.test(prefix + 'main menu appears', function (assert) {
 
             var mainarea;
 

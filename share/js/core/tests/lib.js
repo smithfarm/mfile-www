@@ -40,7 +40,7 @@ define ([
     'current-user',
     'lib'
 ], function (
-    qunit,
+    QUnit,
     cf,
     currentUser,
     lib 
@@ -52,7 +52,7 @@ define ([
         //
         // hairCut
         //
-        qunit.test(prefix + 'internal library functions: hairCut', function (assert) {
+        QUnit.test(prefix + 'internal library functions: hairCut', function (assert) {
             var obj = Object.create(null);
             obj = { a: 1, b: 2, c: 3, bogusProp: "bogus" };
             assert.ok(obj.hasOwnProperty("a"), "a");
@@ -68,7 +68,7 @@ define ([
         //
         // privCheck
         //
-        qunit.test(prefix + 'internal library functions: privCheck', function (assert) {
+        QUnit.test(prefix + 'internal library functions: privCheck', function (assert) {
             currentUser('priv', 'passerby');
             assert.strictEqual(currentUser('priv'), 'passerby', "currentUserPriv override");
             assert.strictEqual(lib.privCheck('passerby'), true, "user passerby, ACL passerby");

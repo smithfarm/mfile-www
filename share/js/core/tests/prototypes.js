@@ -38,7 +38,7 @@ define ([
     'QUnit',
     'prototypes'
 ], function (
-    qunit,
+    QUnit,
     prototypes 
 ) {
 
@@ -49,7 +49,7 @@ define ([
         var t = Object.create(prototypes.target),
             u = Object.create(prototypes.user);
 
-        qunit.test(prefix + 'prototypes prototyping?', function (assert) {
+        QUnit.test(prefix + 'prototypes prototyping?', function (assert) {
 
             // target
             assert.strictEqual(typeof t, 'object', 't is an object');

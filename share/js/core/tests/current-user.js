@@ -41,7 +41,7 @@ define ([
     'cf',
     'current-user'
 ], function (
-    qunit,
+    QUnit,
     cf,
     currentUser
 ) {
@@ -49,7 +49,7 @@ define ([
     var prefix = "core: ";
 
     return function () {
-        qunit.test(prefix + 'currentUser object', function (assert) {
+        QUnit.test(prefix + 'currentUser object', function (assert) {
 
             assert.ok(currentUser().hasOwnProperty('obj'), "currentUser.obj OK");
             assert.ok(currentUser().hasOwnProperty('priv'), "currentUser.priv OK");
