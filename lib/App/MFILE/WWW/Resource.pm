@@ -156,7 +156,7 @@ sub _render_response_html {
     my $entity;
     if ( $r->path_info =~ m/test/i ) {
         $log->debug( "Running unit tests" );
-        $entity = $self->test_html( $ce, $cepriv );
+        $entity = $self->test_html();
     } else {
         $log->debug( "Running the app" );
         $entity = $self->main_html( $ce, $cepriv );
@@ -314,8 +314,8 @@ sub main_html {
     $r .= "<title>App::MFILE::WWW " . $meta->META_MFILE_APPVERSION . "</title>";
     $r .= '<link rel="stylesheet" type="text/css" href="/css/start.css" />';
 
-    # Bring in RequireJS with test == 0 (false)
-    $r .= $self->_require_js($ce, $cepriv, 0);
+    # Bring in RequireJS with testing == 0 (false)
+    $r .= $self->_require_js(0, $ce, $cepriv);
 
     $r .= '</head>';
     $r .= '<body>';
@@ -347,7 +347,7 @@ run (in this order):
 =cut
 
 sub test_html {
-    my ( $self, $ce, $cepriv ) = @_;
+    my ( $self ) = @_;
     $log->debug( "Entering " . __PACKAGE__ . "::test_html" );
 
     my $r = '';
@@ -357,8 +357,8 @@ sub test_html {
     $r .= "<title>App::MFILE::WWW " . $meta->META_MFILE_APPVERSION . " (Unit testing)</title>";
     $r .= '<link rel="stylesheet" type="text/css" href="/css/qunit.css" />';
 
-    # Bring in RequireJS with test == 1 (true)
-    $r .= $self->_require_js($ce, $cepriv, 1);
+    # Bring in RequireJS with testing == 1 (true)
+    $r .= $self->_require_js(1);
 
     $r .= '</head><body>';
     $r .= '<div id="qunit"></div>';
@@ -377,7 +377,7 @@ sub test_html {
 
 # HTML necessary for RequireJS
 sub _require_js {
-    my ( $self, $ce, $cepriv, $test ) = @_;
+    my ( $self, $testing, $ce, $cepriv ) = @_;
 
     my $r = '';
 
@@ -431,7 +431,7 @@ sub _require_js {
 
     # currentUser
     $r .= "currentUser: " . ( $ce ? to_json( $ce ) : 'null' ) . ',';
-    $r .= 'currentUserPriv: \'' . ( $cepriv || 'null' ) . '\',';
+    $r .= "currentUserPriv: " . ( $cepriv ? "\'$cepriv\'" : 'null' ) . ',';
 
     # loginDialog
     $r .= 'loginDialogChallengeText: \'' . $site->MFILE_WWW_LOGIN_DIALOG_CHALLENGE_TEXT . '\',';
@@ -454,7 +454,7 @@ sub _require_js {
     $r .= 'dummyParam: null,';
 
     # unit tests running?
-    $r .= "testing: " . ( $test ? 'true' : 'false' );
+    $r .= "testing: " . ( $testing ? 'true' : 'false' );
 
     $r .= '} } });';
     $r .= '</script>';
