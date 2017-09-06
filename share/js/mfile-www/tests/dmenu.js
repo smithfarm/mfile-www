@@ -52,14 +52,14 @@ define ([
 
     return function () {
 
-        QUnit.test(prefix + 'main menu appears', function (assert) {
+        QUnit.test(prefix + 'demo menu appears', function (assert) {
             var mainarea,
                 currentUserObj = currentUser('obj'),
                 currentUserPriv = currentUser('priv');
-            assert.ok(currentUserObj, 'There is a currentUser object: ' +
+            assert.strictEqual(currentUserObj, null, 'starting currentUser object is ' +
                 QUnit.dump.parse(currentUserObj));
-            assert.ok(currentUserPriv, 'Current user has a priv value: ' +
-                currentUserPriv);
+            assert.strictEqual(currentUserPriv, null, 'starting currentUser priv is ' +
+                QUnit.dump.parse(currentUserPriv));
             root(); // start mfile-www demo app in QUnit fixture
             mainarea = $('#mainarea');
             assert.ok(mainarea.html(), "#mainarea contains: " + mainarea.html());

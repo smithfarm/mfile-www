@@ -50,23 +50,11 @@ define ([
             assert.strictEqual(typeof cf('appName'), 'string', "appName");
             assert.strictEqual(typeof cf('appVersion'), 'string', "appVersion");
             assert.strictEqual(typeof cf('currentUser'), 'object', "currentUser");
-
-            // currentUser can either be null or a user/employee object
-            if (cf('currentUser') === null) {
-                assert.strictEqual(cf('currentUser'), null, "currentUser is null");
-                assert.strictEqual(cf('currentUserPriv'), null, "currentUserPriv is null when currentUser is null");
-            } else {
-                assert.ok(cf('currentUser').hasOwnProperty('nick'), "currentUser has nick property");
-                assert.strictEqual(cf('currentUser').hasOwnProperty('priv'), false, "currentUser does NOT have priv property");
-                assert.strictEqual(typeof priv, 'string', "currentUserPriv");
-                assert.ok( 
-                    (priv === 'passerby') ||
-                    (priv === 'inactive') ||
-                    (priv === 'active') ||
-                    (priv === 'admin')
-                    , "currentUserPriv value is valid (" + priv + ")");
-            }
-
+            //
+            // currentUser and currentUserPriv will always be null in testing
+            assert.strictEqual(cf('currentUser'), null, "currentUser is null");
+            assert.strictEqual(cf('currentUserPriv'), null, "currentUserPriv is null");
+            //
             assert.strictEqual(typeof cf('loginDialogChallengeText'), 'string', "loginDialogChallengeText (1)");
             assert.ok(cf('loginDialogChallengeText').length > 0, "loginDialogChallengeText (2)");
             assert.strictEqual(typeof cf('loginDialogMaxLengthUsername'), 'number', "loginDialogMaxLengthUsername");

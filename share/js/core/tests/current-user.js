@@ -49,13 +49,22 @@ define ([
     var prefix = "core: ";
 
     return function () {
+
         QUnit.test(prefix + 'currentUser object', function (assert) {
-
-            assert.ok(currentUser().hasOwnProperty('obj'), "currentUser.obj OK");
-            assert.ok(currentUser().hasOwnProperty('priv'), "currentUser.priv OK");
-            assert.ok(currentUser().obj.hasOwnProperty('nick'), "currentUser.obj.nick OK");
-
+            var cu = currentUser();
+            assert.ok(cu, "There is a currentUser object with value " +
+                QUnit.dump.parse(cu));
+            assert.ok(cu.hasOwnProperty('obj'), "currentUser.obj exists with value " +
+                QUnit.dump.parse(cu.obj));
+            assert.ok(cu.hasOwnProperty('priv'), "currentUser.priv exists with value " +
+                QUnit.dump.parse(cu.priv));
+            assert.ok(typeof cu.obj, "object", "currentUser.obj is an object");
+            assert.ok('nick' in cu.obj, "currentUser.obj has nick property");
+            assert.strictEqual(cu.obj.nick, "", "value of nick property is the empty string");
+            assert.strictEqual(cu.priv, null, "currentUser.priv is null");
+            assert.strictEqual(cu.flag1, undefined, "currentUser.flag1 is undefined");
         });
+
     };
 
 });

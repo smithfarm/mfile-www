@@ -36,10 +36,12 @@
 
 define ([
     'jquery',
+    'cf',
     'current-user',
     'prototypes'
 ], function (
     $,
+    cf,
     currentUser,
     prototypes
 ) {
@@ -125,9 +127,13 @@ define ([
                 r,
                 yesno;
 
+            if ( cf('testing') && ! cep ) {
+                cep = 'passerby';
+            }
             if ( ! cep ) {
-                console.log("Something is wrong: cannot determine priv level of current user!");
-                return undefined;
+                console.log("Cannot determine priv level of current user! Falling back to sane value \"passerby\"");
+                currentUser('priv', 'passerby');
+                cep = currentUser('priv');
             }
 
             if (p === 'passerby' && cep) {
