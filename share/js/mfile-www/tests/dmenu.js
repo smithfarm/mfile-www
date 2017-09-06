@@ -53,11 +53,13 @@ define ([
     return function () {
 
         QUnit.test(prefix + 'main menu appears', function (assert) {
-            var mainarea;
-            assert.ok(currentUser('obj'), 'There is a currentUser object');
-            console.log("Current user", currentUser('obj'));
-            assert.ok(currentUser('priv'), 'Current user has a priv value');
-            console.log("Current user\'s priv", currentUser('priv'));
+            var mainarea,
+                currentUserObj = currentUser('obj'),
+                currentUserPriv = currentUser('priv');
+            assert.ok(currentUserObj, 'There is a currentUser object: ' +
+                QUnit.dump.parse(currentUserObj));
+            assert.ok(currentUserPriv, 'Current user has a priv value: ' +
+                currentUserPriv);
             root(); // start mfile-www demo app in QUnit fixture
             mainarea = $('#mainarea');
             assert.ok(mainarea.html(), "#mainarea contains: " + mainarea.html());
