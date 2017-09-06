@@ -64,16 +64,16 @@ define ([
 
         if ( cf('testing') ) {
             $('#qunit-fixture').append(html.body());
-        } else {
-            $(document.body).html(html.body());
-        }
-    
-        userObject = currentUser('obj');
-        userPriv = currentUser('priv');
-        if ( userObject && userPriv ) {
             targetInit();
         } else {
-            loginDialog();
+            $(document.body).html(html.body());
+            userObject = currentUser('obj');
+            userPriv = currentUser('priv');
+            if ( userObject && userPriv ) {
+                targetInit();
+            } else {
+                loginDialog();
+            }
         }
     
         return dummy;
