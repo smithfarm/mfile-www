@@ -140,6 +140,10 @@ define ([
             return _stack[_stack.length - 1].xtarget;
         },
 
+        resetStack = function () {
+            // (re)initializes the stack to an empty array
+            _stack = [];
+        },
 
         setFlag = function () {
             _stack[_stack.length - 1].flag = true;
@@ -222,6 +226,7 @@ define ([
         "pop": pop,
         "popWithoutStart": popWithoutStart,
         "push": push,
+        "resetStack": resetStack,
         "setFlag": setFlag,
         "setPush": setPush,
         "setState": setState,

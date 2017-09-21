@@ -44,6 +44,7 @@ define ([
     'current-user',
     'html', 
     'login-dialog',
+    'stack',
     'app/target-init',
     'target'
 ], function (
@@ -52,6 +53,7 @@ define ([
     currentUser,
     html, 
     loginDialog,
+    stack,
     targetInit,
     target
 ) {
@@ -61,6 +63,8 @@ define ([
         var dummy = Object.create(null),
             userObject,
             userPriv;
+
+        stack.resetStack();
 
         if ( cf('testing') ) {
             $('#qunit-fixture').append(html.body());
