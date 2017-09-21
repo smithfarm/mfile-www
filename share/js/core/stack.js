@@ -107,8 +107,8 @@ define ([
                 return;
             }
             if (typeof opts === "object") {
-                flag = opts.hasOwnProperty('flag') ? opts.flag : false;
-                xtarget = opts.hasOwnProperty('xtarget') ? opts.xtarget : null;
+                flag = ('flag' in opts) ? opts.flag : false;
+                xtarget = ('xtarget' in opts) ? opts.xtarget : null;
                 console.log("In stack.push(), setting flag", flag, "and xtarget", xtarget);
             }
             if (tgt.pushable) {
@@ -129,6 +129,10 @@ define ([
         },
         getPush = function () {
             return _stack[_stack.length - 1].push;
+        },
+        getStack = function () {
+            // returns the entire stack
+            return _stack;
         },
         getState = function () {
             return _stack[_stack.length - 1].state;
@@ -219,6 +223,7 @@ define ([
     return {
         "getFlag": getFlag,
         "getPush": getPush,
+        "getStack": getStack,
         "getState": getState,
         "getTarget": getTarget,
         "getXTarget": getXTarget,
