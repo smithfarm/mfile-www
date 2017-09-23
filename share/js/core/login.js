@@ -53,7 +53,6 @@ define ([
 ) {
 
     return function (nam, pwd) {
-        console.log("ajax", ajax);
 
         var found,
             i,

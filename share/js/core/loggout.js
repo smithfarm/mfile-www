@@ -55,8 +55,7 @@ define([
 ) {
 
     var logoutFunc = function () {
-        console.log("ajax", ajax);
-        console.log("cf", cf);
+
         var mainareaLogoutSplash = function () {
                 $('#mainarea').html(html.logout());
                 if (! cf('testing')) {
