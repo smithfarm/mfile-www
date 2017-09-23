@@ -26,6 +26,7 @@ share/js/core/init2.js
 share/js/core/jquery-private.js
 share/js/core/jquery.js
 share/js/core/lib.js
+share/js/core/login.js
 share/js/core/login-dialog.js
 share/js/core/logout.js
 share/js/core/main.js

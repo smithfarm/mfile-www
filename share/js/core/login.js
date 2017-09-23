@@ -30,58 +30,60 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // *************************************************************************
 //
-// root.js
+// login.js
 //
-// displays the application frame in the browser window or QUnit fixture,
-// determines user and privlevel, initializes targets, and loads the main menu
+// Just log in
 //
-
 "use strict";
 
 define ([
     'jquery',
+    'ajax',
     'cf',
     'current-user',
-    'html', 
-    'login-dialog',
-    'stack',
-    'app/target-init',
-    'target'
+    'html',
+    'lib'
 ], function (
     $,
+    ajax,
     cf,
     currentUser,
-    html, 
-    loginDialog,
-    stack,
-    targetInit,
-    target
+    html,
+    lib
 ) {
 
-    return function () {
+    return function (nam, pwd) {
 
-        var dummy = Object.create(null),
-            userObject,
-            userPriv;
-
-        stack.resetStack();
-
-        if ( cf('testing') ) {
-            $('#qunit-fixture').append(html.body());
-        } else {
-            $(document.body).html(html.body());
-        }
-        userObject = currentUser('obj');
-        userPriv = currentUser('priv');
-        if ( userObject && userPriv ) {
-            targetInit();
-        } else {
-            loginDialog();
-        }
-    
-        return dummy;
-
-    }
+        var found,
+            i,
+            rest = {
+                "method": 'LOGIN',
+                "path": 'login',
+                "body": { "nam": nam,
+                          "pwd": pwd }
+            },
+            // success callback
+            sc = function (st) {
+                // trigger GET request to the server -- no console.log messages here
+                // because the reload will make them go away
+                if (cf('testing')) {
+                    console.log("Login successful!");
+                    currentUser('obj', st.payload.emp);
+                    currentUser('priv', st.payload.priv);
+                } else {
+                    location.reload();
+                }
+            },
+            // failure callback
+            fc = function (st) {
+                console.log("Login failed", st);
+                $('#result').html('Login failed: code ' + st.payload.code + 
+                                  ' (' + st.payload.message + ')');
+                $('input[name="nam"]').focus();
+                $('input[name="pwd"]').val('');
+            };
+        console.log("Initiating AJAX call");
+        ajax(rest, sc, fc);
+    };
 
 });
-
