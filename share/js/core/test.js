@@ -38,18 +38,21 @@
 "use strict";
 
 require ([
+    'QUnit',
     'tests/dummy',
     'tests/cf',
     'tests/current-user',
     'tests/lib',
     'tests/prototypes'
 ], function (
+    QUnit,
     dummyTests,
     cfTests,
     currentUserTests,
     libTests,
     prototypeTests
 ) {
+    QUnit.module("mfile-www core");
     dummyTests();
     cfTests();
     currentUserTests();
