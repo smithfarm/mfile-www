@@ -968,3 +968,21 @@ Revision history for App::MFILE::WWW
 - tests: js: add #mainarea introspection to dmenu test
 - tests: js: migrate QUnit from 1.15.0 to 2.4.0
 
+0.159 2017-09-23 23:52 CEST
+- js: core: migrate to JQuery 3.2.1
+- doc: describe how to add new JavaScript unit tests
+- doc: JS unit testing: include QUnit documentation links
+- js: core: upgrade to RequireJS 2.3.5
+- js: core: strictly separate dmenu submit codepaths
+- js: tests: test what happens when 0 is pressed in demoMenu
+- js: core: drop passhash and salt from user prototype
+- js: root: prevent login dialog from appearing in tests
+- Resource.pm: do not set currentUser when testing
+- js: core: current-user: handle null values
+- js: core: cf, current-user: allow override with null
+- js: core: root: reset stack on every invocation
+- js: core: stack: implement getStack method
+- Refactor login, logout codepaths to allow login/logout from tests
+- js: core: rename logout.js to loggout.js
+- js: tests: declare QUnit module "mfile-www core"
+
