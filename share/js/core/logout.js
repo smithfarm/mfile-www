@@ -40,11 +40,13 @@ define([
     'jquery', 
     'ajax',
     'cf',
+    'current-user',
     'html'
 ], function (
     $, 
     ajax,
     cf,
+    currentUser,
     html
 ) {
     return function () {
@@ -61,7 +63,10 @@ define([
             },
             // success callback
             sc = function (status) {
+                console.log("Logout!!!");
                 $('#result').html('Logout successful: ' + status.text);
+                currentUser('obj', null);
+                currentUser('priv', null);
                 displayLogoutMessage();
             },
             // failure callback

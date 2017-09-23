@@ -89,31 +89,34 @@ define ([
 
     // current-user function
     return function (sw, arg) { 
-        var emptyObj = { "nick": "" };
+        var emptyObj = { "nick": null };
         if (sw === 'obj') {
             // console.log('current-user function called with "obj"');
-            if (arg || arg === null) {
+            if (arg) {
                 console.log('NOTICE: setting current user object to ', arg);
                 cu = arg;
                 cf('currentUser', cu);
             }
-            if (cu === null) {
-                console.log('Resetting currentUser object');
+            if (arg === null) {
+                console.log('NOTICE: resetting currentUser object');
                 cu = emptyObj;
                 cf('currentUser', cu);
             }
-            if ('nick' in cu) {
-                console.log('cu.nick is ' + cu.nick);
-                return cu;
-            }
-            console.log("FATAL ERROR: currentUser object has no nick property", cu);
-            return undefined;
+            // if ('nick' in cu && cu.nick) {
+            //     console.log('cu.nick is ' + cu.nick);
+            // }
+            return cu;
         }
         if (sw === 'priv') {
             // console.log('current-user function called with "priv"');
-            if (arg || arg === null) {
+            if (arg) {
                 console.log('NOTICE: setting current user priv to ' + arg);
                 priv = arg;
+                cf('currentUserPriv', priv);
+            }
+            if (arg === null || arg === "") {
+                console.log('NOTICE: resetting current user priv');
+                priv = null;
                 cf('currentUserPriv', priv);
             }
             return priv;
