@@ -50,7 +50,9 @@ define([
     return function () {
         var displayLogoutMessage = function () {
                 $('#mainarea').html(html.logout());
-                location.reload();
+                if (! cf('testing')) {
+                    location.reload();
+                }
             },
             rest = {
                 method: 'LOGIN',
