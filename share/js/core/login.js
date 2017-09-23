@@ -53,6 +53,7 @@ define ([
 ) {
 
     return function (nam, pwd) {
+        console.log("ajax", ajax);
 
         var found,
             i,
@@ -77,13 +78,13 @@ define ([
             // failure callback
             fc = function (st) {
                 console.log("Login failed", st);
-                $('#result').html('Login failed: code ' + st.payload.code + 
-                                  ' (' + st.payload.message + ')');
+                $('#result').html('Login failed: code ' + st.payload.code + ' (' + st.payload.message + ')');
                 $('input[name="nam"]').focus();
                 $('input[name="pwd"]').val('');
             };
-        console.log("Initiating AJAX call");
+
         ajax(rest, sc, fc);
+
     };
 
 });

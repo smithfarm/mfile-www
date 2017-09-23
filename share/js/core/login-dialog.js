@@ -36,14 +36,12 @@
 
 define ([
     'jquery', 
-    'ajax', 
     'cf',
     'html', 
     'lib',
     'login'
 ], function (
     $, 
-    ajax, 
     cf,
     html, 
     lib,

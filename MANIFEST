@@ -28,7 +28,7 @@ share/js/core/jquery.js
 share/js/core/lib.js
 share/js/core/login.js
 share/js/core/login-dialog.js
-share/js/core/logout.js
+share/js/core/loggout.js
 share/js/core/main.js
 share/js/core/prototypes.js
 share/js/core/qunit.js

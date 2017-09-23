@@ -30,9 +30,13 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // *************************************************************************
 //
-// logout.js
+// loggout.js
 //
 // function to log out the user
+//
+// N.B.: The extra "g" in "loggout" is intentional. This module used to be called
+// logout.js but it suffered from odd behavior which went away when renamed to 
+// loggout.js.
 //
 "use strict";
 
@@ -41,16 +45,19 @@ define([
     'ajax',
     'cf',
     'current-user',
-    'html'
+    'html',
 ], function (
     $, 
     ajax,
     cf,
     currentUser,
-    html
+    html,
 ) {
-    return function () {
-        var displayLogoutMessage = function () {
+
+    var logoutFunc = function () {
+        console.log("ajax", ajax);
+        console.log("cf", cf);
+        var mainareaLogoutSplash = function () {
                 $('#mainarea').html(html.logout());
                 if (! cf('testing')) {
                     location.reload();
@@ -63,15 +70,21 @@ define([
             },
             // success callback
             sc = function (status) {
-                console.log("Logout!!!");
-                $('#result').html('Logout successful: ' + status.text);
+                var logout_text = "Logout successful"
+                console.log(logout_text, status);
+                $('#result').html(logout_text);
                 currentUser('obj', null);
                 currentUser('priv', null);
-                displayLogoutMessage();
+                mainareaLogoutSplash();
             },
             // failure callback
-            fc = null;
+            fc = function (status) {
+                console.log("Logout failed with status", status);
+            };
 
+        ajax(rest, sc, fc);
+
+        /*
         $.ajax({
             'url': '/',
             'data': JSON.stringify(rest),
@@ -80,7 +93,11 @@ define([
             'contentType': 'application/json'
         })
         .done(function (data) {
-            sc({'text': data.level});
+            sc(data);
         });
-    }
+        */
+
+    };
+    return logoutFunc;
+
 });
