@@ -127,6 +127,9 @@ define ([
         getFlag = function () {
             return _stack[_stack.length - 1].flag;
         },
+        getLength = function () {
+            return _stack.length;
+        },
         getPush = function () {
             return _stack[_stack.length - 1].push;
         },
@@ -222,6 +225,7 @@ define ([
 
     return {
         "getFlag": getFlag,
+        "getLength": getLength,
         "getPush": getPush,
         "getStack": getStack,
         "getState": getState,
