@@ -102,9 +102,6 @@ define ([
                 cu = emptyObj;
                 cf('currentUser', cu);
             }
-            // if ('nick' in cu && cu.nick) {
-            //     console.log('cu.nick is ' + cu.nick);
-            // }
             return cu;
         }
         if (sw === 'priv') {

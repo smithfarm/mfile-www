@@ -114,13 +114,17 @@ define ([
         mmKeyListener = function (evt) {
 
             var len = $("input:text").length,
-                n = $("input:text").index($(document.activeElement));
+                n = $("input:text").index($(document.activeElement)),
+                i;
 
             lib.logKeyPress(evt);
     
             if (evt.keyCode === 13) {
                 console.log('MiniMenu listener detected <ENTER> keypress');
                 console.log("This form has elements 0 through " + (len - 1));
+                for (i=0; i<len; i++) {
+                    console.log("Element " + i, $("input:text")[i]);
+                }
                 console.log("The current element is no. " + n);
                 evt.preventDefault();
                 if ( n === len - 1 ) {
@@ -237,7 +241,7 @@ define ([
             }
             $('#submitButton').on("click", function (event) {
                 event.preventDefault;
-                //console.log("Submitting form " + dfn);
+                console.log("Submitting form " + dfn);
                 dformSubmit(dfn, obj);
             });
             $('#' + dfn).on("keypress", mmKeyListener);
@@ -536,7 +540,9 @@ define ([
             }
         }, // drowselect
 
-        drowselectListen: drowselectListen
+        drowselectListen: drowselectListen,
+
+        mmKeyListener: mmKeyListener,
 
     }
 });

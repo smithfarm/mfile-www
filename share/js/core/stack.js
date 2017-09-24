@@ -145,7 +145,7 @@ define ([
         },
 
         resetStack = function () {
-            // (re)initializes the stack to an empty array
+            console.log("Resetting the stack");
             _stack = [];
         },
 
