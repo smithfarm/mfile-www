@@ -293,7 +293,15 @@ define ([
         isObjEmpty: function (obj) {
             if (Object.getOwnPropertyNames(obj).length > 0) return false;
             return true;
-        }
+        },
+
+        focusedItem: function () {
+            return {
+                "id": $(document.activeElement).attr('id'),
+                "name": $(document.activeElement).attr('name'),
+            };
+        },
+
     };
 });
 
