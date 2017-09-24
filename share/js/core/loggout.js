@@ -34,9 +34,7 @@
 //
 // function to log out the user
 //
-// N.B.: The extra "g" in "loggout" is intentional. This module used to be called
-// logout.js but it suffered from odd behavior which went away when renamed to 
-// loggout.js.
+// N.B.: The extra "g" in "loggout" is just for kicks.
 //
 "use strict";
 
