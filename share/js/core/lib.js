@@ -71,6 +71,7 @@ define ([
             prop: null,
             maxlen: 20
         },
+
         emptyLineEntry: {
             name: 'emptyLine',
             aclProfileRead: 'passerby',
@@ -84,6 +85,11 @@ define ([
         clearResult: function () {
             $('#result').css('text-align', 'left');
             $('#result').html('&nbsp;');
+        },
+
+        displayResult: function (buf) {
+            $('#result').css('text-align', 'center');
+            $('#result').html(buf);
         },
 
         ajaxMessage: function () {
