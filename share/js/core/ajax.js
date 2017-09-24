@@ -75,12 +75,10 @@ define ([
     'jquery',
     'cf',
     'lib',
-    'logout'
 ], function (
     $,
     cf,
     lib,
-    logout
 ) {
 
     var req = function (mfao, scb, fcb) {
@@ -108,14 +106,6 @@ define ([
                     console.log("AJAX call failure:", data);
                     if (data.hasOwnProperty('payload')) {
                         console.log("Payload is", data.payload);
-                        if (data.payload.hasOwnProperty('code')) {
-                            if (data.payload.code === "401" ) {
-                                if (mfao.method !== 'LOGIN') {
-                                    console.log("401 encountered: logging out");
-                                    logout();
-                                }
-                            }
-                        }
                     }
                     if (fcb) {
                         fcb(data);
