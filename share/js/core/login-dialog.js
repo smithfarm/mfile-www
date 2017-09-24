@@ -55,7 +55,10 @@ define ([
             submitCallback = function (event) {
                 console.log("Entering submitCallback()");
                 event.preventDefault();
-                login($('input[name="nam"]').val(), $('input[name="pwd"]').val());
+                login({
+                    "nam": $('input[name="nam"]').val(),
+                    "pwd": $('input[name="pwd"]').val()
+                });
             },
 
             // formHandler processes user input in login dialog form

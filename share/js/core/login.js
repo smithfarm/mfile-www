@@ -52,15 +52,14 @@ define ([
     lib
 ) {
 
-    return function (nam, pwd) {
+    return function (body) {
 
         var found,
             i,
             rest = {
                 "method": 'LOGIN',
                 "path": 'login',
-                "body": { "nam": nam,
-                          "pwd": pwd }
+                "body": body
             },
             // success callback
             sc = function (st) {
