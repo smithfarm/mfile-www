@@ -308,9 +308,13 @@ sub main_html {
     $log->debug( "Entering " . __PACKAGE__ . "::main_html() with \$ce " .
                  Dumper($ce) . " and \$cepriv " . $cepriv );
 
-    my $r = '<!DOCTYPE html><html>';
-
-    $r .= '<head><meta charset="utf-8">';
+    my $r = '<!DOCTYPE html>';
+    $r .= '<html>';
+    $r .= '<head>';
+    $r .= '<meta charset="utf-8">';
+    $r .= '<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">';
+    $r .= '<meta http-equiv="Pragma" content="no-cache">';
+    $r .= '<meta http-equiv="Expires" content="0">';
     $r .= "<title>App::MFILE::WWW " . $meta->META_MFILE_APPVERSION . "</title>";
     $r .= '<link rel="stylesheet" type="text/css" href="/css/start.css" />';
 
@@ -352,8 +356,13 @@ sub test_html {
 
     my $r = '';
     
-    $r = '<!DOCTYPE html><html>';
-    $r .= '<head><meta charset="utf-8">';
+    $r = '<!DOCTYPE html>';
+    $r .= '<html>';
+    $r .= '<head>';
+    $r .= '<meta charset="utf-8">';
+    $r .= '<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">';
+    $r .= '<meta http-equiv="Pragma" content="no-cache">';
+    $r .= '<meta http-equiv="Expires" content="0">';
     $r .= "<title>App::MFILE::WWW " . $meta->META_MFILE_APPVERSION . " (Unit testing)</title>";
     $r .= '<link rel="stylesheet" type="text/css" href="/css/qunit.css" />';
 
