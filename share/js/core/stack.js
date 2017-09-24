@@ -77,7 +77,7 @@ define ([
                 console.log("pop() was passed an object", mo);
                 $.extend(stackObj.state, mo);
             }
-            stackObj.pushed = false;
+            stackObj.push = false;
             console.log("Popped " + stackObj.target.name);
             type = stackObj.target.type;
             if (start) {
