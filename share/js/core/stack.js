@@ -157,8 +157,13 @@ define ([
         getState = function () {
             return _stack[_stack.length - 1].state;
         },
-        getTarget = function () {
-            return _stack[_stack.length - 1].target;
+        getTarget = function (offset) {
+            // offset -1 for target under top target
+            // offset -2 for two targets down, etc.
+            if (offset === undefined) {
+                offset = 0;
+            }
+            return _stack[_stack.length + offset - 1].target;
         },
         getXTarget = function () {
             return _stack[_stack.length - 1].xtarget;
