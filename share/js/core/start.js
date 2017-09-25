@@ -432,7 +432,7 @@ define ([
             // dmn is dmenu name
             // dmo is dmenu object
             var dmo = target.pull(dmn);
-            return function (obj) {
+            return function (state, opts) {
                 console.log('Entering start.dmenu with argument: ' + dmn);
                 // lib.clearResult();
                 stack.setFlag();
@@ -445,7 +445,7 @@ define ([
 
         dform: function (dfn) {
             var dfo = target.pull(dfn);
-            return function (obj) {
+            return function (state, opts) {
                 console.log('Entering start.dform with argument: ' + dfn);
                 var resultLine = stack.getResultLine();
                 if (resultLine) {
@@ -453,12 +453,12 @@ define ([
                 } else {
                     lib.clearResult();
                 }
-                if (! obj) {
-                    obj = stack.getState();
+                if (! state) {
+                    state = stack.getState();
                 }
-                console.log('The object we are working with is:', obj);
-                $('#mainarea').html(dfo.source(obj));
-                dformListen(dfn, obj);
+                console.log('The object we are working with is:', state);
+                $('#mainarea').html(dfo.source(state));
+                dformListen(dfn, state);
             };
         }, // dform
 
@@ -468,19 +468,19 @@ define ([
                 // that we are being called from the second stage of dbrowser
                 // initialization (i.e., one-time event) -- generate and
                 // return the start function for this dbrowser
-                return function (obj) { 
-                    console.log('Starting new ' + dbn + ' dbrowser with object', obj);
-                    if (! obj) {
-                        obj = stack.getState();
+                return function (state, opts) {
+                    console.log('Starting new ' + dbn + ' dbrowser with state', state);
+                    if (! state) {
+                        state = stack.getState();
                     }
-                    console.log('The browser state object is', obj);
+                    console.log('dbrowser state', state);
                     // (re)initialize dbrowser state
                     if (lib.dbrowserStateOverride) {
                         lib.dbrowserStateOverride = false;
                     } else {
                         lib.dbrowserState.obj = target.pull(dbn);
-                        lib.dbrowserState.set = obj.set;
-                        lib.dbrowserState.pos = obj.pos;
+                        lib.dbrowserState.set = state.set;
+                        lib.dbrowserState.pos = state.pos;
                     }
                     // start browsing
                     dbrowserListen(stack.getResultLine());
@@ -492,14 +492,15 @@ define ([
 
         dnotice: function (dnn) {
             var dno = target.pull(dnn);
-            return function (noticeString) {
+            return function (state, opts) {
+                // state is a string to be displayed on the screen
                 console.log("Entering start.dnotice with argument: " + dnn);
-                if (! noticeString) {
-                    noticeString = stack.getState();
+                if (! state) {
+                    state = stack.getState();
                 }
                 lib.clearResult();
                 $('#mainarea').html(dno.source()); // write HTML to screen
-                $("#noticeText").html(noticeString);
+                $("#noticeText").html(state);
                 $('input[name="sel"]').focus();
                 dnoticeListen(dno);
             };
@@ -507,15 +508,16 @@ define ([
 
         dtable: function (dtn) {
             var dto = target.pull(dtn);
-            return function (dataset) {
+            return function (state, opts) {
+                // state is a array of objects to be displayed as a table
                 lib.clearResult();
                 console.log('Starting new ' + dtn + ' dtable');
-                if (! dataset) {
-                    dataset = stack.getState();
+                if (! state) {
+                    state = stack.getState();
                 }
-                console.log('The dataset is', dataset);
-                $('#mainarea').html(dto.source(dataset));
-                $('#result').text('Displaying table with ' + lib.genObjStr(dataset.length));
+                console.log('The dataset is', state);
+                $('#mainarea').html(dto.source(state));
+                $('#result').text('Displaying table with ' + lib.genObjStr(state.length));
                 dtableListen(dto);
             };
         }, // dtable
@@ -527,20 +529,20 @@ define ([
                 // that we are being called from the second stage of drowselect
                 // initialization (i.e., one-time event) -- generate and
                 // return the start function for this drowselect
-                return function (obj) {
+                return function (state, opts) {
                     lib.clearResult();
                     console.log('Starting new ' + drsn + ' drowselect');
-                    if (! obj) {
-                        obj = stack.getState();
+                    if (! state) {
+                        state = stack.getState();
                     }
-                    console.log('The rowselect state object is', obj);
+                    console.log('rowselect state', state);
                     // (re)initialize drowselect state
                     if (lib.drowselectStateOverride) {
                         lib.drowselectStateOverride = false;
                     } else {
                         lib.drowselectState.obj = target.pull(drsn);
-                        lib.drowselectState.set = obj.set;
-                        lib.drowselectState.pos = obj.pos;
+                        lib.drowselectState.set = state.set;
+                        lib.drowselectState.pos = state.pos;
                     }
                     // start browsing
                     drowselectListen();
