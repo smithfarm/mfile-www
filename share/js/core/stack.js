@@ -61,33 +61,44 @@ define ([
         // pop a target and its state off the stack
         // ARG1 (optional) - object to be merged into stateObj
         // ARG2 (optional) - boolean, whether to call start() (default: true)
-        pop = function (mo, start) {
-            start = (start === false) ? false : true;
-            console.log("Entering stack.pop() with stack", _stack);
-            var stackObj,
-                type;
+        pop = function (mo, opts) {
+            console.log("Entering stack.pop() with object", mo, "and opts", opts);
+            var resultLine,
+                stackState,
+                stackTarget;
+
+            // process opts
+            if (typeof opts !== "object") {
+                opts = {};
+            }
+            opts['resultLine'] = ('resultLine' in opts) ? opts.resultLine : false;
+            opts['start'] = ('start' in opts) ? opts.start : true;
+
+            // pop item off the stack
             _stack.pop(); 
             if (_stack.length === 0) {
                 console.log("Stack empty - logging out");
-                target.pull('logout').start();
+                target.pull('logout').start("Logged out due to stack exhaustion");
                 return;
             }
-            stackObj = _stack[_stack.length - 1];
+            console.log(
+                "After pop, stack length is " + getLength() +
+                " and top target is " + getTarget()
+            );
             if (typeof mo === 'object') {
                 console.log("pop() was passed an object", mo);
-                $.extend(stackObj.state, mo);
+                stackState = getState();
+                $.extend(stackState, mo);
+                setState(stackState);
             }
-            stackObj.push = false;
-            console.log("Popped " + stackObj.target.name);
-            type = stackObj.target.type;
-            if (start) {
-                lib.clearResult();
-                stackObj.target.start();
+            setPush(false);
+            if (opts.start) {
+                getTarget().start(opts.resultLine);
             }
         },
 
         popWithoutStart = function (mo) {
-            pop(mo, false);
+            pop(mo, {"start": false});
         },
 
         // push a target and its state onto the stack
@@ -95,8 +106,9 @@ define ([
             console.log("Entering stack.push() with target", tgt, "object", obj, "and opts", opts);
             // console.log("and stack", _stack);
             var flag,
+                resultLine,
                 xtarget;
-            if (obj === undefined || obj === null) {
+            if (typeof obj !== 'object' || obj === undefined || obj === null) {
                 obj = {};
             }
             if (typeof tgt === "string") {
@@ -106,21 +118,23 @@ define ([
                 console.log("ERROR in stack.push() - found no target object");
                 return;
             }
-            if (typeof opts === "object") {
-                flag = ('flag' in opts) ? opts.flag : false;
-                xtarget = ('xtarget' in opts) ? opts.xtarget : null;
-                console.log("In stack.push(), setting flag", flag, "and xtarget", xtarget);
+            if (typeof opts !== "object") {
+                opts = {};
             }
+            opts.flag = ('flag' in opts) ? opts.flag : false;
+            opts.xtarget = ('xtarget' in opts) ? opts.xtarget : null;
+            opts.resultLine = ('resultLine' in opts) ? opts.resultLine : null;
+            console.log("stack.push() opts", opts);
             if (tgt.pushable) {
                 _stack.push({
-                    "flag": flag,
+                    "flag": opts.flag,
                     "push": true,
+                    "resultLine": opts.resultLine,
                     "state": obj,
                     "target": tgt,
-                    "xtarget": xtarget
+                    "xtarget": opts.xtarget
                 });
             }
-            lib.clearResult();
             tgt.start(obj);
         },
 
@@ -132,6 +146,9 @@ define ([
         },
         getPush = function () {
             return _stack[_stack.length - 1].push;
+        },
+        getResultLine = function () {
+            return _stack[_stack.length - 1].resultLine;
         },
         getStack = function () {
             // returns the entire stack
@@ -227,6 +244,7 @@ define ([
         "getFlag": getFlag,
         "getLength": getLength,
         "getPush": getPush,
+        "getResultLine": getResultLine,
         "getStack": getStack,
         "getState": getState,
         "getTarget": getTarget,

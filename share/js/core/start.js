@@ -299,7 +299,7 @@ define ([
                 }
             };
         },
-        dbrowserListen = function () {
+        dbrowserListen = function (resultLine) {
             var dbo = lib.dbrowserState.obj,
                 set = lib.dbrowserState.set,
                 pos = lib.dbrowserState.pos;
@@ -308,8 +308,12 @@ define ([
             console.log("Browser set is", set, "cursor position is " + pos);
             $('#mainarea').html(dbo.source(set, pos));
             // lib.holdObject(set[pos]); // hold object so hooks can get it
-            $('#result').html("Displaying no. " + (pos + 1) + " of " + 
-                              lib.genObjStr(set.length) + " in result set");
+            if (resultLine) {
+                lib.displayResult(resultLine);
+            } else {
+                lib.displayResult("Displaying no. " + (pos + 1) + " of " + 
+                                  lib.genObjStr(set.length) + " in result set");
+            }
             $('#' + dbo.name).submit(suppressSubmitEvent);
             $('input[name="sel"]').val('').focus();
             $('#submitButton').on("click", function (event) {
@@ -443,11 +447,16 @@ define ([
             var dfo = target.pull(dfn);
             return function (obj) {
                 console.log('Entering start.dform with argument: ' + dfn);
+                var resultLine = stack.getResultLine();
+                if (resultLine) {
+                    lib.displayResult(resultLine);
+                } else {
+                    lib.clearResult();
+                }
                 if (! obj) {
                     obj = stack.getState();
                 }
                 console.log('The object we are working with is:', obj);
-                // lib.clearResult();
                 $('#mainarea').html(dfo.source(obj));
                 dformListen(dfn, obj);
             };
@@ -460,7 +469,6 @@ define ([
                 // initialization (i.e., one-time event) -- generate and
                 // return the start function for this dbrowser
                 return function (obj) { 
-                    lib.clearResult();
                     console.log('Starting new ' + dbn + ' dbrowser with object', obj);
                     if (! obj) {
                         obj = stack.getState();
@@ -475,7 +483,7 @@ define ([
                         lib.dbrowserState.pos = obj.pos;
                     }
                     // start browsing
-                    dbrowserListen(); 
+                    dbrowserListen(stack.getResultLine());
                 };
             }
         }, // dbrowser
