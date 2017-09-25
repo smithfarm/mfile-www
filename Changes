@@ -986,3 +986,16 @@ Revision history for App::MFILE::WWW
 - js: core: rename logout.js to loggout.js
 - js: tests: declare QUnit module "mfile-www core"
 
+0.160 2017-09-25 17:33 CEST
+- js: make login() take an object instead of two positional arguments
+- js: export mmKeyListener from start()
+- js: core: lib: add displayResult function
+- js: stack: add getLength() method
+- js: refrain from calling loggout from ajax.js
+- js: lib.js: add focusedItem function
+- js: stack.js: fix reference to "push" attribute
+- Resource.pm: tell browsers not to cache
+- Provide way to specify result line when starting a target
+- stack.js: make getTarget take an offset
+- start.js: unify arguments taken by primitive start functions
+
