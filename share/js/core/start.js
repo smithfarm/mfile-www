@@ -446,13 +446,12 @@ define ([
         dform: function (dfn) {
             var dfo = target.pull(dfn);
             return function (state, opts) {
-                console.log('Entering start.dform with argument: ' + dfn);
-                var resultLine = stack.getResultLine();
-                if (resultLine) {
-                    lib.displayResult(resultLine);
-                } else {
-                    lib.clearResult();
+                console.log('Entering start method of target ' + dfn);
+                if (typeof opts !== 'object') {
+                    opts = {};
                 }
+                opts.resultLine = ('resultLine' in opts) ? opts.resultLine : null;
+                lib.displayResult(opts.resultLine);
                 if (! state) {
                     state = stack.getState();
                 }

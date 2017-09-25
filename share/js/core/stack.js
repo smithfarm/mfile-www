@@ -61,8 +61,8 @@ define ([
         // pop a target and its state off the stack
         // ARG1 (optional) - object to be merged into stateObj
         // ARG2 (optional) - boolean, whether to call start() (default: true)
-        pop = function (mo, opts) {
-            console.log("Entering stack.pop() with object", mo, "and opts", opts);
+        pop = function (newState, opts) {
+            console.log("Entering stack.pop() with new state", newState, "and opts", opts);
             var resultLine,
                 stackState,
                 stackTarget;
@@ -83,17 +83,17 @@ define ([
             }
             console.log(
                 "After pop, stack length is " + getLength() +
-                " and top target is " + getTarget()
+                " and top target is " + getTarget().name
             );
-            if (typeof mo === 'object') {
-                console.log("pop() was passed an object", mo);
+            if (typeof newState === 'object') {
+                console.log("pop() was passed a new state object", newState);
                 stackState = getState();
-                $.extend(stackState, mo);
+                $.extend(stackState, newState);
                 setState(stackState);
             }
             setPush(false);
             if (opts.start) {
-                getTarget().start(opts.resultLine);
+                getTarget().start(newState, opts);
             }
         },
 
