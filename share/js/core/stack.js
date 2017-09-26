@@ -65,40 +65,50 @@ define ([
             console.log("Entering stack.pop() with new state", newState, "and opts", opts);
             var resultLine,
                 stackState,
-                stackTarget;
+                stackTarget,
+                stackLength;
 
-            // process opts
-            if (typeof opts !== "object") {
-                opts = {};
-            }
+            opts = lib.objectify(opts);
             opts['resultLine'] = ('resultLine' in opts) ? opts.resultLine : false;
-            opts['start'] = ('start' in opts) ? opts.start : true;
+            opts['_start'] = ('_start' in opts) ? opts.start : true;
+            opts['_restart'] = ('_restart' in opts) ? opts._restart : false;
+            opts['_start'] = opts._restart ? true : opts._start;
+            console.log("stack.pop() adjusted opts", opts);
 
-            // pop item off the stack
-            _stack.pop(); 
-            if (_stack.length === 0) {
+            // pop item off the stack, unless called by stack.restart()
+            if (! opts._restart ) {
+                _stack.pop();
+                console.log("Stack top item popped off and discarded.");
+            } else {
+                console.log("Restarting stack top item.");
+            }
+            stackLength = getLength();
+            stackTarget = getTarget();
+            stackState = getState();
+            console.log("Now, the stack length is " + stackLength +
+                        " and the top target is " + stackTarget.name);
+            if (stackLength === 0) {
                 console.log("Stack empty - logging out");
-                target.pull('logout').start("Logged out due to stack exhaustion");
+                target.pull('logout').start("Empty stack - please report bug");
                 return;
             }
-            console.log(
-                "After pop, stack length is " + getLength() +
-                " and top target is " + getTarget().name
-            );
             if (typeof newState === 'object') {
-                console.log("pop() was passed a new state object", newState);
-                stackState = getState();
                 $.extend(stackState, newState);
                 setState(stackState);
             }
             setPush(false);
-            if (opts.start) {
-                getTarget().start(newState, opts);
+            if (opts._start) {
+                delete opts["_start"];
+                delete opts["_restart"];
+                stackTarget.start(newState, opts);
             }
         },
 
-        popWithoutStart = function (mo) {
-            pop(mo, {"start": false});
+        popWithoutStart = function (newState, opts) {
+            opts = lib.objectify(opts);
+            opts['_start'] = false;
+            opts['_restart'] = false;
+            pop(newState, opts);
         },
 
         // push a target and its state onto the stack
@@ -108,9 +118,8 @@ define ([
             var flag,
                 resultLine,
                 xtarget;
-            if (typeof obj !== 'object' || obj === undefined || obj === null) {
-                obj = {};
-            }
+            obj = lib.objectify(obj);
+            opts = lib.objectify(opts);
             if (typeof tgt === "string") {
                 tgt = target.pull(tgt);
             }
@@ -118,13 +127,11 @@ define ([
                 console.log("ERROR in stack.push() - found no target object");
                 return;
             }
-            if (typeof opts !== "object") {
-                opts = {};
-            }
-            opts.flag = ('flag' in opts) ? opts.flag : false;
-            opts.xtarget = ('xtarget' in opts) ? opts.xtarget : null;
-            opts.resultLine = ('resultLine' in opts) ? opts.resultLine : null;
-            console.log("stack.push() opts", opts);
+            opts['flag'] = ('flag' in opts) ? opts.flag : false;
+            opts['xtarget'] = ('xtarget' in opts) ? opts.xtarget : null;
+            opts['resultLine'] = ('resultLine' in opts) ? opts.resultLine : null;
+            opts['_start'] = ('_start' in opts) ? opts._start : true;
+            console.log("stack.push() adjusted opts", opts);
             if (tgt.pushable) {
                 _stack.push({
                     "flag": opts.flag,
@@ -135,7 +142,28 @@ define ([
                     "xtarget": opts.xtarget
                 });
             }
-            tgt.start(obj);
+            if (opts._start) {
+                tgt.start(obj);
+            }
+        },
+
+        pushWithoutStart = function (newState, opts) {
+            if (typeof opts !== 'object') {
+                opts = {};
+            }
+            opts['_start'] = false;
+            push(newState, opts);
+        },
+
+        restart = function (newState, opts) {
+            // does the exact same thing as pop, except it leaves the top
+            // item on the stack and restarts it with new state and opts
+            if (typeof opts !== 'object') {
+                opts = {};
+            }
+            opts["_start"] = true;
+            opts["_restart"] = true;
+            pop(newState, opts);
         },
 
         getFlag = function () {
@@ -258,7 +286,9 @@ define ([
         "pop": pop,
         "popWithoutStart": popWithoutStart,
         "push": push,
+        "pushWithoutStart": popWithoutStart,
         "resetStack": resetStack,
+        "restart" : restart,
         "setFlag": setFlag,
         "setPush": setPush,
         "setState": setState,

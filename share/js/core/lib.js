@@ -302,6 +302,15 @@ define ([
             };
         },
 
+        objectify: function (st) {
+            // if st ("something") is not a traditional object
+            // like { "foo": "bar" }, turn it into {}
+            if (st === undefined || st === null || typeof st !== 'object') {
+                return {};
+            }
+            return st;
+        },
+
     };
 });
 
