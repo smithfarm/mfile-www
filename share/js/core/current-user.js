@@ -70,11 +70,8 @@ define ([
     prototypes
 ) {
 
-    console.log("Entering mfile-www current-user function");
+    console.log("current-user initialization routine");
 
-    // Initialization routine (run only once but the variables are available
-    // to the current-user function and provide storage for the object it
-    // returns)
     var cu = Object.create(prototypes.user),
         ce = cf('currentUser'),
         priv = cf('currentUserPriv'),
@@ -87,7 +84,6 @@ define ([
         $.extend(cu, ce)
     }
 
-    // current-user function
     return function (sw, arg) { 
         var emptyObj = { "nick": null };
         if (sw === 'obj') {
