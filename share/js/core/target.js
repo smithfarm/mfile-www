@@ -103,7 +103,6 @@ define ([
         };
 
     return { 
-        "_store": _store, 
         "pull": pull, 
         "getAll": getAll, 
         "push": push 
