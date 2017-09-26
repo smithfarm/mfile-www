@@ -92,11 +92,6 @@ define ([
             $('#result').html(buf);
         },
 
-        ajaxMessage: function () {
-            $('#result').css('text-align', 'center');
-            $('#result').html('* * * AJAX call * * *');
-        },
-
         // given an object, hold (store) it
         // if called without argument, just return whatever object we are holding
         holdObject: function (obj) {

@@ -81,40 +81,41 @@ define ([
     lib,
 ) {
 
-    var req = function (mfao, scb, fcb) {
-            // mfao is 'MFILE AJAX Object'
-            // scb is 'Success Call Back' 
-            // fcb is 'Failure Call Back' 
-            lib.ajaxMessage();
-            console.log("MFILE.lib.AJAX", mfao);
-            $.ajax({
-                'url': '/',
-                'data': JSON.stringify(mfao),
-                'method': 'POST',
-                'processData': false,
-                'contentType': 'application/json'
-            })
-            .done(function (data) {
-                if (data.level === 'OK') {
-                    console.log("AJAX call success:", data);
-                    if (scb) {
-                        scb(data);
-                    } else {
-                        $('#result').html(data.text);
-                    }
-                } else {
-                    console.log("AJAX call failure:", data);
-                    if (data.hasOwnProperty('payload')) {
-                        console.log("Payload is", data.payload);
-                    }
-                    if (fcb) {
-                        fcb(data);
-                    } else {
-                        $('#result').html(data.payload.message);
-                    }
-                }
-            });
+    var ajaxMessage = function () {
+            $('#result').css('text-align', 'center');
+            $('#result').html('* * * AJAX call * * *');
         };
-    return req;
+
+    return function (mfao, scb, fcb) {
+        // mfao is 'MFILE AJAX Object'
+        // scb is 'Success Call Back'
+        // fcb is 'Failure Call Back'
+        ajaxMessage();
+        console.log("Initiating AJAX call", mfao);
+        $.ajax({
+            'url': '/',
+            'data': JSON.stringify(mfao),
+            'method': 'POST',
+            'processData': false,
+            'contentType': 'application/json'
+        })
+        .done(function (data) {
+            if (data.level === 'OK') {
+                console.log("AJAX call success:", data);
+                if (scb) {
+                    scb(data);
+                } else {
+                    $('#result').html(data.text);
+                }
+            } else {
+                console.log("AJAX call failure:", data);
+                if (fcb) {
+                    fcb(data);
+                } else {
+                    lib.displayResult(data.payload.message);
+                }
+            }
+        });
+    };
 
 });
