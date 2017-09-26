@@ -83,15 +83,15 @@ define ([
                 console.log("Restarting stack top item.");
             }
             stackLength = getLength();
-            stackTarget = getTarget();
-            stackState = getState();
-            console.log("Now, the stack length is " + stackLength +
-                        " and the top target is " + stackTarget.name);
             if (stackLength === 0) {
                 console.log("Stack empty - logging out");
                 target.pull('logout').start("Empty stack - please report bug");
                 return;
             }
+            stackTarget = getTarget();
+            stackState = getState();
+            console.log("Now, the stack length is " + stackLength +
+                        " and the top target is " + stackTarget.name);
             if (typeof newState === 'object') {
                 $.extend(stackState, newState);
                 setState(stackState);
@@ -182,7 +182,16 @@ define ([
             // returns the entire stack
             return _stack;
         },
-        getState = function () {
+        getState = function (offset) {
+            // offset -1 for target under top target
+            // offset -2 for two targets down, etc.
+            if (offset === undefined) {
+                offset = 0;
+            }
+            if (_stack.length === 0) {
+                console.log("Ignoring attempt to get target from empty stack");
+                return null;
+            }
             return _stack[_stack.length - 1].state;
         },
         getTarget = function (offset) {
@@ -190,6 +199,10 @@ define ([
             // offset -2 for two targets down, etc.
             if (offset === undefined) {
                 offset = 0;
+            }
+            if (_stack.length === 0) {
+                console.log("Ignoring attempt to get target from empty stack");
+                return null;
             }
             return _stack[_stack.length + offset - 1].target;
         },

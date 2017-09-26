@@ -52,7 +52,7 @@ define([
     html,
 ) {
 
-    var logoutFunc = function () {
+    return function () {
 
         var mainareaLogoutSplash = function () {
                 $('#mainarea').html(html.logout());
@@ -78,23 +78,8 @@ define([
             fc = function (status) {
                 console.log("Logout failed with status", status);
             };
-
         ajax(rest, sc, fc);
 
-        /*
-        $.ajax({
-            'url': '/',
-            'data': JSON.stringify(rest),
-            'method': 'POST',
-            'processData': false,
-            'contentType': 'application/json'
-        })
-        .done(function (data) {
-            sc(data);
-        });
-        */
-
     };
-    return logoutFunc;
 
 });
