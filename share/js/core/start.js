@@ -307,7 +307,6 @@ define ([
             console.log("Listening in browser " + dbo.name);
             console.log("Browser set is", set, "cursor position is " + pos);
             $('#mainarea').html(dbo.source(set, pos));
-            // lib.holdObject(set[pos]); // hold object so hooks can get it
             if (resultLine) {
                 lib.displayResult(resultLine);
             } else {
@@ -413,7 +412,6 @@ define ([
                 pos = lib.drowselectState.pos;
             $('#result').text("Displaying rowselect with " + lib.genObjStr(set.length));
             $('#mainarea').html(drso.source(set));
-            // lib.holdObject(set[pos]); // hold object so hooks can get it
             lib.reverseVideo(pos, true);
             console.log("Listening in rowselect " + drso.name);
             $('#' + drso.name).submit(suppressSubmitEvent);

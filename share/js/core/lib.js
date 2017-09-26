@@ -81,10 +81,21 @@ define ([
             maxlen: 20
         },
 
-        // clear the result line
         clearResult: function () {
             $('#result').css('text-align', 'left');
             $('#result').html('&nbsp;');
+        },
+
+        // dbrowser states
+        // FIXME: move this into stack.js
+        dbrowserState: dbrowserState,
+
+        // display error message
+        displayError: function (msg) {
+            console.log(msg);
+            $("#result").html(msg);
+            $('input[name="sel"]').val('');
+            $('input[name="entry0"]').focus();
         },
 
         displayResult: function (buf) {
@@ -92,14 +103,27 @@ define ([
             $('#result').html(buf);
         },
 
-        // given an object, hold (store) it
-        // if called without argument, just return whatever object we are holding
-        holdObject: function (obj) {
-            if (obj) {
-                console.log("Setting held object to ", obj);
-                heldObject = obj;
-            }
-            return heldObject;
+        // drowselect state
+        // FIXME: move this into stack.js
+        drowselectState: drowselectState,
+
+        focusedItem: function () {
+            return {
+                "id": $(document.activeElement).attr('id'),
+                "name": $(document.activeElement).attr('name'),
+            };
+        },
+
+        // convert null to empty array
+        forceArray: function (arr) {
+            return (arr === null) ? [] : arr;
+        },
+
+        // generate string "n objects" based on array length
+        genObjStr: function (len) {
+            return (len === 1) ?
+                '1 object' :
+                len + " objects";
         },
 
         // give object a "haircut" by throwing out all properties
@@ -116,9 +140,35 @@ define ([
             return obj;
         },
 
+        isObjEmpty: function (obj) {
+            if (Object.getOwnPropertyNames(obj).length > 0) return false;
+            return true;
+        },
+
+        // boolean function for existing, non-empty string, from
+        // https://www.safaribooksonline.com/library/view/javascript-cookbook/9781449390211/ch01s07.html
+        // true if variable exists, is a string, and has a length greater than zero
+        isStringNotEmpty: function (unknownVariable) {
+            if (((typeof unknownVariable !== "undefined") &&
+                 (typeof unknownVariable.valueOf() === "string")) &&
+                 (unknownVariable.length > 0)) {
+                return true;
+            }
+            return false;
+        },
+
         // log events to browser JavaScript console
         logKeyPress: function (evt) {
             // console.log("WHICH: " + evt.which + ", KEYCODE: " + evt.keyCode);
+        },
+
+        objectify: function (st) {
+            // if st ("something") is not a traditional object
+            // like { "foo": "bar" }, turn it into {}
+            if (st === undefined || st === null || typeof st !== 'object') {
+                return {};
+            }
+            return st;
         },
 
         // check current employee's privilege against a given ACL profile
@@ -156,16 +206,7 @@ define ([
 
             console.log("Does " + cep + " user satisfy ACL " + p + "? " + yesno);
             return r;
-        },
-
-        // right pad a string with spaces 
-        rightPadSpaces: function (toPad, padto) {
-            var strToPad = ((toPad === null) ? '' : toPad).toString();
-            // console.log("Padding " + strToPad + " to " + padto + " spaces.");
-            var sp = '&nbsp;',
-                padSpaces = sp.repeat(padto - String(strToPad).length);
-            return strToPad.concat(padSpaces);
-        },
+        }, // privCheck
 
         // convert "YYYY-MM-DD HH:DD:SS+TZ" string into YYYY-MMM-DD
         readableDate: function (urd) {
@@ -210,28 +251,7 @@ define ([
                 return urd;
             }
             return year.toString() + "-" + month + "-" + day.toString();
-        },
-
-        // pause main thread for n milliseconds
-        wait: function (ms) {
-            var start = new Date().getTime();
-            var end = start;
-            while(end < start + ms) {
-                end = new Date().getTime();
-            }
-        },
-
-        // convert null to empty array
-        forceArray: function (arr) {
-            return (arr === null) ? [] : arr;
-        },
-
-        // generate string "n objects" based on array length
-        genObjStr: function (len) {
-            return (len === 1) ?
-                '1 object' :
-                len + " objects";
-        },
+        }, // readableDate
 
         // reverse-video a row (on/off)
         reverseVideo: function (row, onoff) {
@@ -245,16 +265,13 @@ define ([
             }
         },
 
-        // dbrowser, drowselect states
-        dbrowserState: dbrowserState,
-        drowselectState: drowselectState,
-
-        // display error message
-        displayError: function (msg) {
-            console.log(msg);
-            $("#result").html(msg);
-            $('input[name="sel"]').val('');
-            $('input[name="entry0"]').focus();
+        // right pad a string with spaces
+        rightPadSpaces: function (toPad, padto) {
+            var strToPad = ((toPad === null) ? '' : toPad).toString();
+            // console.log("Padding " + strToPad + " to " + padto + " spaces.");
+            var sp = '&nbsp;',
+                padSpaces = sp.repeat(padto - String(strToPad).length);
+            return strToPad.concat(padSpaces);
         },
 
         // shallow object copy, from
@@ -273,38 +290,14 @@ define ([
             return clone;
         },
 
-        // boolean function for existing, non-empty string, from 
-        // https://www.safaribooksonline.com/library/view/javascript-cookbook/9781449390211/ch01s07.html
-        // true if variable exists, is a string, and has a length greater than zero
-        isStringNotEmpty: function (unknownVariable) {
-            if (((typeof unknownVariable !== "undefined") &&
-                 (typeof unknownVariable.valueOf() === "string")) &&
-                 (unknownVariable.length > 0)) {
-                return true;
-            }
-            return false;
-        },
-
-        isObjEmpty: function (obj) {
-            if (Object.getOwnPropertyNames(obj).length > 0) return false;
-            return true;
-        },
-
-        focusedItem: function () {
-            return {
-                "id": $(document.activeElement).attr('id'),
-                "name": $(document.activeElement).attr('name'),
-            };
-        },
-
-        objectify: function (st) {
-            // if st ("something") is not a traditional object
-            // like { "foo": "bar" }, turn it into {}
-            if (st === undefined || st === null || typeof st !== 'object') {
-                return {};
-            }
-            return st;
-        },
+        // pause main thread for n milliseconds
+        //wait: function (ms) {
+        //    var start = new Date().getTime();
+        //    var end = start;
+        //    while(end < start + ms) {
+        //        end = new Date().getTime();
+        //    }
+        //},
 
     };
 });
