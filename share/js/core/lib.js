@@ -91,14 +91,16 @@ define ([
         dbrowserState: dbrowserState,
 
         // display error message
-        displayError: function (msg) {
-            console.log(msg);
-            $("#result").html(msg);
+        displayError: function (buf) {
+            console.log("ERROR: " + buf);
+            $('#result').css('text-align', 'center');
+            $("#result").html(buf);
             $('input[name="sel"]').val('');
             $('input[name="entry0"]').focus();
         },
 
         displayResult: function (buf) {
+            console.log("RESULT: " + buf);
             $('#result').css('text-align', 'center');
             $('#result').html(buf);
         },
