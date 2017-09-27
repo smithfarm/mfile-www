@@ -136,6 +136,14 @@ sub process_post {
 }
 
 
+=head2 _login_dialog
+
+Called from C<process_post> to process login requests (special AJAX requests)
+originating from the JavaScript side (i.e. the login screen in
+login-dialog.js, via login.js).
+
+=cut
+
 sub _login_dialog {
     my ( $self, $body ) = @_;
     $log->debug( "Entering " . __PACKAGE__ . "::_login_dialog()" );
@@ -182,6 +190,13 @@ sub _login_dialog {
     return $status;
 }
 
+
+=head2 _logout
+
+Called from C<process_post> to process logout requests (special AJAX requests)
+originating from the JavaScript side.
+
+=cut
 
 sub _logout {
     my ( $self, $body ) = @_;
