@@ -253,21 +253,23 @@ define ([
             return r;
         }, // miniMenu       
 
-        valueToDisplay = function (obj, prop) {
+        valueToDisplay = function (obj, prop, mode) {
             console.log("valueToDisplay with object", obj, "and prop " + prop);
             // given an object and a property, return the value to display
             if (typeof obj !== 'object') {
                 return '(NOT_AN_OBJECT)';
-            } else if (! (prop in obj)) {
-                return '(NO_SUCH_PROP)';
+            } else if (! (prop in obj) || obj[prop] === null) {
+                if (mode === 'read') {
+                    return '(none)';
+                } else {
+                    return '';
+                }
             } else if (obj[prop] === undefined) {
                 return '(undefined)';
             } else if (obj[prop] === false) {
                 return 'NO';
             } else if (obj[prop] === true) {
                 return 'YES';
-            } else if (obj[prop] === null) {
-                return '(none)';
             } else if (obj[prop] === NaN) {
                 return '(NOT_A_NUMBER)';
             }
@@ -431,7 +433,7 @@ define ([
                     } else if (lib.privCheck(entry.aclProfileRead)) {
                         r += lib.rightPadSpaces(entry.text.concat(':'), needed);
                         r += '<span id="' + entry.name + '">';
-                        r += valueToDisplay(obj, entry.prop);
+                        r += valueToDisplay(obj, entry.prop, "read");
                         r += '</span><br>';
                     }
                 }
@@ -446,7 +448,7 @@ define ([
                         r += lib.rightPadSpaces(entry.text.concat(':'), needed);
                         r += '<input id="' + entry.name + '" ';
                         r += 'name="entry' + i + '" ';
-                        r += 'value="' + (obj[entry.prop] || '') + '" ';
+                        r += 'value="' + valueToDisplay(obj, entry.prop, "write") + '" ';
                         r += 'size="' + entry.maxlen + '" ';
                         r += 'maxlength="' + entry.maxlen + '"><br>';
                     }
