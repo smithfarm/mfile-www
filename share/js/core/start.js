@@ -448,7 +448,7 @@ define ([
                 if (typeof opts !== 'object') {
                     opts = {};
                 }
-                opts.resultLine = ('resultLine' in opts) ? opts.resultLine : null;
+                opts.resultLine = ('resultLine' in opts) ? opts.resultLine : "&nbsp";
                 lib.displayResult(opts.resultLine);
                 if (! state) {
                     state = stack.getState();
