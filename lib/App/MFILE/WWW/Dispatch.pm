@@ -41,7 +41,6 @@ use strict;
 use warnings;
 
 use App::CELL qw( $CELL $log $meta $site );
-use App::MFILE::HTTP qw( _is_authorized );
 use Data::Dumper;
 use JSON;
 use Params::Validate qw(:all);
@@ -51,11 +50,9 @@ use parent 'App::MFILE::WWW::Resource';
 
 
 
-
 =head1 NAME
 
 App::MFILE::WWW::Dispatch - app dispatch stub
-
 
 
 
@@ -77,24 +74,7 @@ application's dispatch module will be used, instead.
 
 
 
-
 =head1 METHODS
-
-
-=head2 is_authorized
-
-Since all requests go through this function at a fairly early stage, we 
-leverage it to validate the session. 
-
-It is implemented as a wrapper around C<App::MFILE::HTTP::_is_authorized>.
-
-=cut
-
-sub is_authorized {
-    my ( $self ) = @_;
-
-    return _is_authorized( $self );
-}
 
 
 =head2 process_post
@@ -194,34 +174,15 @@ sub _login_dialog {
         return 0;
     }
 
-    my $status;
-    if ( $code == 200 ) {
-        $session->{'ip_addr'} = $r->{'env'}->{'REMOTE_ADDR'};
-        $session->{'currentUser'} = $body_json->{'payload'}->{'emp'};
-        $session->{'currentUserPriv'} = $body_json->{'payload'}->{'priv'};
-        $session->{'last_seen'} = time;
-        $log->debug(
-            "Login successful, currentUser is now " .
-            Dumper( $body_json->{'payload'}->{'emp'} ) .
-            " and privilege level is " . $body_json->{'payload'}->{'priv'}
-        );
-        return 1 if $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and ! $meta->META_LOGIN_BYPASS_STATE;
-        $status = $CELL->status_ok( 'MFILE_WWW_LOGIN_OK', payload => $body_json->{'payload'} );
-    } else {
-        $session = {};
-        $log->debug( "Login unsuccessful, reset session" );
-        return 0 if $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and ! $meta->META_LOGIN_BYPASS_STATE;
-        $status = $CELL->status_not_ok( 
-            'MFILE_WWW_LOGIN_FAIL: %s', 
-            args => [ $code ],
-            payload => { code => $code, message => $message },
-        );
+    if ( $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and ! $meta->META_LOGIN_BYPASS_STATE ) {
+        return ( $code == 200 ) ? 1 : 0;
     }
-    $self->response->header( 'Content-Type' => 'application/json' );
-    $self->response->body( to_json( $status->expurgate ) );
-    return 1;
+
+    my $status = $self->login_status( $code, $message, $body_json );
+    return $status;
 }
-         
+
+
 sub _logout {
     my ( $self, $body ) = @_;
     $log->debug( "Entering " . __PACKAGE__ . "::_logout()" );

@@ -41,9 +41,10 @@ use strict;
 use warnings;
 
 use App::CELL qw( $CELL $log $meta $site );
-use App::MFILE::HTTP qw( rest_req );
 use Data::Dumper;
-use Encode qw( decode_utf8 );
+use Encode qw( decode_utf8 encode_utf8 );
+use File::Temp qw( tempfile );
+use HTTP::Request::Common qw( GET PUT POST DELETE );
 use JSON;
 use LWP::UserAgent;
 use Params::Validate qw(:all);
@@ -51,6 +52,9 @@ use Try::Tiny;
 
 # methods/attributes not defined in this module will be inherited from:
 use parent 'Web::Machine::Resource';
+
+# user agent lookup table
+our $ualt = {};
 
 
 
@@ -116,6 +120,9 @@ sub remote_addr {
 
 sub session {
     my $self = shift;
+    if ( @_ ) {
+        $self->request->{'env'}->{'psgix.session'} = shift;
+    }
     return $self->request->{'env'}->{'psgix.session'};
 }
 
@@ -224,6 +231,85 @@ sub uri_too_long {
     ( length $uri > $site->MFILE_URI_MAX_LENGTH )
         ? 1
         : 0;
+}
+
+
+=head2 is_authorized
+
+Since all requests go through this function at a fairly early stage, we
+leverage it to validate the session.
+
+=cut
+
+sub is_authorized {
+    my ( $self ) = @_;
+
+    $log->debug( "Entering " . __PACKAGE__ . "::is_authorized()" );
+
+    my $r = $self->request;
+    my $session = $self->session;
+    my $remote_addr = $self->remote_addr;
+    my $ce;
+
+    #$log->debug( "Environment is " . Dumper( $r->{'env'} ) );
+    $log->debug( "Session is " . Dumper( $session ) );
+
+    # authorized session
+    if ( $ce = $session->{'currentUser'} and
+         $session->{'ip_addr'} and
+         $session->{'ip_addr'} eq $remote_addr and
+         _is_fresh( $session ) )
+    {
+        $log->debug( "is_authorized: Authorized session, employee " . $ce->{'nick'} );
+        $session->{'last_seen'} = time;
+        return 1;
+    }
+
+    # login attempt
+    if ( $r->method eq 'POST' and
+         $self->context->{'request_body'} and
+         $self->context->{'request_body'}->{'method'} and
+         $self->context->{'request_body'}->{'method'} =~ m/^LOGIN/i ) {
+        $log->debug( "is_authorized: Login attempt - pass it on" );
+        return 1;
+    }
+
+    # login bypass
+    $meta->set('META_LOGIN_BYPASS_STATE', 0) if not defined $meta->META_LOGIN_BYPASS_STATE;
+    if ( $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and not $meta->META_LOGIN_BYPASS_STATE ) {
+        $log->notice("Bypassing login dialog! Using default credentials");
+        $session->{'ip_addr'} = $remote_addr;
+        $session->{'last_seen'} = time;
+        my $bypass_result = $self->_login_dialog( {
+            'nam' => $site->MFILE_WWW_DEFAULT_LOGIN_CREDENTIALS->{'nam'},
+            'pwd' => $site->MFILE_WWW_DEFAULT_LOGIN_CREDENTIALS->{'pwd'},
+        } );
+        $meta->set('META_LOGIN_BYPASS_STATE', 1);
+        return $bypass_result;
+    }
+
+    # unauthorized session
+    $log->debug( "is_authorized fall-through: " . $r->method . " " . $self->request->path_info );
+    return ( $r->method eq 'GET' ) ? 1 : 0;
+}
+
+
+=head2 _is_fresh
+
+Takes a single argument, the PSGI session, which is assumed to contain a
+C<last_seen> attribute containing the number of seconds since epoch when the
+session was last seen.
+
+=cut
+
+sub _is_fresh {
+    my ( $session ) = validate_pos( @_, { type => HASHREF } );
+
+    return 0 unless my $last_seen = $session->{'last_seen'};
+
+    return ( time - $last_seen > $site->MFILE_WWW_SESSION_EXPIRATION_TIME )
+        ? 0
+        : 1;
 }
 
 
@@ -479,5 +565,151 @@ sub _require_js {
     $r .= '</script>';
     return $r;
 } 
+
+
+=head2 login_status
+
+=cut
+
+sub login_status {
+    my ( $self, $code, $message, $body_json ) = @_;
+
+    my $status;
+
+    if ( $code == 200 ) {
+        $self->session->{'ip_addr'} = $self->remote_addr;
+        my $cu = $body_json->{'payload'}->{'emp'};
+        delete $cu->{'passhash'};
+        delete $cu->{'salt'};
+        $self->session->{'currentUser'} = $cu;
+        $self->session->{'currentUserPriv'} = $body_json->{'payload'}->{'priv'};
+        $self->session->{'last_seen'} = time;
+        $log->debug(
+            "Login successful, currentUser is now " .
+            Dumper( $body_json->{'payload'}->{'emp'} ) .
+            " and privilege level is " . $body_json->{'payload'}->{'priv'}
+        );
+        $status = $CELL->status_ok( 'MFILE_WWW_LOGIN_OK', payload => $body_json->{'payload'} );
+    } else {
+        $self->session({});
+        $log->debug( "Login unsuccessful, reset session" );
+        $status = $CELL->status_not_ok(
+            'MFILE_WWW_LOGIN_FAIL: %s',
+            args => [ $code ],
+            payload => { code => $code, message => $message },
+        );
+    }
+    $self->response->header( 'Content-Type' => 'application/json' );
+    $self->response->body( to_json( $status->expurgate ) );
+    return $status;
+}
+
+
+=head2 ua
+
+Returns the LWP::UserAgent object obtained from the lookup table.
+Creates it first if necessary.
+
+=cut
+
+sub ua {
+    my $self = shift;
+    $log->debug( "Entering " . __PACKAGE__ . "::ua()" );
+    my $id = $self->session_id;
+    $log->debug( "ua: session_id is $id" );
+
+    # already in lookup table
+    if ( exists $ualt->{$id} ) {
+         $log->debug( "Session $id already has a LWP::UserAgent object" );
+         return $ualt->{$id};
+    }
+
+    # not in lookup table yet
+    my $tf = "";
+    ( undef, $tf ) = tempfile();
+    $ualt->{$id} = LWP::UserAgent->new;
+    $ualt->{$id}->cookie_jar({ file => $tf });
+    $log->info("New user agent created with cookies in $tf");
+    return $ualt->{$id};
+}
+
+
+=head2 rest_req
+
+Algorithm: send request to REST server, get JSON response, decode it, return
+it.
+
+Takes a single _mandatory_ parameter: a LWP::UserAgent object
+
+Optionally takes PARAMHASH:
+
+    server => [URI OF REST SERVER]         default is 'http://0:5000'
+    method => [HTTP METHOD TO USE]         default is 'GET'
+    nick => [NICK FOR BASIC AUTH]          optional
+    password => [PASSWORD FOR BASIC AUTH]  optional
+    path => [PATH OF REST RESOURCE]        default is '/'
+    req_body => [HASHREF]                  optional
+
+Returns HASHREF containing:
+
+    hr => HTTP::Response object (stripped of the body)
+    body => [BODY OF HTTP RESPONSE, IF ANY] 
+
+=cut
+
+sub rest_req {
+    my $self = shift;
+
+    # process arguments
+    my $ua = $self->ua();
+    die "Bad user agent object" unless ref( $ua ) eq 'LWP::UserAgent';
+    my %ARGS = validate( @_, {
+        server =>   { type => SCALAR,  default => 'http://localhost:5000' },
+        method =>   { type => SCALAR,  default => 'GET', regex => qr/^(GET|POST|PUT|DELETE)$/ },
+        nick =>     { type => SCALAR,  optional => 1 },
+        password => { type => SCALAR,  default => '' },
+        path =>     { type => SCALAR,  default => '/' },
+        req_body => { type => HASHREF, optional => 1 },
+    } );
+    $ARGS{'path'} =~ s/^\/*/\//;
+
+    my $r;
+    {
+        no strict 'refs';
+        $r = &{ $ARGS{'method'} }( $ARGS{'server'} . encode_utf8( $ARGS{'path'} ), 
+                Accept => 'application/json' );
+    }
+
+    if ( $ARGS{'nick'} ) {
+        $r->authorization_basic( $ARGS{'nick'}, $ARGS{'password'} );
+    }
+
+    if ( $ARGS{'method'} =~ m/^(POST|PUT)$/ ) {
+        $r->header( 'Content-Type' => 'application/json' );
+        if ( my $body = $ARGS{'req_body'} ) {
+            my $tmpvar = JSON->new->utf8(0)->encode( $body );
+            $r->content( encode_utf8( $tmpvar ) );
+        }
+    }
+
+    # request is ready - send it and get response
+    my $response = $ua->request( $r );
+
+    # process response
+    my $body_json = $response->decoded_content;
+    $log->debug( "rest_req: decoded JSON body " . Dumper $body_json );
+    $response->content('');
+    my $body;
+    try {
+        $body = JSON->new->decode( $body_json );
+    } catch {
+        $body = { 'code' => $body, 'text' => $body };
+    };
+
+    return {
+        hr => $response,
+        body => $body
+    };
+}
 
 1;
