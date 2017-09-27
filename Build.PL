@@ -22,7 +22,7 @@ my $builder = Module::Build->new(
     },
     build_requires => {
         'App::CELL'      => 0.222,
-        'App::MFILE'     => 0.181,
+        'App::MFILE'     => 0.182,
         'HTTP::Request'  => 0,
         'Plack::Test'    => 0,
         'Scalar::Util'   => 0,

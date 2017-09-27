@@ -100,6 +100,16 @@ sub context {
 }
 
 
+=head2 remote_addr
+
+=cut
+
+sub remote_addr {
+    my $self = shift;
+    return $self->request->{'env'}->{'REMOTE_ADDR'};
+}
+
+
 =head2 session
 
 =cut
