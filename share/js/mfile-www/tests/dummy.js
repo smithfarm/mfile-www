@@ -41,16 +41,12 @@ define ([
 ], function (
     QUnit
 ) {
-
-    var prefix = "mfile-www: ";
-
     return function () {
 
-        QUnit.test(prefix + 'unit testing framework present', function (assert) {
+        QUnit.test('unit testing framework present', function (assert) {
             assert.ok(true, "Passed!");
         });
 
     };
-
 });
 

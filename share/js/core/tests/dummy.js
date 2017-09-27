@@ -41,13 +41,12 @@ define ([
 ], function (
     QUnit
 ) {
-
-    var prefix = "core: ";
-
     return function () {
-        QUnit.test(prefix + 'unit testing framework present', function (assert) {
+
+        QUnit.test('unit testing framework present', function (assert) {
             assert.ok(true, "Passed!");
         });
+
     };
 });
 

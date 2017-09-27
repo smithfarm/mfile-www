@@ -41,12 +41,11 @@ define ([
     QUnit,
     cf
 ) {
-
-    var prefix = 'core: ';
-
     return function () {
+
         var priv = cf('currentUserPriv');
-        QUnit.test(prefix + 'cf sees parameters sent from Perl side', function (assert) {
+
+        QUnit.test('cf sees parameters sent from Perl side', function (assert) {
             assert.strictEqual(typeof cf('appName'), 'string', "appName");
             assert.strictEqual(typeof cf('appVersion'), 'string', "appVersion");
             assert.strictEqual(typeof cf('currentUser'), 'object', "currentUser");
@@ -62,15 +61,17 @@ define ([
             assert.strictEqual(typeof cf('dummyParam'), 'object', "dummyParam is an object");
             assert.strictEqual(cf('nonExistentdummyParam'), undefined, "nonExistentDummyParam is undefined");
         });
-        QUnit.test(prefix + 'cf parameter values can be overridden', function (assert) {
+
+        QUnit.test('cf parameter values can be overridden', function (assert) {
             // override dummyParam
             cf('dummyParam', { test: 'test' });
             assert.deepEqual(cf('dummyParam'), { test: 'test' }, 'dummyParam value override');
         });
-        QUnit.test(prefix + 'cf testing is set to true', function (assert) {
+
+        QUnit.test('cf testing is set to true', function (assert) {
             assert.strictEqual(cf('testing'), true, 'cf testing is set to true');
         });
-    };
 
+    };
 });
 

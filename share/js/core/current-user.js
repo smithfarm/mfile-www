@@ -45,7 +45,7 @@
 // - first argument === undefined
 //   the "full current-user object" is returned, i.e.:
 //   {
-//       obj: { nick: '...', passhash: '...', salt: '...', etc. },
+//       obj: { nick: '...', eid: '...', etc. },
 //       priv: 'passerby'
 //   }
 //
@@ -87,7 +87,7 @@ define ([
     return function (sw, arg) { 
         var emptyObj = { "nick": null };
         if (sw === 'obj') {
-            // console.log('current-user function called with "obj"');
+            console.log('current-user function called with "obj"', arg);
             if (arg) {
                 console.log('NOTICE: setting current user object to ', arg);
                 cu = arg;

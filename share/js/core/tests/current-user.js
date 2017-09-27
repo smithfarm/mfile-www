@@ -45,12 +45,9 @@ define ([
     cf,
     currentUser
 ) {
-
-    var prefix = "core: ";
-
     return function () {
 
-        QUnit.test(prefix + 'currentUser object', function (assert) {
+        QUnit.test('currentUser object', function (assert) {
             var cu = currentUser();
             assert.ok(cu, "There is a currentUser object with value " +
                 QUnit.dump.parse(cu));
@@ -66,6 +63,5 @@ define ([
         });
 
     };
-
 });
 

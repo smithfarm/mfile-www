@@ -30,9 +30,9 @@
 // POSSIBILITY OF SUCH DAMAGE.
 // *************************************************************************
 //
-// app/tests/dmenu.js
+// app/tests/demo-menu.js
 //
-// dmenu unit tests
+// tests exercising the "demoMenu" component of the standalone demo app
 //
 "use strict";
 
@@ -40,34 +40,83 @@ define ([
   'QUnit',
   'jquery',
   'current-user',
+  'login',
   'root',
+  'stack',
 ], function (
   QUnit,
   $,
   currentUser,
-  root
+  login,
+  root,
+  stack,
 ) {
-
-    var prefix = "mfile-www: ";
-
     return function () {
 
-        QUnit.test(prefix + 'demo menu appears', function (assert) {
-            var mainarea,
+        var prefix = "mfile-www: ",
+            test_desc,
+            mainareaFormFunc = function (assert, formId) {
+                // asserts that #mainarea contains a form and that its form ID is
+                // formID
+                var mainarea = $('#mainarea'),
+                    htmlbuf = mainarea.html();
+                assert.ok(htmlbuf, "#mainarea html: " + htmlbuf);
+                assert.strictEqual($('form', mainarea).length, 1, "#mainarea contains 1 form");
+                assert.strictEqual($('form', mainarea)[0].id, formId, "that form is called " + formId);
+            },
+            stackFunc = function (assert, stackLen, afterWhat, tgtType, tgtName) {
+                // asserts that stack has a certain length (stackLen) after doing
+                // some action (afterWhat) and that the target on the top of the
+                // stack is of type tgtType and has name tgtName
+                var topTarget = stack.getTarget();
+                assert.strictEqual(
+                    stack.getLength(),
+                    stackLen,
+                    stackLen + " item(s) on stack after " + afterWhat
+                );
+                assert.strictEqual(
+                    topTarget.type,
+                    tgtType,
+                    "Target on top of stack is of type \"" + tgtType + "\"",
+                );
+                assert.strictEqual(
+                    topTarget.name,
+                    tgtName,
+                    "Target on top of stack has name \"" + tgtName + "\"",
+                );
+            },
+            test_desc = 'demo main menu appears';
+
+        QUnit.test(test_desc, function (assert) {
+            console.log('***TEST*** ' + prefix + test_desc);
+            var done = assert.async(1),
+                mainarea,
+                nick = "root",
+                priv = "admin",
+                /*
                 currentUserObj = currentUser('obj'),
-                currentUserPriv = currentUser('priv');
-            assert.strictEqual(currentUserObj, null, 'starting currentUser object is ' +
-                QUnit.dump.parse(currentUserObj));
-            assert.strictEqual(currentUserPriv, null, 'starting currentUser priv is ' +
-                QUnit.dump.parse(currentUserPriv));
-            root(); // start mfile-www demo app in QUnit fixture
-            mainarea = $('#mainarea');
-            assert.ok(mainarea.html(), "#mainarea contains: " + mainarea.html());
-            assert.strictEqual($('form', mainarea).length, 1, "#mainarea contains 1 form");
-            assert.strictEqual($('form', mainarea)[0].id, 'demoMenu', "#mainarea form id is demoMenu");
+                currentUserPriv = currentUser('priv'),
+                */
+                cu;
+            login({"nam": "root", "pwd": "root"});
+            setTimeout(function () {
+                console.log("TEST: post-login tests");
+                cu = currentUser();
+                assert.ok(cu, "current user object after login: " + QUnit.dump.parse(cu));
+                assert.strictEqual(cu.obj.nick, nick, 'we are now ' + nick);
+                assert.strictEqual(cu.priv, priv, nick + ' has ' + priv + ' privileges');
+                assert.ok(true, "Starting app in fixture");
+                root(); // start app in QUnit fixture
+                stackFunc(assert, 1, 'starting app', 'dmenu', 'demoMenu');
+                mainareaFormFunc(assert, 'demoMenu');
+                assert.ok(true, '*** REACHED logged in as ' + nick);
+                done();
+            }, 500);
         });
 
-        QUnit.test(prefix + 'press 0 in main menu', function (assert) {
+        test_desc = 'press 0 in main menu';
+        QUnit.test(test_desc, function (assert) {
+            console.log('***TEST*** ' + prefix + test_desc);
             var done = assert.async(),
                 sel;
             assert.timeout(200);
@@ -95,6 +144,5 @@ define ([
         });
 
     };
-
 });
 

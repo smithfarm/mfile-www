@@ -67,6 +67,7 @@ define ([
                 // because the reload will make them go away
                 if (cf('testing')) {
                     console.log("Login successful!");
+                    console.log("Login AJAX returned", st);
                     currentUser('obj', st.payload.emp);
                     currentUser('priv', st.payload.priv);
                 } else {

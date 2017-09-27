@@ -41,15 +41,12 @@ define ([
     QUnit,
     prototypes 
 ) {
-
-    var prefix = "core: ";
-
     return function () {
 
-        var t = Object.create(prototypes.target),
-            u = Object.create(prototypes.user);
+        QUnit.test('prototypes prototyping', function (assert) {
 
-        QUnit.test(prefix + 'prototypes prototyping?', function (assert) {
+            var t = Object.create(prototypes.target),
+                u = Object.create(prototypes.user);
 
             // target
             assert.strictEqual(typeof t, 'object', 't is an object');

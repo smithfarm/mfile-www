@@ -45,14 +45,10 @@ define ([
     currentUser,
     lib 
 ) {
-
-    var prefix = "core: ";
-
     return function () {
-        //
+
         // hairCut
-        //
-        QUnit.test(prefix + 'internal library functions: hairCut', function (assert) {
+        QUnit.test('internal library functions: hairCut', function (assert) {
             var obj = Object.create(null);
             obj = { a: 1, b: 2, c: 3, bogusProp: "bogus" };
             assert.ok(obj.hasOwnProperty("a"), "a");
@@ -65,10 +61,9 @@ define ([
             assert.ok(obj.hasOwnProperty("c"), "c still there");
             assert.strictEqual(obj.hasOwnProperty("bogusProp"), false, "no bogus property anymore");
         });
-        //
+
         // privCheck
-        //
-        QUnit.test(prefix + 'internal library functions: privCheck', function (assert) {
+        QUnit.test('internal library functions: privCheck', function (assert) {
             assert.strictEqual(currentUser('priv'), null, "starting currentUserPriv is null");
             currentUser('priv', 'passerby');
             assert.strictEqual(currentUser('priv'), 'passerby', "set currentUserPriv to passerby");
@@ -96,6 +91,7 @@ define ([
             assert.strictEqual(lib.privCheck('admin'), true, "user admin, ACL admin");
             currentUser('priv', null);
         });
+
     };
 });
 

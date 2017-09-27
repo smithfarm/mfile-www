@@ -223,14 +223,14 @@ sub _login_dialog {
         $code = 401;
         $message = 'Unauthorized';
         for my $entry (@$db) {
-            if ( $nick eq $entry->{nam} ) {
-                if ( $password eq $entry->{pwd} ) {
+            if ( $nick eq $entry->{'nam'} ) {
+                if ( $password eq $entry->{'pwd'} ) {
                     $code = 200;
                     $message = 'OK';
                     $body_json = { payload => 
                         { 
-                            current_emp => { nick => $nick },
-                            priv => $entry->{priv} 
+                            emp => { nick => $nick, eid => $entry->{'eid'} },
+                            priv => $entry->{'priv'} 
                         }
                     };
                 }
