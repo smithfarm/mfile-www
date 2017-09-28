@@ -999,3 +999,17 @@ Revision history for App::MFILE::WWW
 - stack.js: make getTarget take an offset
 - start.js: unify arguments taken by primitive start functions
 
+0.161 2017-09-28 11:42 CEST
+- stack.js: implement restart() and pushWithoutStart() methods
+- target.js: do not export _store
+- js: core: html.js: put functions in alphabetical order
+- build/ops: hopefully do not install Vim .swp files
+- js: cleanup: rearrange lib.js functions and drop holdObject()
+- js: fix logout breakage introduced by recent refactoring
+- js: hack standalone demo app tests following recent refactoring
+- Dispatch.pm: migrate is_authorized to App::MFILE::HTTP
+- Eliminate dependency on App::MFILE distro
+- html.js: tweak valueToDisplay()
+- lib.js: displayError use css center
+- start.js: reset result line to &nbsp instead of null
+
