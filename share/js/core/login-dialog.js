@@ -36,13 +36,13 @@
 
 define ([
     'jquery', 
-    'cf',
+    'd3',
     'html', 
     'lib',
     'login'
 ], function (
     $, 
-    cf,
+    d3,
     html, 
     lib,
     login
@@ -93,6 +93,8 @@ define ([
             }; // end of var list
 
         $('#mainarea').html(html.loginDialog());
+        d3.select('.d3')
+            .text('D3 was here');
         formHandler();
 
     }
