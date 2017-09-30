@@ -76,7 +76,7 @@ define ([
             name: 'emptyLine',
             aclProfileRead: 'passerby',
             aclProfileWrite: null,
-            text: null,
+            text: "&nbsp",
             prop: null,
             maxlen: 20
         },
