@@ -212,9 +212,7 @@ define ([
 
         // convert "YYYY-MM-DD HH:DD:SS+TZ" string into YYYY-MMM-DD
         readableDate: function (urd) {
-            var ymd = urd.substr(
-                    0, urd.indexOf(" ")
-                ).split('-'),
+            var ymd = urd.substr(0, urd.indexOf(" ")).split('-'),
                 year,
                 m,
                 day,
