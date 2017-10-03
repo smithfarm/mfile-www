@@ -413,7 +413,10 @@ define ([
         
                 // determine characters needed for padding (based on longest
                 // entry)
-                if (dfo.entriesRead !== undefined) {
+                if (dfo.entriesRead === undefined || dfo.entriesRead === null) {
+                    console.log("No entriesRead, initializing allEntries to empty array");
+                    allEntries = lib.forceArray([]);
+                } else {
                     console.log("entriesRead", dfo.entriesRead);
                     allEntries = lib.forceArray(dfo.entriesRead);
                 }
