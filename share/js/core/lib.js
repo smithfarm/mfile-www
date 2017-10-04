@@ -299,6 +299,37 @@ define ([
         //    }
         //},
 
+        vetDate: function (d) {
+            // should at least support YYYY-MM-DD, YYYYMMDD, YYYY-MMM-DD
+            // if year is omitted, assume current year
+            // if month is omitted, assume current month
+            // if day is omitted, assume today
+            // should trim all whitespace (leading, trailing, internal)
+            // on success, returns canonicalized date
+            // on failure, returns null
+            // TBD
+            console.log("Entering lib.vetDate() with argument " + d)
+        },
+
+        vetDateRange: function (dr) {
+            // should support ranges of dates (using a hyphen)
+            // should support whole months (e.g. 2017 AUGUST, August 2017)
+            // if year is omitted, assume current year
+            // should trim all whitespace (leading, trailing, internal)
+            // on success, returns e.g. { "2017-02-01", "2017-02-28" }
+            // on failure, returns null
+            // TBD
+            console.log("Entering lib.vetDateRange() with argument " + dr)
+        },
+
+        vetTimeRange: function (tr) {
+            // should trim all whitespace (leading, trailing, internal)
+            // on success, returns e.g. { "06:00", "07:30" }
+            // on failure, returns null
+            // TBD
+            console.log("Entering lib.vetTimeRange() with argument " + tr)
+        },
+
     };
 });
 
