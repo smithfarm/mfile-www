@@ -73,7 +73,7 @@ define ([
             'title': 'Demo table',
             'preamble': 'This is just an illustration',
             'aclProfile': 'passerby',
-            'entries': [ entries.tableEntry1, entries.tableEntry2 ],
+            'entriesRead': [ entries.tableEntry1, entries.tableEntry2 ],
             'miniMenu': {
                 entries: ['demoActionFromTable']
             }

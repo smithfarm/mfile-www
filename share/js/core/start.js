@@ -113,9 +113,11 @@ define ([
         //
         mmKeyListener = function (evt) {
 
-            var len = $("input:text").length,
+            var elnam,
+                len = $("input:text").length,
                 n = $("input:text").index($(document.activeElement)),
-                i;
+                i,
+                vetter;
 
             lib.logKeyPress(evt);
     
@@ -131,17 +133,37 @@ define ([
                     console.log("Triggering submit button click");
                     $('#submitButton').click();
                 } else {
-                    $("input:text")[n + 1].focus();
+                    vetter = function () { return true; };
+                    if (false) {
+                        // FIXME
+                        // if we are in a form data entry field for which there is
+                        // an entry vetter callback, set vetter to that function
+                        // FIXME
+                    }
+                    if (vetter()) {
+                        $("input:text")[n + 1].focus();
+                    }
                 }
     
             } else if (evt.keyCode === 9) {
-                var elnam = $(document.activeElement).attr("name");
+                // TAB key in form
+                elnam = $(document.activeElement).attr("name");
+                vetter = function () { return true; };
                 if (
                         (elnam === 'entry0' && evt.shiftKey) ||
                         (elnam === 'sel' && len === 1) ||
                         (elnam === 'sel' && !evt.shiftKey)
                    ) {
+                    // prevent TAB keypress from navigating out of the form
                     evt.preventDefault();
+                } else if (false) {
+                    // FIXME
+                    // if we are in a form data entry field for which there is
+                    // an entry vetter callback, set vetter to that function
+                    // FIXME
+                    if (! vetter()) {
+                        evt.preventDefault();
+                    }
                 }
             }
 

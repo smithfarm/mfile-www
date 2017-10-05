@@ -113,6 +113,7 @@ define ([
                 // console.log("tobj", tobj);
                 // console.log("set", set);
                 var r = '<form id="' + tobj.name + '">',
+                    allEntries,
                     entry,
                     column,
                     row,
@@ -128,14 +129,15 @@ define ([
                 }
 
                 // populate maxl array
-                tobj.entries.map(function (e) {
+                allEntries = tobj.getEntries();
+                allEntries.map(function (e) {
                     headingsentry[e.prop] = e.text;
                 })
                 superset = set.concat([headingsentry]);
                 console.log("superset", superset);
-                for (column = 0; column < tobj.entries.length; column += 1) {
+                for (column = 0; column < allEntries.length; column += 1) {
                     console.log("Column " + column);
-                    entry = tobj.entries[column];
+                    entry = allEntries[column];
                     var elems = superset.map(function (obj) {
                         return obj[entry.prop];
                     });
@@ -149,14 +151,14 @@ define ([
                 }
 
                 // display table header
-                for (column = 0; column < tobj.entries.length; column += 1) {
-                    entry = tobj.entries[column];
+                for (column = 0; column < allEntries.length; column += 1) {
+                    entry = allEntries[column];
                     if (lib.privCheck(entry.aclProfileRead)) {
                         r += '<span style="text-decoration: underline">';
                         r += lib.rightPadSpaces(entry.text, maxl[column]);
                         r += '</span>';
                     }
-                    if (column !== tobj.entries.length - 1) {
+                    if (column !== allEntries.length - 1) {
                         r += ' ';
                     }
                 }
@@ -170,15 +172,15 @@ define ([
                     for (row = 0; row < set.length; row += 1) {
                         r += '<span id="row' + row + '">';
                         var obj = set[row];
-                        for (column = 0; column < tobj.entries.length; column += 1) {
-                            entry = tobj.entries[column];
+                        for (column = 0; column < allEntries.length; column += 1) {
+                            entry = allEntries[column];
                             console.log("entry", entry);
                             if (lib.privCheck(entry.aclProfileRead)) {
                                 var val = obj[entry.prop];
                                 console.log("value", val);
                                 r += lib.rightPadSpaces(val, maxl[column]);
                             }
-                            if (column !== tobj.entries.length - 1) {
+                            if (column !== allEntries.length - 1) {
                                 r += ' ';
                             }
                         }
@@ -349,16 +351,16 @@ define ([
         
                 // determine characters needed for padding (based on longest
                 // entry)
-                allEntries = lib.forceArray(dbo.entries);
+                allEntries = dbo.getEntries();
                 needed = maxLength(allEntries) + 2;
 
                 // display entries
-                len = dbo.entries ? dbo.entries.length : 0;
+                len = allEntries.length;
                 obj = set[pos];
                 console.log('Browsing object', obj);
                 if (len > 0) {
                     for (i = 0; i < len; i += 1) {
-                        entry = dbo.entries[i];
+                        entry = allEntries[i];
                         if (entry.name === 'divider') {
                             r += Array(entry.maxlen).join(entry.text) + '<br>';
                         } else if (entry.name === 'emptyLine') {
@@ -524,7 +526,7 @@ define ([
         drowselect: function (drsn) {
             var drso = target.pull(drsn);
             return genericTable(drsn, drso, 'drowselect');
-        }, // dtable
+        }, // drowselect
 
         dtable: function (dtn) {
             var dto = target.pull(dtn);

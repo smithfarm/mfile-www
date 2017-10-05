@@ -81,7 +81,7 @@ define ([
             'title': 'Demo rowselect',
             'preamble': 'This is just an illustration',
             'aclProfile': 'passerby',
-            'entries': [ entries.rowselectEntry1, entries.rowselectEntry2 ],
+            'entriesRead': [ entries.rowselectEntry1, entries.rowselectEntry2 ],
             'miniMenu': {
                 entries: ['demoEditFromRowselect']
             }

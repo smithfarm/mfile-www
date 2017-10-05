@@ -58,6 +58,10 @@ define ([
             assert.strictEqual(t.source, '(none)', 't.source OK');
             assert.strictEqual(typeof t.pushable, 'boolean', 'target.pushable OK');
             assert.strictEqual(t.pushable, true, 't.pushable OK');
+            assert.deepEqual(t.getEntries(), [], 't.getEntries() empty OK');
+            t.entriesRead = ['foo', 'bar'];
+            t.entriesWrite = ['baz', 'blat'];
+            assert.deepEqual(t.getEntries(), ['foo', 'bar', 'baz', 'blat'], 't.getEntries() full OK');
 
             // user
             assert.strictEqual(typeof u, 'object', 'u is an object');

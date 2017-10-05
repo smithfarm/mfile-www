@@ -128,7 +128,6 @@ define ([
             'title': 'Demo edit from rowselect',
             'preamble': 'This is just an illustration',
             'aclProfile': 'passerby',
-            'entriesRead': null,
             'entriesWrite': [entries.RWprop1, entries.RWprop2],
             'miniMenu': {
                 entries: ['saveToRowselect']

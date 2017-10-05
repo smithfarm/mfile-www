@@ -83,7 +83,7 @@ define ([
             'title': 'Demo browser',
             'preamble': 'This is just an illustration',
             'aclProfile': 'passerby',
-            'entries': [ entries.browserEntry1, entries.browserEntry2 ],
+            'entriesRead': [ entries.browserEntry1, entries.browserEntry2 ],
             'miniMenu': {
                 entries: ['demoEditFromBrowser']
             }
