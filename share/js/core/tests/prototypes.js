@@ -62,6 +62,14 @@ define ([
             t.entriesRead = ['foo', 'bar'];
             t.entriesWrite = ['baz', 'blat'];
             assert.deepEqual(t.getEntries(), ['foo', 'bar', 'baz', 'blat'], 't.getEntries() full OK');
+            t.entriesWrite = [];
+            assert.strictEqual(t.getVetter('foo'), null, 'no vetter in target with empty entriesWrite array');
+            t.entriesWrite = [{"name": "foo"}];
+            assert.strictEqual(t.getVetter('foo'), null, 'still no vetter in target');
+            t.entriesWrite = [{"name": "foo", "vetter": "bar"}];
+            assert.strictEqual(t.getVetter('foo'), null, 'still no vetter in target');
+            t.entriesWrite = [{"name": "foo", "vetter": function () {}}];
+            assert.strictEqual(typeof t.getVetter('foo'), 'function', 'vetter exists in target');
 
             // user
             assert.strictEqual(typeof u, 'object', 'u is an object');

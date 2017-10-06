@@ -59,6 +59,21 @@ define([
                     entries = this.entriesRead.concat(this.entriesWrite);
                     return entries;
                 },
+            getVetter: function (entryName) {
+                    // given an entry name, look up the entry and return the
+                    // vetter function if it exists, otherwise null
+                    var entry,
+                        i;
+                    for (i = 0; i < this.entriesWrite.length; i += 1) {
+                        entry = this.entriesWrite[i];
+                        if (entry.name === entryName) {
+                            if (typeof entry.vetter === 'function') {
+                                return entry.vetter;
+                            }
+                        }
+                    }
+                    return null;
+                },
             entriesRead: [],
             entriesWrite: [],
             menuText: '(none)',

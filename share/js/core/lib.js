@@ -309,6 +309,7 @@ define ([
             // on failure, returns null
             // TBD
             console.log("Entering lib.vetDate() with argument " + d)
+            return "VETTED";
         },
 
         vetDateRange: function (dr) {
@@ -320,6 +321,7 @@ define ([
             // on failure, returns null
             // TBD
             console.log("Entering lib.vetDateRange() with argument " + dr)
+            return "VETTED";
         },
 
         vetTimeRange: function (tr) {
@@ -328,6 +330,7 @@ define ([
             // on failure, returns null
             // TBD
             console.log("Entering lib.vetTimeRange() with argument " + tr)
+            return null;
         },
 
     };
