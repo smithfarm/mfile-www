@@ -57,8 +57,10 @@ define ([
             "obj": null,  // the drowselect object itself
             "set": null,  // the dataset (array) we are selecting from
             "pos": null   // the current position within that array
+        },
+        vetterEntering = function (fn, arg) {
+            console.log("Entering coreLib." + fn + "() with argument ->" + arg + "<-");
         };
-
 
     return {
 
@@ -308,7 +310,7 @@ define ([
             // on success, returns canonicalized date
             // on failure, returns null
             // TBD
-            console.log("Entering lib.vetDate() with argument " + d)
+            vetterEntering("vetDate", d);
             return "VETTED";
         },
 
@@ -320,7 +322,7 @@ define ([
             // on success, returns e.g. { "2017-02-01", "2017-02-28" }
             // on failure, returns null
             // TBD
-            console.log("Entering lib.vetDateRange() with argument " + dr)
+            vetterEntering("vetDateRange", dr);
             return "VETTED";
         },
 
@@ -329,7 +331,7 @@ define ([
             // on success, returns e.g. { "06:00", "07:30" }
             // on failure, returns null
             // TBD
-            console.log("Entering lib.vetTimeRange() with argument " + tr)
+            vetterEntering("vetTimeRange", tr);
             return null;
         },
 
