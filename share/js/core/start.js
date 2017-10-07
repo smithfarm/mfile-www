@@ -116,16 +116,17 @@ define ([
         // miniMenu handlers
         //
         mmKeyListenerVetEntry = function (evt, n, eid) {
-            var vetted = true,
+            var input = $("input[id='" + eid + "']"),
+                vetted = true,
                 vettedVal,
                 vetter;
             console.log("In writable entry " + eid);
             vetter = currentTarget.getVetter(eid);
             if (typeof vetter === 'function') {
                 console.log("Current entry ->" + eid +"<- has a vetter function!");
-                vettedVal = vetter();
+                vettedVal = vetter(input.val());
                 if (vettedVal) {
-                    $("input[id='" + eid + "']").val(vettedVal);
+                    input.val(vettedVal);
                 } else {
                     vetted = false;
                 }
