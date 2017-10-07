@@ -185,8 +185,9 @@ define ([
             }
 
         },
-        mmSubmit = function (tgt, obj) {
-            console.log("Entering mmSubmit with target", tgt, " and object", obj);
+        mmSubmit = function (obj) {
+            console.log("Entering mmSubmit with and object", obj);
+            console.log("Target is", currentTarget);
 
             coreLib.clearResult();
         
@@ -198,7 +199,7 @@ define ([
                 entry,
                 item,
                 wlen,
-                entries = tgt.miniMenu.entries;
+                entries = currentTarget.miniMenu.entries;
 
             // if miniMenu has zero or one entries, 'Back' is the only option
             console.log("entries", entries);
@@ -218,10 +219,10 @@ define ([
                 newObj = $.extend({}, obj);
         
                 // replace the writable properties with the values from the form
-                if (tgt.entriesWrite) {
-                    wlen = tgt.entriesWrite.length;
+                if (currentTarget.entriesWrite) {
+                    wlen = currentTarget.entriesWrite.length;
                     for (i = 0; i < wlen; i += 1) {
-                        entry = tgt.entriesWrite[i];
+                        entry = currentTarget.entriesWrite[i];
                         newObj[entry.prop] = $('#' + entry.name).val();
                     }
                     //console.log("Modified object based on form contents", newObj);
@@ -234,7 +235,7 @@ define ([
             if (sel >= 0 && sel <= len) {
                 //console.log("sel " + sel + " is within range");
                 // we can only select the item if we have sufficient priv level
-                selection = target.pull(tgt.miniMenu.entries[sel]);
+                selection = target.pull(currentTarget.miniMenu.entries[sel]);
                 if (coreLib.privCheck(selection.aclProfile)) {
                     //console.log('Selection ' + sel + ' passed priv check');
                     item = selection;
@@ -253,7 +254,7 @@ define ([
             if (item !== undefined) {
                 //console.log("Selected " + dfn + " menu item: " + item.name);
                 newObj.mm = true;
-                if (tgt.type === 'dform' && tgt.rememberState) {
+                if (currentTarget.type === 'dform' && currentTarget.rememberState) {
                     console.log("Changing stack state to", newObj);
                     stack.setState(newObj);
                 }
@@ -264,10 +265,6 @@ define ([
         //
         // dform handlers
         //
-        dformSubmit = function (dfn, obj) {
-            // dfn is dform name
-            mmSubmit(target.pull(dfn), obj);
-        },
         dformListen = function (dfn, obj) {
             console.log("Listening in form " + dfn);
             currentTarget = target.pull(dfn);
@@ -281,7 +278,7 @@ define ([
             $('#submitButton').on("click", function (event) {
                 event.preventDefault;
                 console.log("Submitting form " + dfn);
-                dformSubmit(dfn, obj);
+                mmSubmit(obj);
             });
             $('#' + dfn).on("keypress", mmKeyListener);
         },
@@ -293,7 +290,7 @@ define ([
             var dbo = coreLib.dbrowserState.obj,
                 set = coreLib.dbrowserState.set,
                 pos = coreLib.dbrowserState.pos;
-            mmSubmit(dbo, set[pos]);
+            mmSubmit(set[pos]);
         },
         dbrowserKeyListener = function () {
             var set = coreLib.dbrowserState.set,
@@ -344,6 +341,7 @@ define ([
                 pos = coreLib.dbrowserState.pos;
             
             console.log("Listening in browser " + dbo.name);
+            currentTarget = dbo;
             console.log("Browser set is", set, "cursor position is " + pos);
             $('#mainarea').html(dbo.source(set, pos));
             if (resultLine) {
@@ -380,10 +378,11 @@ define ([
         // dtable handlers
         // 
         dtableSubmit = function (dto) {
-            mmSubmit(dto);
+            mmSubmit();
         },
         dtableListen = function (dto) {
             console.log("Listening in table " + dto.name);
+            currentTarget = dto;
             $('#' + dto.name).submit(suppressSubmitEvent);
             $('input[name="sel"]').val('').focus();
             $('#submitButton').on("click", function (event) {
@@ -401,7 +400,7 @@ define ([
             var drso = coreLib.drowselectState.obj;
                 set = coreLib.drowselectState.set,
                 pos = coreLib.drowselectState.pos;
-            mmSubmit(drso, set[pos]);
+            mmSubmit(set[pos]);
         },
         drowselectKeyListener = function () {
             var set = coreLib.drowselectState.set,
@@ -449,6 +448,7 @@ define ([
             var drso = coreLib.drowselectState.obj,
                 set = coreLib.drowselectState.set,
                 pos = coreLib.drowselectState.pos;
+            currentTarget = drso;
             $('#result').text("Displaying rowselect with " + coreLib.genObjStr(set.length));
             $('#mainarea').html(drso.source(set));
             coreLib.reverseVideo(pos, true);
