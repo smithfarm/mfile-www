@@ -60,6 +60,7 @@ share/js/mfile-www/dmenu-init.js
 share/js/mfile-www/dnotice-init.js
 share/js/mfile-www/drowselect-init.js
 share/js/mfile-www/dtable-init.js
+share/js/mfile-www/entries.js
 share/js/mfile-www/lib.js
 share/js/mfile-www/target-init.js
 share/js/mfile-www/test.js

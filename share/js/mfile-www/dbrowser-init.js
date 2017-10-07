@@ -37,39 +37,16 @@
 "use strict";
 
 define ([
+    'app/entries',
     'lib',
     'app/lib',
-    'target'
+    'target',
 ], function (
+    entries,
     lib,
     appLib,
-    target
+    target,
 ) {
-
-    //
-    // define dbrowser entries here
-    //
-    var entries = {        
-
-            // read-only form entry no. 1
-            'browserEntry1': {
-                name: 'browserEntry1',
-                aclProfileRead: 'passerby',
-                text: 'Entry 1',
-                prop: 'prop1',
-                maxlen: 20
-            },
-
-            // read-write form entry no. 2
-            'browserEntry2': {
-                name: 'browserEntry2',
-                aclProfileRead: 'passerby',
-                text: 'Entry 2',
-                prop: 'prop2',
-                maxlen: 20
-            }
-
-        };
 
     return function () {
 
