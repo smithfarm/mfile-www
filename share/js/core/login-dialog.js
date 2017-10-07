@@ -71,22 +71,24 @@ define ([
                 $('#loginform').submit(submitCallback);
 
                 // Set up listener for <ENTER> keypresses in "username" field
-                $('input[name="nam"]').keydown(function (event) {
-                    lib.logKeyPress(event);
-                    if (event.keyCode === 13) {
-                        event.preventDefault();
+                $('input[name="nam"]').keydown(function (evt) {
+                    lib.logKeyPress(evt);
+                    if (evt.keyCode === 13) {
+                        evt.preventDefault();
                         $('input[name="pwd"]').focus();
+                    } else if (evt.keyCode === 9 && evt.shiftKey) {
+                        evt.preventDefault();
                     }
                 });
 
                 // Set up listener for <ENTER> and <TAB> keypresses in "password" field
-                $('input[name="pwd"]').keydown(function (event) {
-                    lib.logKeyPress(event);
-                    if (event.keyCode === 13) {
+                $('input[name="pwd"]').keydown(function (evt) {
+                    lib.logKeyPress(evt);
+                    if (evt.keyCode === 13) {
                         // event.preventDefault();
-                        submitCallback(event);
-                    } else if (event.keyCode === 9) {
-                        event.preventDefault();
+                        submitCallback(evt);
+                    } else if (evt.keyCode === 9) {
+                        evt.preventDefault();
                         $('input[name="nam"]').focus();
                     }
                 });
