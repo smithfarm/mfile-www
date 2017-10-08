@@ -62,6 +62,15 @@ define ([
             assert.strictEqual(obj.hasOwnProperty("bogusProp"), false, "no bogus property anymore");
         });
 
+        // isInteger
+        QUnit.test('internal library functions: isInteger', function (assert) {
+            assert.ok(lib.isInteger(-1), "-1 is an integer");
+            assert.ok(lib.isInteger(0), "0 is an integer");
+            assert.ok(lib.isInteger(1), "1 is an integer");
+            assert.notOk(lib.isInteger("foo"), "foo is not an integer");
+            assert.notOk(lib.isInteger(""), "empty string is not an integer");
+        });
+
         // privCheck
         QUnit.test('internal library functions: privCheck', function (assert) {
             assert.strictEqual(currentUser('priv'), null, "starting currentUserPriv is null");

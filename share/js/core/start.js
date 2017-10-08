@@ -122,6 +122,7 @@ define ([
                 vetter;
             console.log("In writable entry " + eid);
             vetter = currentTarget.getVetter(eid);
+            console.log("vetter", vetter);
             if (typeof vetter === 'function') {
                 console.log("Current entry ->" + eid +"<- has a vetter function!");
                 vettedVal = vetter(input.val());
@@ -186,7 +187,7 @@ define ([
 
         },
         mmSubmit = function (obj) {
-            console.log("Entering mmSubmit with and object", obj);
+            console.log("Entering mmSubmit with object", obj);
             console.log("Target is", currentTarget);
 
             coreLib.clearResult();
@@ -200,6 +201,8 @@ define ([
                 item,
                 wlen,
                 entries = currentTarget.miniMenu.entries;
+
+            // FIXME vet form data
 
             // if miniMenu has zero or one entries, 'Back' is the only option
             console.log("entries", entries);
