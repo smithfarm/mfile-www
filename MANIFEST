@@ -50,6 +50,7 @@ share/js/core/test.js
 share/js/core/test-go.js
 share/js/core/tests/cf.js
 share/js/core/tests/current-user.js
+share/js/core/tests/datetime.js
 share/js/core/tests/dummy.js
 share/js/core/tests/lib.js
 share/js/core/tests/prototypes.js
