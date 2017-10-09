@@ -45,10 +45,94 @@ define ([
     var //today = Object.create(Date.prototype),
         today = new Date(),
 
+        canonicalizeTime = function (rt) {
+            // assume rt ("raw time") is a string with format "h:m" where h and
+            // m are integers
+            console.log("Entering canonicalizeTime() with argument", rt);
+
+            var h,
+                i,
+                m,
+                ct = [],
+                rts = String(rt).split(":");
+
+            if (rts.length !== 2) {
+                return null;
+            }
+            for (i = 0; i < 2; i += 1) {
+                if (rts[i] === "") {
+                    rts[i] = "0";
+                }
+            }
+            if (!coreLib.isInteger(rts[0]) || !coreLib.isInteger(rts[1])) {
+                return null;
+            }
+            h = parseInt(rts[0], 10);
+            m = parseInt(rts[1], 10);
+            if (h < 0 || h > 24) {
+                return null;
+            }
+            if (m < 0 || m > 59) {
+                return null;
+            }
+            if (h === 24 && m !== 0) {
+                return null;
+            }
+            // assemble canonicalized time string; left-pad with zero if necessary
+            ct[0] = h;
+            ct[1] = m;
+            for (i = 0; i < 2; i += 1) {
+                if (ct[i] < 10) {
+                    ct[i] = "0" + String(ct[i]);
+                } else {
+                    ct[i] = String(ct[i]);
+                }
+            }
+            return ct[0] + ":" + ct[1];
+        },
+
+        canonicalizeTimeRange = function (tr) {
+            var ttr = String(tr).trim().replace(/\s/g, '');
+            if (ttr.match(/^\d*:\d*-\d*:\d*$/)) {
+                return canonicalizeTimeRangeStandard(ttr);
+            } else if (ttr.match(/^\d*:\d*[+]\d+hour/)) {
+                return canonicalizeTimeRangeOffset(ttr);
+            }
+            return null;
+        },
+
+        canonicalizeTimeRangeOffset = function (tr) {
+            // on success, returns e.g. ["06:00", "07:30"]
+            // on failure, returns null
+            return null;
+        },
+
+        canonicalizeTimeRangeStandard = function (tr) {
+            // on success, returns e.g. ["06:00", "07:30"]
+            // on failure, returns null
+            var i,
+                ttrs = tr.split('-'),
+                ftr = [];
+
+            if (ttrs.length !== 2) {
+                return null;
+            }
+            for (i = 0; i < 2; i += 1) {
+                ftr[i] = canonicalizeTime(ttrs[i]);
+                if (ftr[i] === null) {
+                    return null;
+                }
+            }
+
+            return ftr;
+        },
+
         intToMonth = function (m) {
+            // if 1 <= m <= 12, return three-letter string signifying the month
+            // otherwise, return null
             console.log("Entering intToMonth() with argument", m);
             var m = parseInt(m, 10),
-                month = String(m);
+                month = null;
             if (m === 1) {
                 month = "JAN";
             } else if (m === 2) {
@@ -214,6 +298,10 @@ define ([
 
     return {
 
+        canonicalizeTime: canonicalizeTime,
+
+        intToMonth: intToMonth,
+
         // convert "YYYY-MM-DD HH:DD:SS+TZ" string into YYYY-MMM-DD
         readableDate: function (urd) {
             var ymd = urd.substr(0, urd.indexOf(" ")).split('-'),
@@ -230,8 +318,6 @@ define ([
             month = intToMonth(m);
             return year.toString() + "-" + month + "-" + day.toString();
         }, // readableDate
-
-        intToMonth: intToMonth,
 
         strToMonth: strToMonth,
 
@@ -286,12 +372,12 @@ define ([
         },
 
         vetTimeRange: function (tr) {
-            // should trim all whitespace (leading, trailing, internal)
-            // on success, returns e.g. { "06:00", "07:30" }
-            // on failure, returns null
-            // TBD
-            var ttr = String(tr).trim();
-            return null;
+            var ctr = canonicalizeTimeRange(tr),
+                rv = null;
+            if (ctr !== null) {
+                rv = ctr[0] + '-' + ctr[1];
+            }
+            return rv;
         },
 
     };

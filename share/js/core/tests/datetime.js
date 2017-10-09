@@ -51,6 +51,26 @@ define ([
             console.log("Entering date_invalid() with argument", d);
             var r = dt.vetDate(d);
             assert.strictEqual(r, null, "invalid: " + d);
+        },
+        time_valid = function (assert, t) {
+            console.log("Entering time_valid() with argument", t);
+            var r = dt.canonicalizeTime(t);
+            assert.ok(r, "valid: " + t + " -> " + r);
+        },
+        time_invalid = function (assert, t) {
+            console.log("Entering time_invalid() with argument", t);
+            var r = dt.canonicalizeTime(t);
+            assert.strictEqual(r, null, "invalid: " + t);
+        },
+        timerange_valid = function (assert, tr) {
+            console.log("Entering timerange_valid() with argument", tr);
+            var r = dt.vetTimeRange(tr);
+            assert.ok(r, "valid: " + tr + " -> " + r);
+        },
+        timerange_invalid = function (assert, tr) {
+            console.log("Entering timerange_invalid() with argument", tr);
+            var r = dt.vetTimeRange(tr);
+            assert.strictEqual(r, null, "invalid: " + tr);
         };
 
     return function () {
@@ -158,6 +178,57 @@ define ([
             date_invalid(assert, '15  -  deception ');
             date_invalid(assert, 'Pi is approximately 3.1415927');
         });
+
+        QUnit.test('canonicalizeTime', function (assert) {
+            time_valid(assert, "7:00");
+            time_valid(assert, "7:0");
+            time_valid(assert, "7:");
+            time_valid(assert, "0:00");
+            time_valid(assert, "0:0");
+            time_valid(assert, ":0");
+            time_valid(assert, ":");
+            time_invalid(assert, "foobar");
+            time_invalid(assert, "foo:bar");
+            time_invalid(assert, "foo:10");
+            time_invalid(assert, "10:bar");
+            time_invalid(assert, "10:K§Ň");
+            time_invalid(assert, "-1:");
+            time_invalid(assert, "5:-434");
+            time_invalid(assert, "5:-43");
+            time_invalid(assert, "5:60");
+            time_invalid(assert, "24:60");
+            time_invalid(assert, "245:600");
+            time_invalid(assert, "25:50");
+            time_valid(assert, "02:50");
+            time_invalid(assert, "02:60");
+            time_valid(assert, "02:03");
+            time_valid(assert, "12:00");
+            time_valid(assert, "2:1");
+            time_valid(assert, "1:2");
+            time_valid(assert, "1:9");
+            time_valid(assert, "10:10");
+            time_invalid(assert, "25:10");
+            time_invalid(assert, "10::10");
+            time_valid(assert, "10: 10");
+            time_valid(assert, "10 :10");
+        });
+
+        QUnit.test('time range vetter function', function (assert) {
+            timerange_valid(assert, "12:00-12:30");
+            timerange_valid(assert, "12:00 -12:30");
+            timerange_valid(assert, "12:00 - 12:30");
+            timerange_invalid(assert, "12:00 -- 12:30");
+            timerange_invalid(assert, "12:60-12:00");
+            timerange_invalid(assert, "12:00-12:60");
+            timerange_valid(assert, "12:0-12:6");
+            timerange_valid(assert, "12:6-12:0");
+            timerange_invalid(assert, "12::6-12:0");
+        });
+
+        QUnit.test('time range vetter function - offset', function (assert) {
+            assert.ok(true, "no tests yet");
+        });
+
     };
 
 });
