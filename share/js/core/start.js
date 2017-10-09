@@ -202,8 +202,6 @@ define ([
                 wlen,
                 entries = currentTarget.miniMenu.entries;
 
-            // FIXME vet form data
-
             // if miniMenu has zero or one entries, 'Back' is the only option
             console.log("entries", entries);
             if (entries === null || entries === undefined || entries.length === 0) {
@@ -400,10 +398,29 @@ define ([
         // drowselect handlers
         //
         drowselectSubmit = function () {
-            var drso = coreLib.drowselectState.obj;
+            var drso = coreLib.drowselectState.obj,
                 set = coreLib.drowselectState.set,
-                pos = coreLib.drowselectState.pos;
-            mmSubmit(set[pos]);
+                pos = coreLib.drowselectState.pos,
+                xtgt;
+            if (drso.hasOwnProperty('miniMenu')) {
+                if (drso.miniMenu.hasOwnProperty('entries')) {
+                    if (drso.miniMenu.entries.length > 0) {
+                        mmSubmit(set[pos]);
+                        return;
+                    }
+                }
+            }
+            if (drso.hasOwnProperty('submitAction')) {
+                stack.push(drso.submitAction, set[pos]);
+            } else {
+                // no miniMenu, no submitAction - just go back
+                xtgt = stack.getXTarget();
+                if (typeof xtgt === "string") {
+                    stack.unwindToTarget(xtgt);
+                } else {
+                    stack.pop();
+                }
+            }
         },
         drowselectKeyListener = function () {
             var set = coreLib.drowselectState.set,

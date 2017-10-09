@@ -91,8 +91,9 @@ define ([
             stackTarget = getTarget();
             stackState = getState();
             console.log("Now, the stack length is " + stackLength +
-                        " and the top target is " + stackTarget.name);
-            if (typeof newState === 'object') {
+                        " and the top target is " + stackTarget.name +
+                        " and its state is", stackState);
+            if (newState && typeof newState === 'object') {
                 $.extend(stackState, newState);
                 setState(stackState);
             }
