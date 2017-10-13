@@ -300,6 +300,8 @@ define ([
 
         canonicalizeTime: canonicalizeTime,
 
+        canonicalizeTimeRange: canonicalizeTimeRange,
+
         intToMonth: intToMonth,
 
         // convert "YYYY-MM-DD HH:DD:SS+TZ" string into YYYY-MMM-DD
