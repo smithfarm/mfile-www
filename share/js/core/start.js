@@ -266,12 +266,14 @@ define ([
         //
         // dform handlers
         //
-        dformListen = function (dfn, obj) {
+        dformListen = function (dfn, obj, focusId) {
             console.log("Listening in form " + dfn);
             currentTarget = target.pull(dfn);
             $('#' + dfn).submit( suppressSubmitEvent );
             $('input[name="sel"]').val('');
-            if (stack.getPush() === true && $('input[name="entry0"]').length) {
+            if (focusId) {
+                $('input[id="' + focusId + '"]').focus();
+            } else if (stack.getPush() === true && $('input[name="entry0"]').length) {
                 $('input[name="entry0"]').focus();
             } else {
                 $('input[name="sel"]').focus();
@@ -508,13 +510,14 @@ define ([
                     opts = {};
                 }
                 opts.resultLine = ('resultLine' in opts) ? opts.resultLine : "&nbsp";
+                opts.inputId = ('inputId' in opts) ? opts.inputId : null;
                 coreLib.displayResult(opts.resultLine);
                 if (! state) {
                     state = stack.getState();
                 }
                 console.log('The object we are working with is:', state);
                 $('#mainarea').html(dfo.source(state));
-                dformListen(dfn, state);
+                dformListen(dfn, state, opts.inputId);
             };
         }, // dform
 
