@@ -187,6 +187,7 @@ define ([
             time_valid(assert, "0:0");
             time_valid(assert, ":0");
             time_valid(assert, ":");
+            time_valid(assert, "7");
             time_invalid(assert, "foobar");
             time_invalid(assert, "foo:bar");
             time_invalid(assert, "foo:10");
@@ -223,10 +224,19 @@ define ([
             timerange_valid(assert, "12:0-12:6");
             timerange_valid(assert, "12:6-12:0");
             timerange_invalid(assert, "12::6-12:0");
+            timerange_valid(assert, "8-12");
         });
 
         QUnit.test('time range vetter function - offset', function (assert) {
-            assert.ok(true, "no tests yet");
+            timerange_valid(assert, "8+1");
+            timerange_invalid(assert, "16+10");
+            timerange_valid(assert, "8:00+1");
+            timerange_valid(assert, "8:00+1:45");
+            timerange_valid(assert, "8:45+1:45");
+            timerange_valid(assert, "8:45+1:55");
+            timerange_valid(assert, "23:45+0:15");
+            timerange_invalid(assert, "23:45+0:16");
+            timerange_valid(assert, "0+0");
         });
 
     };

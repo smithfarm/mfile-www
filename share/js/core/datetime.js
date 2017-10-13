@@ -45,8 +45,12 @@ define ([
     var //today = Object.create(Date.prototype),
         today = new Date(),
 
+        addMinutes = function (date, minutes) {
+            return new Date(date.getTime() + minutes*60000);
+        },
+
         canonicalizeTime = function (rt) {
-            // assume rt ("raw time") is a string with format "h:m" where h and
+            // assume rt ("raw time") is a string with format "h[:m]" where h and
             // m are integers
             console.log("Entering canonicalizeTime() with argument", rt);
 
@@ -56,8 +60,11 @@ define ([
                 ct = [],
                 rts = String(rt).split(":");
 
-            if (rts.length !== 2) {
+            if (rts.length < 1 || rts.length > 2) {
                 return null;
+            }
+            if (rts.length === 1) {
+                rts.push("0");
             }
             for (i = 0; i < 2; i += 1) {
                 if (rts[i] === "") {
@@ -92,19 +99,53 @@ define ([
         },
 
         canonicalizeTimeRange = function (tr) {
+            console.log("Entering canonicalizeTimeRange() with argument", tr);
             var ttr = String(tr).trim().replace(/\s/g, '');
-            if (ttr.match(/^\d*:\d*-\d*:\d*$/)) {
+            if (ttr.match(/^\d*:{0,1}\d*-\d*:{0,1}\d*$/)) {
+                console.log(tr + " is a standard time range");
                 return canonicalizeTimeRangeStandard(ttr);
-            } else if (ttr.match(/^\d*:\d*[+]\d+hour/)) {
+            } else if (ttr.match(/^\d+:{0,1}\d*[+]\d+:{0,1}\d*/)) {
+                console.log(tr + " is an offset time range");
                 return canonicalizeTimeRangeOffset(ttr);
             }
             return null;
         },
 
         canonicalizeTimeRangeOffset = function (tr) {
+            console.log("Entering canonicalizeTimeRangeOffset() with argument", tr);
             // on success, returns e.g. ["06:00", "07:30"]
             // on failure, returns null
-            return null;
+            var i,
+                ttrs = tr.split('+'),
+                ftr = [],
+                buf = [],
+                baseMinutes,
+                offsetMinutes;
+
+            if (ttrs.length !== 2) {
+                return null;
+            }
+            for (i = 0; i < 2; i += 1) {
+                ftr[i] = canonicalizeTime(ttrs[i]);
+                if (ftr[i] === null) {
+                    return null;
+                }
+            }
+            console.log("Canonicalized base time: " + ftr[0]);
+            console.log("Canonicalized offset: " + ftr[1]);
+            baseMinutes = timeToMinutes(ftr[0]);
+            offsetMinutes = timeToMinutes(ftr[1]);
+            console.log("Base minutes: " + baseMinutes);
+            console.log("Base minutes: " + offsetMinutes);
+            if (baseMinutes === null || offsetMinutes === null) {
+                console.log("CRITICAL ERROR: problem with timeToMinutes", ftr);
+                return null;
+            }
+            ftr[1] = minutesToTime(baseMinutes + offsetMinutes);
+            if (ftr[1] === null) {
+                return null;
+            }
+            return ftr;
         },
 
         canonicalizeTimeRangeStandard = function (tr) {
@@ -161,6 +202,20 @@ define ([
             return month;
         }, // intToMonth
 
+        minutesToTime = function (m) {
+            console.log("Entering minutesToTime() with argument", m);
+            var quotient,
+                remainder;
+            if (m < 0 || m > 1440) {
+                return null;
+            }
+            quotient = String(Math.floor(m/60));
+            remainder = String(m % 60);
+            console.log("Quotient is", quotient);
+            console.log("Remainder is", remainder);
+            return canonicalizeTime(quotient + ":" + remainder);
+        },
+
         strToMonth = function (buf) {
             console.log("Entering strToMonth() with argument", buf);
             var m = String(buf).toLowerCase().slice(0, 3),
@@ -195,6 +250,23 @@ define ([
             }
             return month;
         }, // strToMonth
+
+        timeToMinutes = function (ts) {
+            // convert a canonicalized time string into minutes
+            var buf = String(ts).split(':');
+            if (buf.length !== 2) {
+                return null;
+            }
+            buf[0] = parseInt(buf[0], 10);
+            if (buf[0] > 24) {
+                return null;
+            }
+            buf[1] = parseInt(buf[1], 10);
+            if (buf[1] > 59) {
+                return null;
+            }
+            return buf[0] * 60 + buf[1];
+        },
 
         vetDateYYYYMMDD = function (ds) {
             console.log("Entering vetDateYYYYMMDD() with argument", ds);
@@ -298,11 +370,15 @@ define ([
 
     return {
 
+        addMinutes: addMinutes,
+
         canonicalizeTime: canonicalizeTime,
 
         canonicalizeTimeRange: canonicalizeTimeRange,
 
         intToMonth: intToMonth,
+
+        minutesToTime: minutesToTime,
 
         // convert "YYYY-MM-DD HH:DD:SS+TZ" string into YYYY-MMM-DD
         readableDate: function (urd) {
@@ -322,6 +398,8 @@ define ([
         }, // readableDate
 
         strToMonth: strToMonth,
+
+        timeToMinutes: timeToMinutes,
 
         vetDateYYYYMMDD: vetDateYYYYMMDD,
 
