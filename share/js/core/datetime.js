@@ -100,13 +100,24 @@ define ([
 
         canonicalizeTimeRange = function (tr) {
             console.log("Entering canonicalizeTimeRange() with argument", tr);
-            var ttr = String(tr).trim().replace(/\s/g, '');
+            var ttr = String(tr).trim().replace(/\s/g, ''),
+                ttrs;
             if (ttr.match(/^\d*:{0,1}\d*-\d*:{0,1}\d*$/)) {
                 console.log(tr + " is a standard time range");
                 return canonicalizeTimeRangeStandard(ttr);
-            } else if (ttr.match(/^\d+:{0,1}\d*[+]\d+:{0,1}\d*/)) {
+            } else if (ttr.match(/^\d+:{0,1}\d*\+\d+:{0,1}\d*/)) {
                 console.log(tr + " is an offset time range");
                 return canonicalizeTimeRangeOffset(ttr);
+            } else if (ttr.match(/^\+\d+:{0,1}\d*/)) {
+                console.log(tr + " is a last-interval-plus-offset time range");
+                ttrs = canonicalizeTime(ttr.replace(/\+/g, ''));
+                if (ttrs === null) {
+                    return null;
+                }
+                return '+' + ttrs;
+            } else if (ttr.match(/^\+$/)) {
+                console.log(tr + " is a next-scheduled-interval time range");
+                return ttr;
             }
             return null;
         },
@@ -452,12 +463,13 @@ define ([
         },
 
         vetTimeRange: function (tr) {
-            var ctr = canonicalizeTimeRange(tr),
-                rv = null;
-            if (ctr !== null) {
-                rv = ctr[0] + '-' + ctr[1];
+            var ctr = canonicalizeTimeRange(tr);
+            if (ctr === null) {
+                return null
+            } else if (coreLib.isArray(ctr)) {
+                return ctr[0] + '-' + ctr[1];
             }
-            return rv;
+            return ctr;
         },
 
     };

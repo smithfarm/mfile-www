@@ -237,6 +237,9 @@ define ([
             timerange_valid(assert, "23:45+0:15");
             timerange_invalid(assert, "23:45+0:16");
             timerange_valid(assert, "0+0");
+            timerange_valid(assert, "+0:00");
+            timerange_valid(assert, "+1:5");
+            timerange_valid(assert, "+");
         });
 
     };
