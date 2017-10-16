@@ -506,17 +506,33 @@ define ([
             var dfo = target.pull(dfn);
             return function (state, opts) {
                 console.log('Entering start method of target ' + dfn);
+                var i,
+                    populateArray = [];
                 if (typeof opts !== 'object') {
                     opts = {};
                 }
                 opts.resultLine = ('resultLine' in opts) ? opts.resultLine : "&nbsp";
                 opts.inputId = ('inputId' in opts) ? opts.inputId : null;
                 coreLib.displayResult(opts.resultLine);
+                // determine dform "state" (i.e. starting content of form entries)
                 if (! state) {
                     state = stack.getState();
                 }
                 console.log('The object we are working with is:', state);
+                // generate and display dform html
                 $('#mainarea').html(dfo.source(state));
+                // assemble array of entries with "populate" property
+                for (i = 0; i < dfo.entriesRead.length; i += 1) {
+                    if (dfo.entriesRead[i].hasOwnProperty("populate")) {
+                        populateArray.push(dfo.entriesRead[i]);
+                    }
+                }
+                // call first populate function to trigger sequential,
+                // asynchronous population of all entries with "populate" property
+                if (populateArray.length > 0) {
+                    populateArray[0].populate(populateArray);
+                }
+                // listen for user input in form
                 dformListen(dfn, state, opts.inputId);
             };
         }, // dform
