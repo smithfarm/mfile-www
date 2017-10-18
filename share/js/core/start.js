@@ -269,7 +269,7 @@ define ([
         dformListen = function (dfn, obj, focusId) {
             console.log("Listening in form " + dfn);
             currentTarget = target.pull(dfn);
-            $('#' + dfn).submit( suppressSubmitEvent );
+            $('#' + dfn).submit(suppressSubmitEvent);
             $('input[name="sel"]').val('');
             if (focusId) {
                 $('input[id="' + focusId + '"]').focus();
@@ -524,13 +524,13 @@ define ([
                 // assemble array of entries with "populate" property
                 for (i = 0; i < dfo.entriesRead.length; i += 1) {
                     if (dfo.entriesRead[i].hasOwnProperty("populate")) {
-                        populateArray.push(dfo.entriesRead[i]);
+                        populateArray.push(dfo.entriesRead[i].populate);
                     }
                 }
                 // call first populate function to trigger sequential,
                 // asynchronous population of all entries with "populate" property
                 if (populateArray.length > 0) {
-                    populateArray[0].populate(populateArray);
+                    populateArray[0](populateArray);
                 }
                 // listen for user input in form
                 dformListen(dfn, state, opts.inputId);
