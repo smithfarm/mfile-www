@@ -182,7 +182,9 @@ define ([
                     // prevent TAB keypress from navigating out of the form
                     evt.preventDefault();
                 }
-                mmKeyListenerVetEntry(evt, n, elid);
+                if (! evt.shiftKey) {
+                    mmKeyListenerVetEntry(evt, n, elid);
+                }
             }
 
         },
