@@ -186,7 +186,7 @@ define ([
         },
 
         // log events to browser JavaScript console
-        logKeyPress: function (evt) {
+        logKeyDown: function (evt) {
             console.log("WHICH: " + evt.which + ", KEYCODE: " + evt.keyCode);
         },
 

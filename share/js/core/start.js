@@ -101,9 +101,9 @@ define ([
         },
         dmenuKeyListener = function (dmn) {
             return function (event) {
-                coreLib.logKeyPress(event);
+                coreLib.logKeyDown(event);
                 if (event.keyCode === 13) {
-                    console.log("Detected ENTER keypress; submitting " + dmn + " form");
+                    console.log("Detected ENTER keydown; submitting " + dmn + " form");
                     event.preventDefault();
                     dmenuSubmit(dmn);
                 } else if (event.keyCode === 9) {
@@ -153,7 +153,7 @@ define ([
                 n = $("input:text").index($(document.activeElement)),
                 i;
 
-            coreLib.logKeyPress(evt);
+            coreLib.logKeyDown(evt);
             coreLib.clearResult();
     
             if (evt.keyCode === 13) {
@@ -179,7 +179,7 @@ define ([
                         (elnam === 'sel' && len === 1) ||
                         (elnam === 'sel' && !evt.shiftKey)
                    ) {
-                    // prevent TAB keypress from navigating out of the form
+                    // prevent TAB keydown from navigating out of the form
                     evt.preventDefault();
                 }
                 if (! evt.shiftKey) {
@@ -285,7 +285,7 @@ define ([
                 console.log("Submitting form " + dfn);
                 mmSubmit(obj);
             });
-            $('#' + dfn).on("keypress", mmKeyListener);
+            $('#' + dfn).on("keydown", mmKeyListener);
         },
 
         //
@@ -303,19 +303,19 @@ define ([
             
             return function (evt) {
         
-                coreLib.logKeyPress(evt);
+                coreLib.logKeyDown(evt);
         
                 // since the dbrowser has (may have) a navigation menu, we
                 // check first for those keys before moving to miniMenu handler
                 if (evt.keyCode === 37) { // <-
                     if (evt.ctrlKey) {
-                        console.log('Listener detected CTRL-\u2190 keypress');
+                        console.log('Listener detected CTRL-\u2190 keydown');
                         if ($("#navJumpToBegin").length) {
                             coreLib.dbrowserState.pos = 0;
                             dbrowserListen();
                         }
                     } else {
-                        console.log('Listener detected \u2190 keypress');
+                        console.log('Listener detected \u2190 keydown');
                         if ($("#navBack").length) {
                             coreLib.dbrowserState.pos -= 1;
                             dbrowserListen();
@@ -323,13 +323,13 @@ define ([
                     }
                 } else if (evt.keyCode === 39) { // ->
                     if (evt.ctrlKey) {
-                        console.log('Listener detected CTRL-\u2192 keypress');
+                        console.log('Listener detected CTRL-\u2192 keydown');
                         if ($("#navJumpToEnd").length) {
                             coreLib.dbrowserState.pos = set.length - 1;
                             dbrowserListen();
                         }
                     } else {
-                        console.log('Listener detected \u2192 keypress');
+                        console.log('Listener detected \u2192 keydown');
                         if ($("#navForward").length) {
                             coreLib.dbrowserState.pos += 1;
                             dbrowserListen();
@@ -363,7 +363,7 @@ define ([
                 stack.getState().pos = pos;
                 dbrowserSubmit();
             });
-            $('#' + dbo.name).on("keypress", dbrowserKeyListener());
+            $('#' + dbo.name).on("keydown", dbrowserKeyListener());
         },
 
         //
@@ -376,7 +376,7 @@ define ([
                 stack.pop();
                 return;
             });
-            $('#' + dno.name).on("keypress", mmKeyListener);
+            $('#' + dno.name).on("keydown", mmKeyListener);
         },
 
         //
@@ -395,7 +395,7 @@ define ([
                 //console.log("Submitting table " + dto.name);
                 dtableSubmit(dto);
             });
-            $('#' + dto.name).on("keypress", mmKeyListener);
+            $('#' + dto.name).on("keydown", mmKeyListener);
         },
 
         //
@@ -433,16 +433,16 @@ define ([
             return function (evt) {
 
                 console.log("Entering drowselectKeyListener");
-                coreLib.logKeyPress(evt);
+                coreLib.logKeyDown(evt);
 
                 if (evt.keyCode === 37) { // up arrow
                     if (evt.ctrlKey) {
-                        console.log('Listener detected CTRL-up arrow keypress');
+                        console.log('Listener detected CTRL-up arrow keydown');
                         coreLib.reverseVideo(coreLib.drowselectState.pos, false);
                         coreLib.drowselectState.pos = 0;
                         drowselectListen();
                     } else {
-                        console.log('Listener detected up arrow keypress');
+                        console.log('Listener detected up arrow keydown');
                         if (coreLib.drowselectState.pos > 0) {
                             coreLib.reverseVideo(coreLib.drowselectState.pos, false);
                             coreLib.drowselectState.pos -= 1;
@@ -451,12 +451,12 @@ define ([
                     }
                 } else if (evt.keyCode === 39) { // down arrow
                     if (evt.ctrlKey) {
-                        console.log('Listener detected CTRL-down arrow keypress');
+                        console.log('Listener detected CTRL-down arrow keydown');
                         coreLib.reverseVideo(coreLib.drowselectState.pos, false);
                         coreLib.drowselectState.pos = set.length - 1;
                         drowselectListen();
                     } else {
-                        console.log('Listener detected down arrow keypress');
+                        console.log('Listener detected down arrow keydown');
                         if (coreLib.drowselectState.pos < set.length - 1) {
                             coreLib.reverseVideo(coreLib.drowselectState.pos, false);
                             coreLib.drowselectState.pos += 1;
@@ -484,7 +484,7 @@ define ([
                 //console.log("Submitting rowselect " + drso.name);
                 drowselectSubmit();
             });
-            $('#' + drso.name).on("keypress", drowselectKeyListener());
+            $('#' + drso.name).on("keydown", drowselectKeyListener());
         };
 
     return {
