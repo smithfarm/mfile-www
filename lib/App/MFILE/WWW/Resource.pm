@@ -408,9 +408,9 @@ sub main_html {
     $r .= '<html>';
     $r .= '<head>';
     $r .= '<meta charset="utf-8">';
-    $r .= '<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">';
-    $r .= '<meta http-equiv="Pragma" content="no-cache">';
-    $r .= '<meta http-equiv="Expires" content="0">';
+#    $r .= '<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">';
+#    $r .= '<meta http-equiv="Pragma" content="no-cache">';
+#    $r .= '<meta http-equiv="Expires" content="0">';
     $r .= "<title>App::MFILE::WWW " . $meta->META_MFILE_APPVERSION . "</title>";
     $r .= '<link rel="stylesheet" type="text/css" href="/css/start.css" />';
 
@@ -521,7 +521,10 @@ sub _require_js {
     $r .= '            QUnit.config.autostart = false;';
     $r .= '        }';
     $r .= '    }';
-    $r .= '}';
+    $r .= '},';
+
+    # default waitSeconds is just 7, which is too little for production
+    $r .= 'waitSeconds: 30';
 
     # end of require.config
     $r .= "});";
