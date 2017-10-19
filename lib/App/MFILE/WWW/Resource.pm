@@ -419,6 +419,7 @@ sub main_html {
 
     $r .= '</head>';
     $r .= '<body>';
+    $r .= '<div id="myLoadProgress" class="loadProgress"></div>';
 
     # Start the main app logic
     $r .= '<script>require([\'main\']);</script>';
@@ -501,6 +502,25 @@ sub _require_js {
     $r .= 'map: {';
     $r .= "    '*': { 'jquery': 'jquery-private' },";
     $r .= "    'jquery-private': { 'jquery': 'jquery' }";
+    $r .= '},';
+
+    # callbacks for showing module loading progress
+    $r .= 'onNodeCreated: function(node, config, moduleName, url) {';
+    $r .= "    var t = document.getElementById('myLoadProgress'),";
+    $r .= "        m = '';";
+    $r .= "    m = 'module ' + moduleName + ' is about to be loaded';";
+    $r .= "    console.log(m);";
+    $r .= "    t.innerHTML = m;";
+    $r .= "    node.addEventListener('load', function() {";
+    $r .= "        m = 'module ' + moduleName + ' has been loaded';";
+    $r .= "        console.log(m);";
+    $r .= "        t.innerHTML = m;";
+    $r .= '    });';
+    $r .= "    node.addEventListener('error', function() {";
+    $r .= "        m = 'module ' + moduleName + ' could not be loaded';";
+    $r .= "        console.log(m);";
+    $r .= "        t.innerHTML = m;";
+    $r .= '    });';
     $r .= '},';
 
     # path config
