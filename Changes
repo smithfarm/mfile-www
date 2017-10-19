@@ -1030,3 +1030,16 @@ Revision history for App::MFILE::WWW
 - js: datetime: implement offset time ranges
 - js: stack, start: make dform take an "inputId" option
 
+0.163 2017-10-19 23:19 CEST
+- js: lib: add isArray() from Crockford, Douglas
+- js: datetime: enable vetting of special Dochazka time ranges
+- js: dform: if entries have populate property, trigger populate async
+- js: start: implement dform non-interactive async populate feature
+- Resource: re-enable browser caching, increase waitSeconds
+- js: core: use minified d3 and jQuery
+- js: eliminate D3 from login dialog to lower page load times
+- Resource: use onNodeCreated to display RequireJS module loading info
+- js: start: refrain from vetting form entries on SHIFT-TAB
+- js: core: use keydown instead of keypress (for Chrome)
+- Resource: fix login bypass functionality
+
