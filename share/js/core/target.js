@@ -56,10 +56,8 @@
 "use strict";
 
 define ([
-    "jquery",
     "prototypes"
 ], function (
-    $,
     prototypes
 ) {
 
@@ -93,7 +91,6 @@ define ([
         push = function (tn, props) {
             var target,
                 i;
-            $('#mainarea').html(tn);
             if (! _store.hasOwnProperty(tn)) {
                 _store[tn] = Object.create(prototypes.target);
             }
