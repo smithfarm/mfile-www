@@ -419,7 +419,7 @@ sub main_html {
 
     $r .= '</head>';
     $r .= '<body>';
-    $r .= '<div id="myLoadProgress" class="loadProgress"></div>';
+    $r .= '<div id="myLoadProgress" class="loadProgress">Loading RequireJS...</div>';
 
     # Start the main app logic
     $r .= '<script>require([\'main\']);</script>';
@@ -467,6 +467,7 @@ sub test_html {
     $r .= $self->_require_js(1);
 
     $r .= '</head><body>';
+    $r .= '<div id="myLoadProgress" class="loadProgress">Loading RequireJS...</div>';
     $r .= '<div id="qunit"></div>';
     $r .= '<div id="qunit-fixture"></div>';
 
