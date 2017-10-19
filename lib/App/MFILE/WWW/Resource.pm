@@ -276,6 +276,7 @@ sub is_authorized {
 
     # login bypass
     $meta->set('META_LOGIN_BYPASS_STATE', 0) if not defined $meta->META_LOGIN_BYPASS_STATE;
+    return 1 if $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and $meta->META_LOGIN_BYPASS_STATE;
     if ( $site->MFILE_WWW_BYPASS_LOGIN_DIALOG and not $meta->META_LOGIN_BYPASS_STATE ) {
         $log->notice("Bypassing login dialog! Using default credentials");
         $session->{'ip_addr'} = $remote_addr;
