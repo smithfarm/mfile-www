@@ -187,7 +187,7 @@ define ([
 
         // log events to browser JavaScript console
         logKeyDown: function (evt) {
-            console.log("WHICH: " + evt.which + ", KEYCODE: " + evt.keyCode);
+            // console.log("WHICH: " + evt.which + ", KEYCODE: " + evt.keyCode);
         },
 
         objectify: function (st) {
