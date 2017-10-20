@@ -39,14 +39,16 @@ define ([
     'jquery',
     'app/entries',
     'lib',
+    'populate',
     'stack',
-    'target'
+    'target',
 ], function (
     $,
     entryDefs,
     coreLib,
+    populate,
     stack,
-    target
+    target,
 ) {
     var 
         currentTarget,
@@ -532,7 +534,7 @@ define ([
                 // call first populate function to trigger sequential,
                 // asynchronous population of all entries with "populate" property
                 if (populateArray.length > 0) {
-                    populateArray[0](populateArray);
+                    populate(populateArray);
                 }
                 // listen for user input in form
                 dformListen(dfn, state, opts.inputId);
