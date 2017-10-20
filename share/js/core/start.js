@@ -491,20 +491,33 @@ define ([
 
     return {
 
-        dmenu: function (dmn) {
-            // dmn is dmenu name
-            // dmo is dmenu object
-            var dmo = target.pull(dmn);
-            return function (state, opts) {
-                console.log('Entering start.dmenu with argument: ' + dmn);
-                // coreLib.clearResult();
-                stack.setFlag();
-                $('#mainarea').html(dmo.source);
-                $('input[name="sel"]').val('').focus();
-                $('#' + dmn).submit(dmenuSubmitEvent(dmn));
-                $('input[name="sel"]').keydown(dmenuKeyListener(dmn));
-            };
-        }, // dmenu
+        dbrowser: function (dbn) {
+            if (dbn) {
+                // when called with dbn (dbrowser name) argument, we assume
+                // that we are being called from the second stage of dbrowser
+                // initialization (i.e., one-time event) -- generate and
+                // return the start function for this dbrowser
+                return function (state, opts) {
+                    console.log('Starting new ' + dbn + ' dbrowser with state', state);
+                    if (! state) {
+                        state = stack.getState();
+                    }
+                    console.log('dbrowser state', state);
+                    // (re)initialize dbrowser state
+                    if (coreLib.dbrowserStateOverride) {
+                        coreLib.dbrowserStateOverride = false;
+                    } else {
+                        coreLib.dbrowserState.obj = target.pull(dbn);
+                        coreLib.dbrowserState.set = state.set;
+                        coreLib.dbrowserState.pos = state.pos;
+                    }
+                    // start browsing
+                    dbrowserListen(stack.getResultLine());
+                };
+            }
+        }, // dbrowser
+
+        dbrowserListen: dbrowserListen,
 
         dform: function (dfn) {
             var dfo = target.pull(dfn);
@@ -541,33 +554,21 @@ define ([
             };
         }, // dform
 
-        dbrowser: function (dbn) {
-            if (dbn) {
-                // when called with dbn (dbrowser name) argument, we assume
-                // that we are being called from the second stage of dbrowser
-                // initialization (i.e., one-time event) -- generate and
-                // return the start function for this dbrowser
-                return function (state, opts) {
-                    console.log('Starting new ' + dbn + ' dbrowser with state', state);
-                    if (! state) {
-                        state = stack.getState();
-                    }
-                    console.log('dbrowser state', state);
-                    // (re)initialize dbrowser state
-                    if (coreLib.dbrowserStateOverride) {
-                        coreLib.dbrowserStateOverride = false;
-                    } else {
-                        coreLib.dbrowserState.obj = target.pull(dbn);
-                        coreLib.dbrowserState.set = state.set;
-                        coreLib.dbrowserState.pos = state.pos;
-                    }
-                    // start browsing
-                    dbrowserListen(stack.getResultLine());
-                };
-            }
-        }, // dbrowser
-
-        dbrowserListen: dbrowserListen,
+        dmenu: function (dmn) {
+            // dmn is dmenu name
+            // dmo is dmenu object
+            var dmo = target.pull(dmn);
+            return function (state, opts) {
+                console.log('Entering start.dmenu with argument: ' + dmn);
+                // coreLib.clearResult();
+                stack.setFlag();
+                $('#mainarea').html(dmo.source);
+                $('input[name="sel"]').val('').focus();
+                $('#' + dmn).submit(dmenuSubmitEvent(dmn));
+                $('input[name="sel"]').keydown(dmenuKeyListener(dmn));
+                coreLib.clearResult();
+            };
+        }, // dmenu
 
         dnotice: function (dnn) {
             var dno = target.pull(dnn);

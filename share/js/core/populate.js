@@ -43,7 +43,7 @@ define ([
 ) {
 
     return function (populateArray) {
-        console.log("Entering populate()");
+        console.log("Entering populate()", populateArray);
         if (lib.isArray(populateArray)) {
             if (populateArray.length > 0) {
                 populateArray.shift()(populateArray);
