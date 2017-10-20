@@ -1043,3 +1043,11 @@ Revision history for App::MFILE::WWW
 - js: core: use keydown instead of keypress (for Chrome)
 - Resource: fix login bypass functionality
 
+0.164 2017-10-20 22:41 CEST
+- Dispatch+Resource: refactor login dialog bypass
+- js: core: implement populate module
+- js: start: clear result line when displaying dmenu
+- js: stack: implement unwindToType()
+- Dispatch: fix App::CELL constructor
+- js: datetime: add intToDay(), monthToInt(), and tsrangeToTimeRange()
+
