@@ -182,7 +182,7 @@ sub validate_user_credentials {
         }
     } else {
         $log->crit( "Not running in standalone mode" );
-        return $status->NOT_OK;
+        return $CELL->status_not_ok();
     }
 
     my $status = $self->login_status( $code, $message, $body_json );
