@@ -241,8 +241,11 @@ define ([
             console.log("Entering minutesToTime() with argument", m);
             var quotient,
                 remainder;
-            if (m < 0 || m > 1440) {
+            if (m < 0) {
                 return null;
+            }
+            if (m > 1440) {
+                m = 1440;
             }
             quotient = String(Math.floor(m/60));
             remainder = String(m % 60);
@@ -454,6 +457,8 @@ define ([
         canonicalizeTime: canonicalizeTime,
 
         canonicalizeTimeRange: canonicalizeTimeRange,
+
+        canonicalizeTimeRangeOffset: canonicalizeTimeRangeOffset,
 
         intToDay: intToDay,
 
