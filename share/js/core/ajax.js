@@ -103,9 +103,10 @@ define ([
             if (data.level === 'OK') {
                 console.log("AJAX call success:", data);
                 if (scb) {
+                    lib.clearResult();
                     scb(data);
                 } else {
-                    $('#result').html(data.text);
+                    lib.displayResult(data.text);
                 }
             } else {
                 console.log("AJAX call failure:", data);
