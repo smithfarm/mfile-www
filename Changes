@@ -1051,3 +1051,11 @@ Revision history for App::MFILE::WWW
 - Dispatch: fix App::CELL constructor
 - js: datetime: add intToDay(), monthToInt(), and tsrangeToTimeRange()
 
+0.165 2017-10-21 12:02 CEST
+- js: start: vet populate property more carefully in dform
+- js: start: log an error if entry has bad populate property
+- js: stack, start: refrain from setting resultLine option to null
+- js: core: make the console log less noisy
+- js: refactor ajax.js
+- js: refactor populate.js
+
