@@ -530,6 +530,7 @@ define ([
                     opts = {};
                 }
                 opts.resultLine = ('resultLine' in opts) ? opts.resultLine : "&nbsp";
+                opts.resultLine = (opts.resultLine === null) ? "&nbsp" : opts.resultLine;
                 opts.inputId = ('inputId' in opts) ? opts.inputId : null;
                 coreLib.displayResult(opts.resultLine);
                 // determine dform "state" (i.e. starting content of form entries)

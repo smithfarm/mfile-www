@@ -70,7 +70,7 @@ define ([
 
             opts = lib.objectify(opts);
             opts['inputId'] = ('inputId' in opts) ? opts.inputId : null;
-            opts['resultLine'] = ('resultLine' in opts) ? opts.resultLine : null;
+            opts['resultLine'] = ('resultLine' in opts) ? opts.resultLine : "&nbsp";
             opts['_start'] = ('_start' in opts) ? opts.start : true;
             opts['_restart'] = ('_restart' in opts) ? opts._restart : false;
             opts['_start'] = opts._restart ? true : opts._start;
