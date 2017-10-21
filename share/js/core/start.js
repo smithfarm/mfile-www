@@ -523,7 +523,8 @@ define ([
             var dfo = target.pull(dfn);
             return function (state, opts) {
                 console.log('Entering start method of target ' + dfn);
-                var i,
+                var entry,
+                    i,
                     populateArray = [];
                 if (typeof opts !== 'object') {
                     opts = {};
@@ -540,8 +541,9 @@ define ([
                 $('#mainarea').html(dfo.source(state));
                 // assemble array of entries with "populate" property
                 for (i = 0; i < dfo.entriesRead.length; i += 1) {
-                    if (dfo.entriesRead[i].hasOwnProperty("populate")) {
-                        populateArray.push(dfo.entriesRead[i].populate);
+                    entry = dfo.entriesRead[i];
+                    if (entry.hasOwnProperty("populate") && typeof entry.populate === 'function') {
+                        populateArray.push(entry.populate);
                     }
                 }
                 // call first populate function to trigger sequential,
@@ -586,22 +588,6 @@ define ([
             };
         }, // dnotice
 
-        dtable: function (dtn) {
-            var dto = target.pull(dtn);
-            return function (state, opts) {
-                // state is a array of objects to be displayed as a table
-                coreLib.clearResult();
-                console.log('Starting new ' + dtn + ' dtable');
-                if (! state) {
-                    state = stack.getState();
-                }
-                console.log('The dataset is', state);
-                $('#mainarea').html(dto.source(state));
-                $('#result').text('Displaying table with ' + coreLib.genObjStr(state.length));
-                dtableListen(dto);
-            };
-        }, // dtable
-
         drowselect: function (drsn) {
             var drso = target.pull(drsn);
             if (drsn) {
@@ -632,6 +618,24 @@ define ([
 
         drowselectListen: drowselectListen,
 
+        dtable: function (dtn) {
+            var dto = target.pull(dtn);
+            return function (state, opts) {
+                // state is a array of objects to be displayed as a table
+                coreLib.clearResult();
+                console.log('Starting new ' + dtn + ' dtable');
+                if (! state) {
+                    state = stack.getState();
+                }
+                console.log('The dataset is', state);
+                $('#mainarea').html(dto.source(state));
+                $('#result').text('Displaying table with ' + coreLib.genObjStr(state.length));
+                dtableListen(dto);
+            };
+        }, // dtable
+
+        // export key listener so we can send events to it from outside of this module
+        // (for testing automation purposes)
         mmKeyListener: mmKeyListener,
 
     }
