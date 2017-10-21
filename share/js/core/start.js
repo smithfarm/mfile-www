@@ -554,7 +554,7 @@ define ([
                 // call first populate function to trigger sequential,
                 // asynchronous population of all entries with "populate" property
                 if (populateArray.length > 0) {
-                    populate(populateArray);
+                    populate.bootstrap(populateArray);
                 }
                 // listen for user input in form
                 dformListen(dfn, state, opts.inputId);

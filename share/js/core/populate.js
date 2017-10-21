@@ -42,13 +42,25 @@ define ([
     lib,
 ) {
 
-    return function (populateArray) {
-        console.log("Entering populate()", populateArray);
-        if (lib.isArray(populateArray)) {
-            if (populateArray.length > 0) {
-                populateArray.shift()(populateArray);
+    return {
+
+        "bootstrap": function (populateArray) {
+            console.log("Entering populate.bootstrap() with " + populateArray.length + " populate functions");
+            if (lib.isArray(populateArray)) {
+                if (populateArray.length > 0) {
+                    populateArray.shift()(populateArray);
+                }
             }
+        },
+
+        "shift": function (populateArray) {
+            console.log("Entering populate.shift() with " + populateArray.length + " populate functions left");
+            if (populateArray.length === 0) {
+                return function (populateArray) {};
+            }
+            return populateArray.shift();
         }
+
     };
 
 });
