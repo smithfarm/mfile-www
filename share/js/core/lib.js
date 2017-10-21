@@ -232,7 +232,7 @@ define ([
                 yesno = "No.";
             }
 
-            console.log("Does " + cep + " user satisfy ACL " + p + "? " + yesno);
+            // console.log("Does " + cep + " user satisfy ACL " + p + "? " + yesno);
             return r;
         }, // privCheck
 
