@@ -542,8 +542,12 @@ define ([
                 // assemble array of entries with "populate" property
                 for (i = 0; i < dfo.entriesRead.length; i += 1) {
                     entry = dfo.entriesRead[i];
-                    if (entry.hasOwnProperty("populate") && typeof entry.populate === 'function') {
-                        populateArray.push(entry.populate);
+                    if (entry.hasOwnProperty("populate")) {
+                        if (typeof entry.populate === 'function') {
+                            populateArray.push(entry.populate);
+                        } else {
+                            console.log("CRITICAL ERROR: bad populate property in entry " + entry.name);
+                        }
                     }
                 }
                 // call first populate function to trigger sequential,
