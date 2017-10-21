@@ -222,7 +222,7 @@ define ([
                 console.log("CRITICAL ERROR: in maxLength(), arr has no members");
             }
             max = arr.reduce(function(prevVal, elem) {
-                if (elem.text === null) {
+                if (elem.text === null || elem.text === undefined) {
                     elem.text = '&nbsp';
                 }
                 if (elem.text.length > prevVal) {
@@ -263,7 +263,11 @@ define ([
             // console.log("valueToDisplay with object", obj, "and prop " + prop);
             // given an object and a property, return the value to display
             if (typeof obj !== 'object') {
-                return '(NOT_AN_OBJECT)';
+                if (mode === 'hidden') {
+                    return '';
+                } else {
+                    return '(NOT_AN_OBJECT)';
+                }
             } else if (! (prop in obj) || obj[prop] === null) {
                 if (mode === 'read') {
                     return '(none)';
@@ -271,7 +275,11 @@ define ([
                     return '';
                 }
             } else if (obj[prop] === undefined) {
-                return '(undefined)';
+                if (mode === 'hidden') {
+                    return '';
+                } else {
+                    return '(undefined)';
+                }
             } else if (obj[prop] === false) {
                 return 'NO';
             } else if (obj[prop] === true) {
@@ -439,6 +447,8 @@ define ([
                         r += Array(entry.maxlen).join(entry.text) + '<br>';
                     } else if (entry.name === 'emptyLine') {
                         r += '<br>';
+                    } else if (entry.name === 'textOnly') {
+                        r += entry.textOnly + '<br>';
                     } else if (lib.privCheck(entry.aclProfileRead)) {
                         r += lib.rightPadSpaces(entry.text.concat(':'), needed);
                         r += '<span id="' + entry.name + '">';
@@ -446,7 +456,9 @@ define ([
                         r += '</span><br>';
                     }
                 }
-                r += '<br>';
+                if (len > 0) {
+                    r += '<br>';
+                }
         
                 // READ-WRITE entries second
                 len = dfo.entriesWrite ? dfo.entriesWrite.length : 0;
@@ -462,7 +474,19 @@ define ([
                         r += 'maxlength="' + entry.maxlen + '"><br>';
                     }
                 }
-                r += '<br>';
+                if (len > 0) {
+                    r += '<br>';
+                }
+
+                // HIDDEN entries third
+                len = dfo.entriesHidden ? dfo.entriesHidden.length : 0;
+                console.log("Processing " + len + " hidden dform entries");
+                for (i = 0; i < len; i += 1) {
+                    entry = dfo.entriesHidden[i];
+                    r += '<div hidden id="' + entry.name + '">';
+                    r += valueToDisplay(obj, entry.prop, "hidden");
+                    r += '</div>';
+                }
         
                 // miniMenu at the bottom
                 r += miniMenu(dfo.miniMenu);
