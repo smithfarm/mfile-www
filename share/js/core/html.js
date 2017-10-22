@@ -222,7 +222,7 @@ define ([
                 console.log("CRITICAL ERROR: in maxLength(), arr has no members");
             }
             max = arr.reduce(function(prevVal, elem) {
-                if (elem.text === null || elem.text === undefined) {
+                if (elem.text === null || elem.text === undefined || elem.hidden === true) {
                     elem.text = '&nbsp';
                 }
                 if (elem.text.length > prevVal) {
@@ -450,10 +450,19 @@ define ([
                     } else if (entry.name === 'textOnly') {
                         r += entry.textOnly + '<br>';
                     } else if (lib.privCheck(entry.aclProfileRead)) {
-                        r += lib.rightPadSpaces(entry.text.concat(':'), needed);
-                        r += '<span id="' + entry.name + '">';
-                        r += valueToDisplay(obj, entry.prop, "read");
-                        r += '</span><br>';
+                        if (! entry.hidden) {
+                            r += lib.rightPadSpaces(entry.text.concat(':'), needed);
+                        }
+                        r += '<span ';
+                        if (entry.hidden) {
+                            r += 'hidden ';
+                        }
+                        r += 'id="' + entry.name + '">';
+                        r += valueToDisplay(obj, entry.prop, (entry.hidden ? "hidden" : "read"));
+                        r += '</span>';
+                        if (! entry.hidden) {
+                            r += '<br>';
+                        }
                     }
                 }
                 if (len > 0) {
@@ -478,16 +487,6 @@ define ([
                     r += '<br>';
                 }
 
-                // HIDDEN entries third
-                len = dfo.entriesHidden ? dfo.entriesHidden.length : 0;
-                console.log("Processing " + len + " hidden dform entries");
-                for (i = 0; i < len; i += 1) {
-                    entry = dfo.entriesHidden[i];
-                    r += '<div hidden id="' + entry.name + '">';
-                    r += valueToDisplay(obj, entry.prop, "hidden");
-                    r += '</div>';
-                }
-        
                 // miniMenu at the bottom
                 r += miniMenu(dfo.miniMenu);
 
