@@ -539,6 +539,7 @@ define ([
                 if (typeof opts !== 'object') {
                     opts = {};
                 }
+                opts.populate = ('populate' in opts) ? opts.populate : "true";
                 opts.resultLine = ('resultLine' in opts) ? opts.resultLine : "&nbsp";
                 opts.resultLine = (opts.resultLine === null) ? "&nbsp" : opts.resultLine;
                 opts.inputId = ('inputId' in opts) ? opts.inputId : null;
@@ -563,7 +564,7 @@ define ([
                 }
                 // call first populate function to trigger sequential,
                 // asynchronous population of all entries with "populate" property
-                if (populateArray.length > 0) {
+                if (opts.populate && populateArray.length > 0) {
                     populate.bootstrap(populateArray);
                 }
                 // listen for user input in form
