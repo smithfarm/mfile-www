@@ -110,7 +110,9 @@ define ([
                     dmenuSubmit(dmn);
                 } else if (event.keyCode === 9) {
                     event.preventDefault();
-                }
+                } else if (event.keyCode === 27) {
+                    stack.pop();
+                } // end of function - don't put anything after this line
             };
         },
 
@@ -187,8 +189,16 @@ define ([
                 if (! evt.shiftKey) {
                     mmKeyListenerVetEntry(evt, n, elid);
                 }
+            } else if (evt.keyCode === 27) {
+                var xtgt = stack.getXTarget();
+                if (typeof xtgt === "string") {
+                    stack.unwindToTarget(xtgt);
+                    return null;
+                } else {
+                    stack.pop();
+                    return null;
+                }
             }
-
         },
         mmSubmit = function (obj) {
             console.log("Entering mmSubmit with object", obj);
