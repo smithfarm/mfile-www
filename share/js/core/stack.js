@@ -251,7 +251,7 @@ define ([
 
         // unwind stack until given target is reached
         // optional object to pass to start()
-        unwindToTarget = function (tname, obj) {
+        unwindToTarget = function (tname, newObj, opts) {
             var i, tgt;
             console.log("Unwinding the stack to target " + tname);
             for (i = _stack.length; i > 0; i -= 1) {
@@ -259,9 +259,9 @@ define ([
                 if (tgt.name === tname) {
                    break;
                 }
-                popWithoutStart();
+                popWithoutStart(newObj, opts);
             }
-            tgt.start(obj);
+            tgt.start(newObj, opts);
         },
         
         unwindToFlag = function () {
