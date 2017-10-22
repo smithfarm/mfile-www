@@ -1059,3 +1059,11 @@ Revision history for App::MFILE::WWW
 - js: refactor ajax.js
 - js: refactor populate.js
 
+0.166 2017-10-22 07:17 CEST
+- js: datetime: do not allow offset time range to go past 24:00
+- js: html: implement "hidden entries" feature in dform
+- js: start: ESC is "Back" in dmenu and dform
+- js: datetime: implement isTimeRangeAfterTime() and isTimeWithinTimeRange()
+- js: html: implement "hidden entries" feature in dform
+- js: stack: make unwindToTarget take opts
+
