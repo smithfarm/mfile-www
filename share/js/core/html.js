@@ -574,8 +574,9 @@ define ([
         logout: function () {
             var r = '';
             r += '<br><br><br>';
-            r += 'You have been logged out of our humble application<br><br>';
-            r += 'Have a lot of fun!<br><br><br>';
+            r += 'You have been logged out of this humble application<br><br>';
+            r += 'Reload the page (e.g. by hitting F5 or Ctrl-R) to login again<br><br>';
+            r += 'Have a lot of fun!<br><br><br><br>';
             return r;
         } // logout
 
