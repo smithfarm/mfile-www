@@ -237,6 +237,55 @@ define ([
             return month;
         }, // intToMonth
 
+        isTimeRangeAfterTime = function (tr, t) {
+            var b, e, trh, trm, th, tm;
+            [b, e] = tr.split('-');
+            [trh, trm] = b.split(':');
+            [th, tm] = t.split(':');
+            trh = parseInt(trh, 10);
+            trm = parseInt(trm, 10);
+            th = parseInt(th, 10);
+            tm = parseInt(tm, 10);
+            if (trh > th) {
+                return true;
+            }
+            if (trh < th) {
+                return false;
+            }
+            // trh === th
+            if (trm > tm) {
+                return true;
+            }
+            return false;
+        }, // isTimeRangeAfterTime
+
+        isTimeWithinTimeRange = function (t, tr) {
+            var b, e, t, trbh, treh, trbm, trem, th, tm;
+            [b, e] = tr.split('-');
+            [trbh, trbm] = b.split(':');
+            [treh, trem] = e.split(':');
+            [th, tm] = t.split(':');
+            trbh = parseInt(trbh, 10);
+            trbm = parseInt(trbm, 10);
+            treh = parseInt(treh, 10);
+            trem = parseInt(trem, 10);
+            th = parseInt(th, 10);
+            tm = parseInt(tm, 10);
+            if (th === trbh && tm === trbm) {
+                return true;
+            }
+            if (th === treh && tm === trem) {
+                return false;
+            }
+            t = parseFloat(th + '.' + tm);
+            b = parseFloat(trbh + '.' + trbm);
+            e = parseFloat(treh + '.' + trem);
+            if (t > b && t < e) {
+                return true;
+            }
+            return false;
+        }, // isTimeWithinTimeRange
+
         minutesToTime = function (m) {
             console.log("Entering minutesToTime() with argument", m);
             var quotient,
@@ -463,6 +512,10 @@ define ([
         intToDay: intToDay,
 
         intToMonth: intToMonth,
+
+        isTimeRangeAfterTime: isTimeRangeAfterTime,
+
+        isTimeWithinTimeRange: isTimeWithinTimeRange,
 
         minutesToTime: minutesToTime,
 
