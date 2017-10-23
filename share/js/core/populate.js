@@ -48,6 +48,7 @@ define ([
             console.log("Entering populate.bootstrap() with " + populateArray.length + " populate functions");
             if (lib.isArray(populateArray)) {
                 if (populateArray.length > 0) {
+                    lib.displayResult("Populating form fields...");
                     populateArray.shift()(populateArray);
                 }
             }
@@ -56,6 +57,7 @@ define ([
         "shift": function (populateArray) {
             console.log("Entering populate.shift() with " + populateArray.length + " populate functions left");
             if (populateArray.length === 0) {
+                lib.clearResult();
                 return function (populateArray) {};
             }
             return populateArray.shift();
