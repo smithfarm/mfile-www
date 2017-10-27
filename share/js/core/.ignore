@@ -1,0 +1,4 @@
+qunit*.js
+require*.js
+d3*.js
+jquery*
