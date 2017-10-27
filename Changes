@@ -1067,3 +1067,12 @@ Revision history for App::MFILE::WWW
 - js: html: implement "hidden entries" feature in dform
 - js: stack: make unwindToTarget take opts
 
+0.167 2017-10-27 23:07 CEST
+- js: loggout: refactor
+- js: html: tweak logout message
+- start.js: add "populate" option to dform
+- js: populate: clear result line when populate is finished
+- Add .ignore file for ag
+- js: core: display logout message from application in result line
+- js: stack/start: disable logout-via-ESC
+
