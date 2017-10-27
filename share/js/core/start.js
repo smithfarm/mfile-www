@@ -83,7 +83,7 @@ define ([
                     entry = selection;
                 }
             } else if (sel === 'X' || sel === 'x') {
-                stack.pop();
+                stack.pop(undefined, { "logout": true });
                 return;
             } else if (sel === '') {
                 // user hit 'enter'
@@ -260,7 +260,7 @@ define ([
                 if (typeof xtgt === "string") {
                     stack.unwindToTarget(xtgt);
                 } else {
-                    stack.pop();
+                    stack.pop(undefined, { 'logout': true });
                 }
                 return;
             } else {

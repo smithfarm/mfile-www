@@ -69,6 +69,7 @@ define ([
                 stackLength;
 
             opts = lib.objectify(opts);
+            opts['logout'] = ('logout' in opts) ? opts.logout : false;
             opts['inputId'] = ('inputId' in opts) ? opts.inputId : null;
             opts['resultLine'] = ('resultLine' in opts) ? opts.resultLine : "&nbsp";
             opts['_start'] = ('_start' in opts) ? opts.start : true;
@@ -76,18 +77,24 @@ define ([
             opts['_start'] = opts._restart ? true : opts._start;
             console.log("stack.pop() adjusted opts", opts);
 
+            stackLength = getLength();
+
+            if (stackLength === 1) {
+                if (opts.logout) {
+                    target.pull('logout').start();
+                    return;
+                } else {
+                    console.log("Refusing to pop last remaining item off the stack");
+                    return
+                }
+            }
+
             // pop item off the stack, unless called by stack.restart()
-            if (! opts._restart ) {
+            if (! opts._restart) {
                 _stack.pop();
                 console.log("Stack top item popped off and discarded.");
-            } else {
+            } else if (opts._restart) {
                 console.log("Restarting stack top item.");
-            }
-            stackLength = getLength();
-            if (stackLength === 0) {
-                console.log("Stack empty - logging out");
-                target.pull('logout').start("Empty stack - please report bug");
-                return;
             }
             stackTarget = getTarget();
             stackState = getState();
