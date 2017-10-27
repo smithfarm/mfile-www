@@ -59,7 +59,6 @@ define([
     return function () {
 
         var logoutPostAJAX = function (msg) {
-                coreLib.displayResult(msg);
                 currentUser('obj', null);
                 currentUser('priv', null);
                 $('#userbox').html(appLib.fillUserBox()); // reset userbox
@@ -77,7 +76,10 @@ define([
                 body: null
             },
             sc = function (st) {
-                logoutPostAJAX(st.text);
+                if (! msg) {
+                    msg = st.text;
+                }
+                logoutPostAJAX(msg);
             },
             fc = function (st) {
                 logoutPostAJAX(st.text);
