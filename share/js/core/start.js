@@ -126,9 +126,9 @@ define ([
                 vetter;
             console.log("In writable entry " + eid);
             vetter = currentTarget.getVetter(eid);
-            console.log("vetter", vetter);
+            // console.log("vetter", vetter);
             if (typeof vetter === 'function') {
-                console.log("Current entry ->" + eid +"<- has a vetter function!");
+                // console.log("Current entry ->" + eid +"<- has a vetter function!");
                 vettedVal = vetter(input.val());
                 if (vettedVal) {
                     input.val(vettedVal);
