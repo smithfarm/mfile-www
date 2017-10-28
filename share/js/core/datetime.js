@@ -42,7 +42,18 @@ define ([
     coreLib,
 ) {
 
-    var //today = Object.create(Date.prototype),
+    var mflt = [null, 'January', 'February', 'March', 'April', 'May',
+                'June', 'July', 'August', 'September', 'October',
+                'November', 'December'],
+
+        mlo = { 'jan': 'January', 'feb': 'February', 'mar': 'March',
+                'apr': 'April', 'may': 'May', 'jun': 'June', 'jul': 'July',
+                'aug': 'August', 'sep': 'September', 'oct': 'October',
+                'nov': 'November', 'dec': 'December' },
+
+        mlt =  [null, 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL',
+                'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+
         today = new Date(),
 
         addMinutes = function (date, minutes) {
@@ -203,36 +214,18 @@ define ([
             return day;
         },
 
-        intToMonth = function (m) {
+        intToMonth = function (m, full) {
             var month = null;
             // if 1 <= m <= 12, return three-letter string signifying the month
             // otherwise, return null
             console.log("Entering intToMonth() with argument", m);
             m = parseInt(m, 10);
-            if (m === 1) {
-                month = "JAN";
-            } else if (m === 2) {
-                month = "FEB";
-            } else if (m === 3) {
-                month = "MAR";
-            } else if (m === 4) {
-                month = "APR";
-            } else if (m === 5) {
-                month = "MAY";
-            } else if (m === 6) {
-                month = "JUN";
-            } else if (m === 7) {
-                month = "JUL";
-            } else if (m === 8) {
-                month = "AUG";
-            } else if (m === 9) {
-                month = "SEP";
-            } else if (m === 10) {
-                month = "OCT";
-            } else if (m === 11) {
-                month = "NOV";
-            } else if (m === 12) {
-                month = "DEC";
+            if (m > 0 && m < 13) {
+                if (full === true) {
+                    month = mflt[m];
+                } else {
+                    month = mlt[m];
+                }
             }
             return month;
         }, // intToMonth
@@ -332,41 +325,22 @@ define ([
                 m = 12;
             }
             return m;
-        }, // intToMonth
+        }, // monthToInt
 
-        strToMonth = function (buf) {
+        strToMonth = function (buf, full) {
             console.log("Entering strToMonth() with argument", buf);
-            var m = String(buf).toLowerCase().slice(0, 3),
-                month = null;
+            var m = String(buf).trim().toLowerCase().slice(0, 3);
             if (m.length < 3) {
                 return null;
             }
-            if (m === 'jan') {
-                month = "JAN";
-            } else if (m === 'feb') {
-                month = "FEB";
-            } else if (m === 'mar') {
-                month = "MAR";
-            } else if (m === 'apr') {
-                month = "APR";
-            } else if (m === 'may') {
-                month = "MAY";
-            } else if (m === 'jun') {
-                month = "JUN";
-            } else if (m === 'jul') {
-                month = "JUL";
-            } else if (m === 'aug') {
-                month = "AUG";
-            } else if (m === 'sep') {
-                month = "SEP";
-            } else if (m === 'oct') {
-                month = "OCT";
-            } else if (m === 'nov') {
-                month = "NOV";
-            } else if (m === 'dec') {
-                month = "DEC";
+            if (mlo.hasOwnProperty(m)) {
+                if (full === true) {
+                    return mlo[m];
+                } else {
+                    return m.toUpperCase();
+                }
             }
-            return month;
+            return null;
         }, // strToMonth
 
         timeToMinutes = function (ts) {
@@ -544,14 +518,6 @@ define ([
 
         tsrangeToTimeRange: tsrangeToTimeRange,
 
-        vetDateYYYYMMDD: vetDateYYYYMMDD,
-
-        vetDateOffset: vetDateOffset,
-
-        vetDateMMDD: vetDateMMDD,
-
-        vetDateDD: vetDateDD,
-
         vetDate: function (d) {
             console.log("Entering vetDate() with argument", d);
             var i,
@@ -582,6 +548,12 @@ define ([
             return null;
         },
 
+        vetDateDD: vetDateDD,
+
+        vetDateMMDD: vetDateMMDD,
+
+        vetDateOffset: vetDateOffset,
+
         vetDateRange: function (dr) {
             // should support ranges of dates (using a hyphen)
             // should support whole months (e.g. 2017 AUGUST, August 2017)
@@ -594,6 +566,27 @@ define ([
             return "VETTED";
         },
 
+        vetDateYYYYMMDD: vetDateYYYYMMDD,
+
+        vetDayList: function (dl) {
+        },
+
+        vetMonth: function (m) {
+            var cm = (new Date()).getMonth() + 1,
+                itm = intToMonth(m, true),
+                stm = strToMonth(m, true);
+            if (m === undefined || m === null || String(m).length === 0) {
+                return intToMonth(cm, true);
+            }
+            if (itm !== null) {
+                return itm;
+            }
+            if (stm !== null) {
+                return stm;
+            }
+            return null;
+        },
+
         vetTimeRange: function (tr) {
             var ctr = canonicalizeTimeRange(tr);
             if (ctr === null) {
@@ -602,6 +595,25 @@ define ([
                 return ctr[0] + '-' + ctr[1];
             }
             return ctr;
+        },
+
+        vetYear: function (y) {
+            var iy = parseInt(y, 10);
+            // console.log("Entering vetYear()", iy, typeof iy);
+            if (Number.isNaN(iy)) {
+                return String((new Date()).getFullYear())
+            }
+            if (iy < 0 || iy > 2100) {
+                return null;
+            }
+            if (iy < 1900) {
+                if (iy < 100) {
+                    return String(2000 + iy);
+                } else {
+                    return null;
+                }
+            }
+            return y;
         },
 
     };
