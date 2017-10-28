@@ -220,6 +220,7 @@ define ([
                 // console.log("arr has " + len + " members and the first one has text " + arr[0].text)
             } else {
                 console.log("CRITICAL ERROR: in maxLength(), arr has no members");
+                return null;
             }
             max = arr.reduce(function(prevVal, elem) {
                 if (elem.text === null || elem.text === undefined || elem.hidden === true) {
@@ -240,13 +241,13 @@ define ([
                 entry,
                 i,
                 r;
-            // console.log("miniMenu is ", mm);
-            // console.log("miniMenu length is " + len);
+            console.log("miniMenu is ", mm);
+            console.log("miniMenu length is " + len);
             if (len > 0) {
                 r = 'Menu:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                 for (i = 0; i < len; i += 1) {
-                    // console.log("i === " + i);
-                    // console.log("Attempting to pull target " + entries[i] + " from miniMenu");
+                    console.log("i === " + i);
+                    console.log("Attempting to pull target " + entries[i] + " from miniMenu");
                     entry = target.pull(entries[i]);
                     if (lib.privCheck(entry.aclProfile)) {
                         r += i + '. ' + entry.menuText + '&nbsp;&nbsp;';
@@ -289,6 +290,22 @@ define ([
             }
             return obj[prop];
         }, // valueToDisplay
+
+        vetEntries = function (tgt, arr) {
+            // checks that all entries do exist
+            // if any are missing, write an error
+            // return true (OK) or false (NOT OK)
+            for (var i = 0; i < arr.length; i += 1) {
+                if (typeof arr[i] !== "object" ||
+                    arr[i] === null ||
+                    arr[i].text === undefined)
+                {
+                    console.log("CRITICAL ERROR: target definition ->" + tgt + "<- mentions non-existent entry");
+                    return false;
+                }
+            }
+            return true;
+        }, // vetEntries
 
         // "Your choice" section at the bottom - shared by all target types
         yourChoice = function () {
@@ -360,6 +377,10 @@ define ([
                 // determine characters needed for padding (based on longest
                 // entry)
                 allEntries = dbo.getEntries();
+                if (! vetEntries(dbn, allEntries)) {
+                    // no point in going any further
+                    return null;
+                }
                 needed = maxLength(allEntries) + 2;
 
                 // display entries
@@ -436,6 +457,10 @@ define ([
                     );
                 }
                 // console.log("About to call maxLength() on allEntries", allEntries);
+                if (! vetEntries(dfn, allEntries)) {
+                    // no point in going any further
+                    return null;
+                }
                 needed = maxLength(allEntries) + 2;
 
                 // READ-ONLY entries first
