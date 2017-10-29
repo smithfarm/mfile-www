@@ -56,7 +56,7 @@ define([
     coreLib,
 ) {
 
-    return function () {
+    return function (msg) {
 
         var logoutPostAJAX = function (msg) {
                 currentUser('obj', null);
