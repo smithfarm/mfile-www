@@ -394,6 +394,12 @@ define ([
             return buf[0] * 60 + buf[1];
         },
 
+        tsrangeToDateAndTimeRange = function (tsr) {
+            // tsr looks like this: ["2017-10-20 08:00:00+02","2017-10-20 12:00:00+02")
+            var date = tsr.match(/\d{4}-\d{2}-\d{2}/)[0];
+            return [date, tsrangeToTimeRange(tsr)];
+        },
+
         tsrangeToTimeRange = function (tsr) {
             // tsr looks like this: ["2017-10-20 08:00:00+02","2017-10-20 12:00:00+02")
             var begin, end, h, m, s, re = /\d{2}:\d{2}:\d{2}/;
@@ -664,6 +670,7 @@ define ([
         readableDate: readableDate,
         strToMonth: strToMonth,
         timeToMinutes: timeToMinutes,
+        tsrangeToDateAndTimeRange: tsrangeToDateAndTimeRange,
         tsrangeToTimeRange: tsrangeToTimeRange,
         vetDate: vetDate,
         vetDateDD: vetDateDD,
