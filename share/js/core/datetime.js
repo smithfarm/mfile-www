@@ -190,6 +190,15 @@ define ([
             return ftr;
         },
 
+        currentMonth = function () {
+            var cm = (new Date()).getMonth() + 1;
+            return intToMonth(m, true);
+        },
+
+        currentYear = function () {
+            return String((new Date()).getFullYear());
+        },
+
         daysInMonth = function (year, month) {
             if (! coreLib.isInteger(month)) {
                 month = monthToInt(month);
@@ -417,7 +426,7 @@ define ([
             } else if (tda.length === 1) {
                 return vetDateDD(tda);
             } else if (tda.length === 2) {
-                if (coreLib.isInteger(tda[0]) && !coreLib.isInteger(tda[1])) {
+                if (coreLib.isInteger(tda[0]) && ! coreLib.isInteger(tda[1])) {
                     return vetDateDDMM(tda);
                 } else {
                     return vetDateMMDD(tda);
@@ -500,7 +509,7 @@ define ([
                 m = ds[1],
                 d = parseInt(ds[2], 10),
                 month;
-            if (!coreLib.isInteger(y) || !coreLib.isInteger(d)) {
+            if (! coreLib.isInteger(y) || ! coreLib.isInteger(d)) {
                 console.log("Non-integer year or day-of-month");
                 return null;
             }
@@ -528,7 +537,7 @@ define ([
                     return null;
                 }
             }
-            if (!coreLib.isInteger(d) || d < 1 || d > 31) {
+            if (! coreLib.isInteger(d) || d < 1 || d > 31) {
                 console.log("Day-of-month out of range");
                 return null;
             }
@@ -538,6 +547,59 @@ define ([
                    '-' +
                    String(d);
         }, // vetDateYYYYMMDD
+
+        vetDayList = function (tokens) {
+            // tokens is an array of integers supposed to be days of a month
+            // each array member can be:
+            // - a single day (e.g. "1", "30")
+            // - a range (e.g. "6-12")
+            var daylist = [],
+                i, j, rangeBegin, rangeEnd, t;
+            console.log("Entering vetDayList() with tokens", tokens);
+            for (i = 0; i < tokens.length; i += 1) {
+                tokens[i] = tokens[i].trim();
+                t = tokens[i];
+                // console.log("Iterating with token " + t);
+                // t is either a number or a range: if it's a number, push it 
+                // to daylist. If it's a range, push each range member.
+                if (t.indexOf('-') === -1) {
+                    if (! coreLib.isInteger(t) || t < 1 || t > 31) {
+                        console.log("Ignoring non-numeric dayspec " + t);
+                        continue;
+                    }
+                    daylist.push(t);
+                } else {
+                    [rangeBegin, rangeEnd] = t.split('-');
+                    rangeBegin = parseInt(rangeBegin, 10);
+                    rangeEnd = parseInt(rangeEnd, 10);
+                    if (! coreLib.isInteger(rangeBegin) || ! coreLib.isInteger(rangeEnd) ||
+                        rangeBegin < 1 || rangeBegin > 31 ||
+                        rangeEnd < 1 || rangeEnd > 31 ||
+                        rangeBegin > rangeEnd) {
+                        console.log("Ignoring invalid day range ->" + t + "<-");
+                        continue;
+                    }
+                    // console.log("Encountered range from " + rangeBegin + " to " + rangeEnd);
+                    for (j = rangeBegin; j < (rangeEnd + 1); j += 1) {
+                        // console.log("Looping j == " + j);
+                        daylist.push(j);
+                        if (j > 31) {
+                            console.log("Illegal j", j);
+                            break;
+                        }
+                    }
+                    // console.log("Completed j-loop");
+                }
+                if (i > 100) {
+                    console.log("Illegal i", i);
+                    break;
+                }
+            }
+            // console.log("Completed i-loop");
+            return (coreLib.uniq(daylist)).sort(
+                function(a, b) { return a - b; }
+            );
+        },
 
         vetMonth = function (m) {
             var cm = (new Date()).getMonth() + 1,
@@ -569,7 +631,7 @@ define ([
             var iy = parseInt(y, 10);
             // console.log("Entering vetYear()", iy, typeof iy);
             if (Number.isNaN(iy)) {
-                return String((new Date()).getFullYear())
+                return currentYear();
             }
             if (iy < 0 || iy > 2100) {
                 return null;
@@ -590,6 +652,8 @@ define ([
         canonicalizeTime: canonicalizeTime,
         canonicalizeTimeRange: canonicalizeTimeRange,
         canonicalizeTimeRangeOffset: canonicalizeTimeRangeOffset,
+        currentMonth: currentMonth,
+        currentYear: currentYear,
         daysInMonth: daysInMonth,
         intToDay: intToDay,
         intToMonth: intToMonth,
@@ -607,6 +671,7 @@ define ([
         vetDateOffset: vetDateOffset,
         vetDateRange: vetDateRange,
         vetDateYYYYMMDD: vetDateYYYYMMDD,
+        vetDayList: vetDayList,
         vetMonth: vetMonth,
         vetTimeRange: vetTimeRange,
         vetYear: vetYear,
