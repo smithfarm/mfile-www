@@ -1084,3 +1084,8 @@ Revision history for App::MFILE::WWW
 - js: core/html: let entries have size attribute different from maxlen
 - js: core/datetime: implement vetDayList()
 
+0.169 2017-10-29 17:57 CET
+- js: core/ajax: display failure message with displayError()
+- js: core/loggout: propagate result line message
+- js: core/html: fix bug in vetEntries()
+
