@@ -499,12 +499,15 @@ define ([
                 console.log("Processing " + len + " read-write dform entries");
                 for (i = 0; i < len; i += 1) {
                     entry = dfo.entriesWrite[i];
+                    if (! entry.hasOwnProperty('size') && entry.hasOwnProperty('maxlen')) {
+                        entry.size = entry.maxlen;
+                    }
                     if (lib.privCheck(entry.aclProfileWrite)) {
                         r += lib.rightPadSpaces(entry.text.concat(':'), needed);
                         r += '<input id="' + entry.name + '" ';
                         r += 'name="entry' + i + '" ';
                         r += 'value="' + valueToDisplay(obj, entry.prop, "write") + '" ';
-                        r += 'size="' + entry.maxlen + '" ';
+                        r += 'size="' + entry.size + '" ';
                         r += 'maxlength="' + entry.maxlen + '"><br>';
                     }
                 }
