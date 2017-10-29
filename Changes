@@ -1076,3 +1076,11 @@ Revision history for App::MFILE::WWW
 - js: core: display logout message from application in result line
 - js: stack/start: disable logout-via-ESC
 
+0.168 2017-10-29 12:25 CET
+- js: core/html: improve debugging experience
+- js: core/datetime: implement vetMonth() and vetYear()
+- js: core/datetime: add daysInMonth() function
+- js: core/lib: add uniq() function, eliminates duplicates from array
+- js: core/html: let entries have size attribute different from maxlen
+- js: core/datetime: implement vetDayList()
+
