@@ -296,11 +296,19 @@ define ([
             // if any are missing, write an error
             // return true (OK) or false (NOT OK)
             for (var i = 0; i < arr.length; i += 1) {
-                if (typeof arr[i] !== "object" ||
-                    arr[i] === null ||
-                    arr[i].text === undefined)
-                {
-                    console.log("CRITICAL ERROR: target definition ->" + tgt + "<- mentions non-existent entry");
+                if (typeof arr[i] !== "object") {
+                    console.log("ERROR: target definition ->" + tgt + "<- " +
+                                "mentions non-existent entry " + i);
+                    return false;
+                }
+                if (arr[i] === null) {
+                    console.log("ERROR: target definition ->" + tgt + "<- " +
+                                " contains null entry " + i);
+                    return false;
+                }
+                if (arr[i].name === undefined) {
+                    console.log("ERROR: target definition ->" + tgt + "<- " +
+                                "is missing a \"name\" property " + i);
                     return false;
                 }
             }
