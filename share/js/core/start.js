@@ -535,7 +535,6 @@ define ([
                 opts.resultLine = ('resultLine' in opts) ? opts.resultLine : "&nbsp";
                 opts.resultLine = (opts.resultLine === null) ? "&nbsp" : opts.resultLine;
                 opts.inputId = ('inputId' in opts) ? opts.inputId : null;
-                coreLib.displayResult(opts.resultLine);
                 // determine dform "state" (i.e. starting content of form entries)
                 if (! state) {
                     state = stack.getState();
@@ -559,6 +558,7 @@ define ([
                 if (opts.populate && populateArray.length > 0) {
                     populate.bootstrap(populateArray);
                 }
+                coreLib.displayResult(opts.resultLine);
                 // listen for user input in form
                 dformListen(dfn, state, opts.inputId);
             };

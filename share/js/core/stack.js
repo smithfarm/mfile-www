@@ -90,11 +90,11 @@ define ([
             }
 
             // pop item off the stack, unless called by stack.restart()
-            if (! opts._restart) {
+            if (opts._restart) {
+                console.log("Restarting stack top item.");
+            } else {
                 _stack.pop();
                 console.log("Stack top item popped off and discarded.");
-            } else if (opts._restart) {
-                console.log("Restarting stack top item.");
             }
             stackTarget = getTarget();
             stackState = getState();
