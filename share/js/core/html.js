@@ -250,10 +250,10 @@ define ([
                     console.log("Attempting to pull target " + entries[i] + " from miniMenu");
                     entry = target.pull(entries[i]);
                     if (lib.privCheck(entry.aclProfile)) {
-                        r += i + '. ' + entry.menuText + '&nbsp;&nbsp;';
+                        r += i + '.&nbsp' + entry.menuText + '&nbsp; ';
                     }
                 }
-                r += 'X. Exit/back';
+                r += 'X.&nbspExit/back';
             } else {
                 r = "To leave this page, press ENTER or click the Submit button";
             }
