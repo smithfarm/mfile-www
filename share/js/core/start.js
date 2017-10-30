@@ -119,39 +119,28 @@ define ([
         //
         // miniMenu handlers
         //
-        mmKeyListenerVetEntry = function (evt, n, eid) {
-            var input = $("input[id='" + eid + "']"),
+        mmVetEntry = function (n, entryName) {
+            var input = $("input[id='" + entryName + "']"),
                 vetted = true,
                 vettedVal,
                 vetter;
-            console.log("In writable entry " + eid);
-            vetter = currentTarget.getVetter(eid);
+            console.log("In writable entry " + entryName);
+            vetter = currentTarget.getVetter(entryName);
             // console.log("vetter", vetter);
             if (typeof vetter === 'function') {
-                // console.log("Current entry ->" + eid +"<- has a vetter function!");
+                // console.log("Current entry ->" + entryName +"<- has a vetter function!");
                 vettedVal = vetter(input.val());
                 if (vettedVal) {
                     input.val(vettedVal);
                 } else {
                     vetted = false;
+                    coreLib.displayError("Bad " + entryDefs[entryName].text.toLowerCase() + " value!");
                 }
             }
-            if (vetted) {
-                if (evt.keyCode !== 9) {
-                    $("input:text")[n + 1].focus();
-                }
-            } else {
-                coreLib.displayError("Bad " + entryDefs[eid].text.toLowerCase() + " value!");
-                if (evt.keyCode === 9) {
-                    evt.preventDefault();
-                }
-                $("input:text")[n].focus();
-            }
+            return vetted;
         },
         mmKeyListener = function (evt) {
-
-            var 
-                elid = $(document.activeElement).attr("id"),
+            var elid = $(document.activeElement).attr("id"),
                 elnam = $(document.activeElement).attr("name"),
                 len = $("input:text").length,
                 n = $("input:text").index($(document.activeElement)),
@@ -173,21 +162,26 @@ define ([
                     // FIXME: iterate over writable entries and vet all the values
                     $('#submitButton').click();
                 } else {
-                    mmKeyListenerVetEntry(evt, n, elid);
+                    if (mmVetEntry(n, elid)) {
+                        $("input:text")[n + 1].focus();
+                    } else {
+                        $("input:text")[n].focus();
+                    }
                 }
             } else if (evt.keyCode === 9) {
                 // TAB key in form
-                vetter = function () { return true; };
                 if (
                         (elnam === 'entry0' && evt.shiftKey) ||
                         (elnam === 'sel' && len === 1) ||
-                        (elnam === 'sel' && !evt.shiftKey)
+                        (elnam === 'sel' && ! evt.shiftKey)
                    ) {
                     // prevent TAB keydown from navigating out of the form
                     evt.preventDefault();
-                }
-                if (! evt.shiftKey) {
-                    mmKeyListenerVetEntry(evt, n, elid);
+                } else if (! evt.shiftKey) {
+                    if (! mmVetEntry(n, elid)) {
+                        evt.preventDefault();
+                        $("input:text")[n].focus();
+                    }
                 }
             } else if (evt.keyCode === 27) {
                 var xtgt = stack.getXTarget();
@@ -230,22 +224,6 @@ define ([
                 return;
             }
 
-            if (obj !== undefined) {
-                newObj = $.extend({}, obj);
-        
-                // replace the writable properties with the values from the form
-                if (currentTarget.entriesWrite) {
-                    wlen = currentTarget.entriesWrite.length;
-                    for (i = 0; i < wlen; i += 1) {
-                        entry = currentTarget.entriesWrite[i];
-                        newObj[entry.prop] = $('#' + entry.name).val();
-                    }
-                    //console.log("Modified object based on form contents", newObj);
-                }
-            } else {
-                newObj = {};
-            }
-        
             console.log("sel === " + sel + " and len === " + len);
             if (sel >= 0 && sel <= len) {
                 //console.log("sel " + sel + " is within range");
@@ -268,10 +246,26 @@ define ([
             }
             if (item !== undefined) {
                 //console.log("Selected " + dfn + " menu item: " + item.name);
-                newObj.mm = true;
-                if (currentTarget.type === 'dform' && currentTarget.rememberState) {
-                    console.log("Changing stack state to", newObj);
-                    stack.setState(newObj);
+                if (currentTarget.type === 'dform') {
+                    if (obj === undefined) {
+                        newObj = {};
+                    } else {
+                        newObj = $.extend({}, obj);
+                    }
+                    // Vet all writable entries
+                    len = currentTarget.entriesWrite ? currentTarget.entriesWrite.length : 0;
+                    console.log("Vetting " + len + " writable dform entries");
+                    for (i = 0; i < len; i += 1) {
+                        entry = currentTarget.entriesWrite[i];
+                        if (! mmVetEntry(i, entry.name)) {
+                            return;
+                        }
+                        newObj[entry.prop] = $('#' + entry.name).val();
+                    }
+                    if (currentTarget.rememberState) {
+                        console.log("Changing stack state to", newObj);
+                        stack.setState(newObj);
+                    }
                 }
                 stack.push(item, newObj);
             }
