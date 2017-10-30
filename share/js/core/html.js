@@ -128,7 +128,7 @@ define ([
                     r += tobj.preamble + '<br><br>';
                 }
 
-                // populate maxl array
+                // populate maxl array (maximum length of each column)
                 allEntries = tobj.getEntries();
                 allEntries.map(function (e) {
                     headingsentry[e.prop] = e.text;
@@ -502,9 +502,9 @@ define ([
                     r += '<br>';
                 }
         
-                // READ-WRITE entries second
+                // WRITABLE entries second
                 len = dfo.entriesWrite ? dfo.entriesWrite.length : 0;
-                console.log("Processing " + len + " read-write dform entries");
+                console.log("Processing " + len + " writable dform entries");
                 for (i = 0; i < len; i += 1) {
                     entry = dfo.entriesWrite[i];
                     if (! entry.hasOwnProperty('size') && entry.hasOwnProperty('maxlen')) {
