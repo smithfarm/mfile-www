@@ -246,26 +246,24 @@ define ([
             }
             if (item !== undefined) {
                 //console.log("Selected " + dfn + " menu item: " + item.name);
-                if (currentTarget.type === 'dform') {
-                    if (obj === undefined) {
-                        newObj = {};
-                    } else {
-                        newObj = $.extend({}, obj);
+                if (obj === undefined) {
+                    newObj = {};
+                } else {
+                    newObj = $.extend({}, obj);
+                }
+                // Vet all writable entries
+                len = currentTarget.entriesWrite ? currentTarget.entriesWrite.length : 0;
+                console.log("Vetting " + len + " writable dform entries");
+                for (i = 0; i < len; i += 1) {
+                    entry = currentTarget.entriesWrite[i];
+                    if (! mmVetEntry(i, entry.name)) {
+                        return;
                     }
-                    // Vet all writable entries
-                    len = currentTarget.entriesWrite ? currentTarget.entriesWrite.length : 0;
-                    console.log("Vetting " + len + " writable dform entries");
-                    for (i = 0; i < len; i += 1) {
-                        entry = currentTarget.entriesWrite[i];
-                        if (! mmVetEntry(i, entry.name)) {
-                            return;
-                        }
-                        newObj[entry.prop] = $('#' + entry.name).val();
-                    }
-                    if (currentTarget.rememberState) {
-                        console.log("Changing stack state to", newObj);
-                        stack.setState(newObj);
-                    }
+                    newObj[entry.prop] = $('#' + entry.name).val();
+                }
+                if (currentTarget.rememberState) {
+                    console.log("Changing stack state to", newObj);
+                    stack.setState(newObj);
                 }
                 stack.push(item, newObj);
             }
