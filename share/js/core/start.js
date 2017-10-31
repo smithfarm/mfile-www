@@ -572,11 +572,16 @@ define ([
                 console.log('Entering start.dmenu with argument: ' + dmn);
                 // coreLib.clearResult();
                 stack.setFlag();
+                if (typeof opts !== 'object' || opts === null) {
+                    opts = {};
+                }
+                opts.resultLine = ('resultLine' in opts) ? opts.resultLine : "&nbsp";
+                opts.resultLine = (opts.resultLine === null) ? "&nbsp" : opts.resultLine;
                 $('#mainarea').html(dmo.source);
                 $('input[name="sel"]').val('').focus();
                 $('#' + dmn).submit(dmenuSubmitEvent(dmn));
                 $('input[name="sel"]').keydown(dmenuKeyListener(dmn));
-                coreLib.clearResult();
+                coreLib.displayResult(opts.resultLine);
             };
         }, // dmenu
 
