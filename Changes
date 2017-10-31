@@ -1089,3 +1089,14 @@ Revision history for App::MFILE::WWW
 - js: core/loggout: propagate result line message
 - js: core/html: fix bug in vetEntries()
 
+0.170 2017-10-31 12:00 CET
+- js: core/datetime: add tsrangeToDateAndTimeRange()
+- js: core/start: vet all writable dform entries when submitting
+- js: core/start: populate object regardless of target type
+- js: core/start: display opts.resultLine after populate in dform
+- js: core/html: make long miniMenus wrap a little less clumsily
+- js: core/stack: fix missing underscore in pop()
+- js: core/stack: push opts onto stack
+- js: core/stack: make unwindTo{Flag,Target} handle opts and respect _start
+- js: core/start: make dmenu process opts and respect resultLine
+

@@ -58,11 +58,11 @@ App::MFILE::WWW - Web UI development toolkit with prototype demo app
 
 =head1 VERSION
 
-Version 0.169
+Version 0.170
 
 =cut
 
-our $VERSION = '0.169';
+our $VERSION = '0.170';
 our @EXPORT_OK = ( '$VERSION' );
 
 
