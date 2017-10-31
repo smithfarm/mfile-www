@@ -241,13 +241,13 @@ define ([
                 entry,
                 i,
                 r;
-            console.log("miniMenu is ", mm);
-            console.log("miniMenu length is " + len);
+            // console.log("miniMenu is ", mm);
+            // console.log("miniMenu length is " + len);
             if (len > 0) {
                 r = 'Menu:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                 for (i = 0; i < len; i += 1) {
-                    console.log("i === " + i);
-                    console.log("Attempting to pull target " + entries[i] + " from miniMenu");
+                    // console.log("i === " + i);
+                    // console.log("Attempting to pull target " + entries[i] + " from miniMenu");
                     entry = target.pull(entries[i]);
                     if (lib.privCheck(entry.aclProfile)) {
                         r += i + '.&nbsp' + entry.menuText + '&nbsp; ';
