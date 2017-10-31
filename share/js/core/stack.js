@@ -144,6 +144,7 @@ define ([
             if (tgt.pushable) {
                 _stack.push({
                     "flag": opts.flag,
+                    "opts": opts,
                     "push": true,
                     "resultLine": opts.resultLine,
                     "state": obj,
@@ -180,6 +181,9 @@ define ([
         },
         getLength = function () {
             return _stack.length;
+        },
+        getOpts = function () {
+            return _stack[_stack.length - 1].opts;
         },
         getPush = function () {
             return _stack[_stack.length - 1].push;
