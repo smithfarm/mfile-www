@@ -267,6 +267,7 @@ define ([
             console.log("Unwinding the stack to target " + tname);
             for (i = _stack.length; i > 0; i -= 1) {
                 tgt = _stack[i - 1].target;
+                console.log("Does " + tgt.name + " equal " + tname + " ?");
                 if (tgt.name === tname) {
                    break;
                 }
@@ -275,22 +276,32 @@ define ([
             tgt.start(newObj, opts);
         },
         
-        unwindToFlag = function () {
+        unwindToFlag = function (newObj, opts) {
             console.log("Unwinding the stack to flag");
             var flag, i;
+            if (typeof opts !== 'object' || opts === null) {
+                opts = {};
+            }
+            opts['_start'] = ('_start' in opts) ? opts._start : true;
             for (i = _stack.length; i > 0; i -= 1) {
                 flag = _stack[i - 1].flag;
                 if (flag) {
                    break;
                 }
-                popWithoutStart();
+                popWithoutStart(newObj, opts);
             }
-            _stack[_stack.length - 1].target.start();
+            if (opts._start) {
+                _stack[_stack.length - 1].target.start();
+            }
         },
 
-        unwindToType = function (targetType) {
+        unwindToType = function (targetType, opts) {
             var i, tgt;
             console.log("Unwinding stack to nearest target of type " + targetType);
+            if (typeof opts !== 'object' || opts === null) {
+                opts = {};
+            }
+            opts['_start'] = ('_start' in opts) ? opts._start : true;
             for (i = _stack.length; i > 0; i -= 1) {
                 tgt = _stack[i - 1].target;
                 if (tgt.type === targetType) {
@@ -298,13 +309,17 @@ define ([
                 }
                 popWithoutStart();
             }
-            tgt.start();
+            if (opts._start) {
+                tgt.start();
+            }
         },
 
         // grep stack for a target name (exact match)
         grep = function (tname) {
             var i, retval = false;
+            console.log("Grepping stack for " + tname);
             for (i = 0; i < _stack.length; i += 1) {
+                console.log("Does " + _stack[i].target.name + " equal " + tname + " ?");
                 if (_stack[i].target.name === tname) {
                     return true;
                 }
@@ -315,6 +330,7 @@ define ([
     return {
         "getFlag": getFlag,
         "getLength": getLength,
+        "getOpts": getOpts,
         "getPush": getPush,
         "getResultLine": getResultLine,
         "getStack": getStack,
