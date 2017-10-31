@@ -72,7 +72,7 @@ define ([
             opts['logout'] = ('logout' in opts) ? opts.logout : false;
             opts['inputId'] = ('inputId' in opts) ? opts.inputId : null;
             opts['resultLine'] = ('resultLine' in opts) ? opts.resultLine : "&nbsp";
-            opts['_start'] = ('_start' in opts) ? opts.start : true;
+            opts['_start'] = ('_start' in opts) ? opts._start : true;
             opts['_restart'] = ('_restart' in opts) ? opts._restart : false;
             opts['_start'] = opts._restart ? true : opts._start;
             console.log("stack.pop() adjusted opts", opts);
