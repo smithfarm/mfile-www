@@ -530,7 +530,15 @@ define ([
                     obj = stack.getState();
                 }
                 $('#mainarea').html(dco.source);
-                $('#dcallback').html(dco.callback(obj, dco.title, dco.preamble));
+                if (dco.hasOwnProperty('callback')) {
+                    $('#dcallback').html(dco.callback(obj, dco.title, dco.preamble));
+                }
+                if (dco.hasOwnProperty('htmlCallback')) {
+                    $('#dcallback').html(dco.htmlCallback(obj, dco.title, dco.preamble));
+                }
+                if (dco.hasOwnProperty('populateCallback')) {
+                    dco.populateCallback(obj);
+                }
                 $('input[name="sel"]').val('').focus();
                 $('#submitButton').on("click", function (event) {
                     event.preventDefault;
