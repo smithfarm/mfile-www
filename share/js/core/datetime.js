@@ -394,7 +394,7 @@ define ([
                 if (full === true) {
                     return mlo[m];
                 } else {
-                    return m.toUpperCase();
+                    return mlo[m].toUpperCase().slice(0, 3);
                 }
             }
             return null;
