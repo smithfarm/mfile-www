@@ -48,10 +48,20 @@ define ([
                 'June', 'July', 'August', 'September', 'October',
                 'November', 'December'],
 
-        mlo = { 'jan': 'January', 'feb': 'February', 'mar': 'March',
-                'apr': 'April', 'may': 'May', 'jun': 'June', 'jul': 'July',
-                'aug': 'August', 'sep': 'September', 'oct': 'October',
-                'nov': 'November', 'dec': 'December' },
+        mlo = {
+            'j': 'January', 'ja': 'January', 'jan': 'January',
+            'f': 'February', 'fe': 'February', 'feb': 'February',
+            'mar': 'March',
+            'a': 'April', 'ap': 'April', 'apr': 'April',
+            'may': 'May',
+            'jun': 'June',
+            'jul': 'July',
+            'a': 'August', 'au': 'August', 'aug': 'August',
+            's': 'September', 'se': 'September', 'sep': 'September',
+            'o': 'October', 'oc': 'October', 'oct': 'October',
+            'n': 'November', 'no': 'November', 'nov': 'November',
+            'd': 'December', 'de': 'December', 'dec': 'December',
+        },
 
         mlt =  [null, 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL',
                 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
@@ -377,7 +387,7 @@ define ([
         strToMonth = function (buf, full) {
             console.log("Entering strToMonth() with argument", buf);
             var m = String(buf).trim().toLowerCase().slice(0, 3);
-            if (m.length < 3) {
+            if (m.length < 1) {
                 return null;
             }
             if (mlo.hasOwnProperty(m)) {
