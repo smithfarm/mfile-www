@@ -57,7 +57,19 @@ define ([
             "obj": null,  // the drowselect object itself
             "set": null,  // the dataset (array) we are selecting from
             "pos": null   // the current position within that array
-        };
+        },
+        // boolean function for existing, non-empty string, from
+        // https://www.safaribooksonline.com/library/view/javascript-cookbook/9781449390211/ch01s07.html
+        // true if variable exists, is a string, and has a length greater than zero
+        isStringNotEmpty = function (unknownVariable) {
+            if (((typeof unknownVariable !== "undefined") &&
+                 (typeof unknownVariable.valueOf() === "string")) &&
+                 (unknownVariable.length > 0)) {
+                return true;
+            }
+            return false;
+        }
+        ;
 
     return {
 
@@ -173,21 +185,25 @@ define ([
             return true;
         },
 
-        // boolean function for existing, non-empty string, from
-        // https://www.safaribooksonline.com/library/view/javascript-cookbook/9781449390211/ch01s07.html
-        // true if variable exists, is a string, and has a length greater than zero
-        isStringNotEmpty: function (unknownVariable) {
-            if (((typeof unknownVariable !== "undefined") &&
-                 (typeof unknownVariable.valueOf() === "string")) &&
-                 (unknownVariable.length > 0)) {
-                return true;
-            }
-            return false;
-        },
+        isStringNotEmpty: isStringNotEmpty,
 
         // log events to browser JavaScript console
         logKeyDown: function (evt) {
             // console.log("WHICH: " + evt.which + ", KEYCODE: " + evt.keyCode);
+        },
+
+        // return null if val contains parenthesis
+        // used when scraping forms for values, to make sure we don't process
+        // values like "(none)" which are created by us
+        nullify: function (val) {
+            console.log("Entering nullify() with value", val);
+            if (isStringNotEmpty(val)) {
+                if (val.indexOf('(') !== -1) {
+                    return null;
+                }
+                return val;
+            }
+            return null;
         },
 
         objectify: function (st) {
