@@ -37,8 +37,10 @@
 "use strict";
 
 define ([
+    "jquery",
     "lib",
 ], function (
+    $,
     coreLib,
 ) {
 
@@ -109,17 +111,18 @@ define ([
             return ct[0] + ":" + ct[1];
         },
 
-        canonicalizeTimeRange = function (tr) {
+        canonicalizeTimeRange = function (tr, opts) {
             console.log("Entering canonicalizeTimeRange() with argument", tr);
             var ttr = String(tr).trim().replace(/\s/g, ''),
                 ttrs;
+            opts = $.extend({"offset": true}, opts);
             if (/^\d*:{0,1}\d*-\d*:{0,1}\d*$/.test(ttr)) {
                 console.log(tr + " is a standard time range");
                 return canonicalizeTimeRangeStandard(ttr);
-            } else if (/^\d+:{0,1}\d*\+\d+:{0,1}\d*/.test(ttr)) {
+            } else if (/^\d+:{0,1}\d*\+\d+:{0,1}\d*/.test(ttr) && opts.offset) {
                 console.log(tr + " is an offset time range");
                 return canonicalizeTimeRangeOffset(ttr);
-            } else if (/^\+\d+:{0,1}\d*/.test(ttr)) {
+            } else if (/^\+\d+:{0,1}\d*/.test(ttr) && opts.offset) {
                 console.log(tr + " is a last-interval-plus-offset time range");
                 ttrs = canonicalizeTime(ttr.replace(/\+/g, ''));
                 if (ttrs === null) {
@@ -634,7 +637,17 @@ define ([
         },
 
         vetTimeRange = function (tr) {
-            var ctr = canonicalizeTimeRange(tr);
+            var ctr = canonicalizeTimeRange(tr, { "offset": true });
+            if (ctr === null) {
+                return null
+            } else if (coreLib.isArray(ctr)) {
+                return ctr[0] + '-' + ctr[1];
+            }
+            return ctr;
+        },
+
+        vetTimeRangeNoOffset = function (tr) {
+            var ctr = canonicalizeTimeRange(tr, { "offset": false });
             if (ctr === null) {
                 return null
             } else if (coreLib.isArray(ctr)) {
@@ -692,6 +705,7 @@ define ([
         vetDayList: vetDayList,
         vetMonth: vetMonth,
         vetTimeRange: vetTimeRange,
+        vetTimeRangeNoOffset: vetTimeRangeNoOffset,
         vetYear: vetYear,
     };
 
