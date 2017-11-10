@@ -554,7 +554,7 @@ define ([
             var dfo = target.pull(dfn);
             return function (state, opts) {
                 currentTarget = dfo;
-                console.log('Entering start method of target ' + dfn);
+                console.log('Entering start method of target ' + dfn + ', unadulterated opts', opts);
                 var entry,
                     i,
                     populateArray = [];
@@ -563,8 +563,8 @@ define ([
                 }
                 opts.populate = ('populate' in opts) ? opts.populate : "true";
                 opts.resultLine = ('resultLine' in opts) ? opts.resultLine : "&nbsp";
-                opts.resultLine = (opts.resultLine === null) ? "&nbsp" : opts.resultLine;
                 opts.inputId = ('inputId' in opts) ? opts.inputId : null;
+                console.log("opts", opts);
                 // determine dform "state" (i.e. starting content of form entries)
                 if (! state) {
                     state = stack.getState();
@@ -585,10 +585,10 @@ define ([
                 }
                 // call first populate function to trigger sequential,
                 // asynchronous population of all entries with "populate" property
+                coreLib.displayResult(opts.resultLine);
                 if (opts.populate && populateArray.length > 0) {
                     populate.bootstrap(populateArray);
                 }
-                coreLib.displayResult(opts.resultLine);
                 // listen for user input in form
                 dformListen(dfn, state, opts.inputId);
             };

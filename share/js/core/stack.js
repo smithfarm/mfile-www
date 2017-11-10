@@ -71,7 +71,7 @@ define ([
             opts = lib.objectify(opts);
             opts['logout'] = ('logout' in opts) ? opts.logout : false;
             opts['inputId'] = ('inputId' in opts) ? opts.inputId : null;
-            opts['resultLine'] = ('resultLine' in opts) ? opts.resultLine : "&nbsp";
+            opts['resultLine'] = ('resultLine' in opts) ? opts.resultLine : null;
             opts['_start'] = ('_start' in opts) ? opts._start : true;
             opts['_restart'] = ('_restart' in opts) ? opts._restart : false;
             opts['_start'] = opts._restart ? true : opts._start;
@@ -153,7 +153,7 @@ define ([
                 });
             }
             if (opts._start) {
-                tgt.start(obj);
+                tgt.start(obj, opts);
             }
         },
 

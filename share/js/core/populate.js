@@ -37,16 +37,21 @@
 "use strict";
 
 define ([
+    'jquery',
     'lib',
 ], function (
+    $,
     lib,
 ) {
+
+    var resultLine;
 
     return {
 
         "bootstrap": function (populateArray) {
             console.log("Entering populate.bootstrap() with " +
                         populateArray.length + " populate functions");
+            resultLine = $('#result').html();
             if (lib.isArray(populateArray)) {
                 if (populateArray.length > 0) {
                     lib.displayResult("Populating form fields...");
@@ -59,8 +64,8 @@ define ([
             console.log("Entering populate.shift() with " +
                         populateArray.length + " populate functions left");
             if (populateArray.length === 0) {
-                lib.clearResult();
-                return function (populateArray) {};
+                lib.displayResult(resultLine);
+                return function () {};
             }
             return populateArray.shift();
         }

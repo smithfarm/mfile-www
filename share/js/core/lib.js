@@ -58,6 +58,11 @@ define ([
             "set": null,  // the dataset (array) we are selecting from
             "pos": null   // the current position within that array
         },
+        clearResult = function () {
+            console.log("Clearing result line");
+            $('#result').css('text-align', 'left');
+            $('#result').html('&nbsp;');
+        },
         // boolean function for existing, non-empty string, from
         // https://www.safaribooksonline.com/library/view/javascript-cookbook/9781449390211/ch01s07.html
         // true if variable exists, is a string, and has a length greater than zero
@@ -92,10 +97,7 @@ define ([
             maxlen: 20
         },
 
-        clearResult: function () {
-            $('#result').css('text-align', 'left');
-            $('#result').html('&nbsp;');
-        },
+        clearResult: clearResult,
 
         // dbrowser states
         // FIXME: move this into stack.js
@@ -115,7 +117,11 @@ define ([
         },
 
         displayResult: function (buf) {
-            console.log("RESULT: " + buf);
+            console.log("RESULT", buf);
+            if (! buf) {
+                clearResult();
+                return;
+            }
             $('#result').css('text-align', 'center');
             $('#result').html(buf);
         },
