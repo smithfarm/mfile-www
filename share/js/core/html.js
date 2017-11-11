@@ -239,24 +239,33 @@ define ([
             var entries = (mm.entries === null) ? [] : mm.entries,
                 len = entries.length,
                 entry,
+                menuText,
                 i,
                 r;
             // console.log("miniMenu is ", mm);
             // console.log("miniMenu length is " + len);
+            r = "<div class='minimenu'>";
             if (len > 0) {
-                r = 'Menu:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                r += "<div class='minimenuleft'>";
+                // r += 'Menu:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                r += 'Menu:';
+                r += "</div>"; // minimenuleft
+                r += "<div class='minimenuright'>";
                 for (i = 0; i < len; i += 1) {
                     // console.log("i === " + i);
                     // console.log("Attempting to pull target " + entries[i] + " from miniMenu");
                     entry = target.pull(entries[i]);
+                    menuText = entry.menuText.replace(/ /g, '&nbsp;');
                     if (lib.privCheck(entry.aclProfile)) {
-                        r += i + '.&nbsp' + entry.menuText + '&nbsp; ';
+                        r += i + '.&nbsp' + menuText + '&nbsp; ';
                     }
                 }
                 r += 'X.&nbspExit/back';
+                r += '</div>'; // minimenuright
             } else {
-                r = "To leave this page, press ENTER or click the Submit button";
+                r += "To leave this page, press ENTER or click the Submit button";
             }
+            r += "</div>"; // minimenu
             return r;
         }, // miniMenu       
 
@@ -317,8 +326,18 @@ define ([
 
         // "Your choice" section at the bottom - shared by all target types
         yourChoice = function () {
-            return '<br><b>Your choice:</b> <input name="sel" size=3 maxlength=2> ' +
-                   '<input id="submitButton" type="submit" value="Submit"><br><br>'
+            var r = '<br>';
+            r += "<div class='yourchoice'>";
+            r += "<div class='yourchoiceleft'>";
+            r += "Your choice:";
+            r += "</div>"; // yourchoiceleft
+            r += "<div class='yourchoiceright'>";
+            r += '<input name="sel" size=3 maxlength=2> ' +
+                 '<input id="submitButton" type="submit" value="Submit">';
+            r += "</div>"; // yourchoiceright
+            r += "</div>"; // yourchoice
+            r += "<br>";
+            return r;
         };
 
 
