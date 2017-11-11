@@ -75,7 +75,7 @@ define ([
                 entry,
                 selection;
         
-            if ($.isNumeric(sel) && sel >= 0 && sel <= len) {
+            if ($.isNumeric(sel) && sel > 0 && sel <= len) {
                 // we can only select the entry if we have sufficient priv level
                 selection = target.pull(dmo.entries[sel]);
                 if (coreLib.privCheck(selection.aclProfile)) {
@@ -225,10 +225,13 @@ define ([
             }
 
             // console.log("sel === " + sel + " and len === " + len);
-            if (sel >= 0 && sel <= len) {
+            if (sel > 0 && sel <= len) {
                 // console.log("sel " + sel + " is within range");
+                // the selection number the user sees is array index + 1, because
+                // otherwise the miniMenu selections would be numbered starting
+                // from zero, which is unintuitive for non-programmers
+                selection = target.pull(currentTarget.miniMenu.entries[sel - 1]);
                 // we can only select the item if we have sufficient priv level
-                selection = target.pull(currentTarget.miniMenu.entries[sel]);
                 if (coreLib.privCheck(selection.aclProfile)) {
                     //console.log('Selection ' + sel + ' passed priv check');
                     item = selection;

@@ -41,7 +41,7 @@ define ([
     'target'
 ], function (
     cf,
-    lib,
+    coreLib,
     appLib,
     target
 ) {
@@ -153,9 +153,9 @@ define ([
                 // display table header
                 for (column = 0; column < allEntries.length; column += 1) {
                     entry = allEntries[column];
-                    if (lib.privCheck(entry.aclProfileRead)) {
+                    if (coreLib.privCheck(entry.aclProfileRead)) {
                         r += '<span style="text-decoration: underline">';
-                        r += lib.rightPadSpaces(entry.text, maxl[column]);
+                        r += coreLib.rightPadSpaces(entry.text, maxl[column]);
                         r += '</span>';
                     }
                     if (column !== allEntries.length - 1) {
@@ -175,10 +175,10 @@ define ([
                         for (column = 0; column < allEntries.length; column += 1) {
                             entry = allEntries[column];
                             // console.log("entry", entry);
-                            if (lib.privCheck(entry.aclProfileRead)) {
+                            if (coreLib.privCheck(entry.aclProfileRead)) {
                                 var val = obj[entry.prop];
                                 // console.log("value", val);
-                                r += lib.rightPadSpaces(val, maxl[column]);
+                                r += coreLib.rightPadSpaces(val, maxl[column]);
                             }
                             if (column !== allEntries.length - 1) {
                                 r += ' ';
@@ -236,27 +236,32 @@ define ([
         }, // maxLength
 
         miniMenu = function (mm) {
-            var entries = (mm.entries === null) ? [] : mm.entries,
-                len = entries.length,
+            var entries,
                 entry,
                 menuText,
                 i,
                 r;
-            // console.log("miniMenu is ", mm);
-            // console.log("miniMenu length is " + len);
+            if (typeof mm === 'object' && 'entries' in mm && coreLib.isArray(mm.entries)) {
+                entries = mm.entries.slice(0);
+                entries.unshift(null);
+            } else {
+                entries = [ null ];
+            }
+            console.log("miniMenu", mm);
+            console.log("entries", entries);
             r = "<div class='minimenu'>";
-            if (len > 0) {
+            if (entries.length > 1) {
                 r += "<div class='minimenuleft'>";
                 // r += 'Menu:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                 r += 'Menu:';
                 r += "</div>"; // minimenuleft
                 r += "<div class='minimenuright'>";
-                for (i = 0; i < len; i += 1) {
+                for (i = 1; i < entries.length; i += 1) {
                     // console.log("i === " + i);
                     // console.log("Attempting to pull target " + entries[i] + " from miniMenu");
                     entry = target.pull(entries[i]);
                     menuText = entry.menuText.replace(/ /g, '&nbsp;');
-                    if (lib.privCheck(entry.aclProfile)) {
+                    if (coreLib.privCheck(entry.aclProfile)) {
                         r += i + '.&nbsp' + menuText + '&nbsp; ';
                     }
                 }
@@ -421,8 +426,8 @@ define ([
                             r += Array(entry.maxlen).join(entry.text) + '<br>';
                         } else if (entry.name === 'emptyLine') {
                             r += '<br>';
-                        } else if (lib.privCheck(entry.aclProfileRead)) {
-                            r += lib.rightPadSpaces(entry.text.concat(':'), needed);
+                        } else if (coreLib.privCheck(entry.aclProfileRead)) {
+                            r += coreLib.rightPadSpaces(entry.text.concat(':'), needed);
                             r += '<span id="' + entry.name + '">';
                             r += valueToDisplay(obj, entry.prop);
                             r += '</span><br>';
@@ -491,10 +496,10 @@ define ([
                 // entry)
                 if (dfo.entriesRead === undefined || dfo.entriesRead === null) {
                     // console.log("No entriesRead, initializing allEntries to empty array");
-                    allEntries = lib.forceArray([]);
+                    allEntries = coreLib.forceArray([]);
                 } else {
                     // console.log("entriesRead", dfo.entriesRead);
-                    allEntries = lib.forceArray(dfo.entriesRead);
+                    allEntries = coreLib.forceArray(dfo.entriesRead);
                 }
                 if (dfo.entriesWrite !== undefined) {
                     // console.log("entriesWrite", dfo.entriesWrite);
@@ -520,9 +525,9 @@ define ([
                         r += '<br>';
                     } else if (entry.name === 'textOnly') {
                         r += entry.textOnly + '<br>';
-                    } else if (lib.privCheck(entry.aclProfileRead)) {
+                    } else if (coreLib.privCheck(entry.aclProfileRead)) {
                         if (! entry.hidden) {
-                            r += lib.rightPadSpaces(entry.text.concat(':'), needed);
+                            r += coreLib.rightPadSpaces(entry.text.concat(':'), needed);
                         }
                         r += '<span ';
                         if (entry.hidden) {
@@ -548,8 +553,8 @@ define ([
                     if (! entry.hasOwnProperty('size') && entry.hasOwnProperty('maxlen')) {
                         entry.size = entry.maxlen;
                     }
-                    if (lib.privCheck(entry.aclProfileWrite)) {
-                        r += lib.rightPadSpaces(entry.text.concat(':'), needed);
+                    if (coreLib.privCheck(entry.aclProfileWrite)) {
+                        r += coreLib.rightPadSpaces(entry.text.concat(':'), needed);
                         r += '<input id="' + entry.name + '" ';
                         r += 'name="entry' + i + '" ';
                         r += 'value="' + valueToDisplay(obj, entry.prop, "write") + '" ';
@@ -585,11 +590,12 @@ define ([
         
             r += '<form id="' + dmn + '"><br><b>' + dmo.title + '</b><br><br>';
 
-            for (i = 0; i < len; i += 1) {
+            dmo.entries.unshift(null);
+            for (i = 1; i < len; i += 1) {
                 // the entries are names of targets
                 entry = target.pull(dmo.entries[i]);
                 // console.log("Pulled target " + dmo.entries[i] + " with result ", entry);
-                if (lib.privCheck(entry.aclProfile)) {
+                if (coreLib.privCheck(entry.aclProfile)) {
                     r += i + '. ' + entry.menuText + '<br>';
                 }
             }
