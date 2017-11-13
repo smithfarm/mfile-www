@@ -1119,3 +1119,9 @@ Revision history for App::MFILE::WWW
 - css, js/html: implement proper miniMenu indenting
 - js: core: html/start: make menu entries start at 1
 
+0.174 2017-11-13 11:43 CET
+- Revert "Integrate D3 into the application"
+- js: core/html: fix dmenu regression
+- js: core/html: give minimenu div an id
+- js: reflect appLib.fillUserBox() behavior change
+
