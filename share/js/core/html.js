@@ -249,7 +249,7 @@ define ([
             }
             console.log("miniMenu", mm);
             console.log("entries", entries);
-            r = "<div class='minimenu'>";
+            r = "<div class='minimenu' id='minimenu'>";
             if (entries.length > 1) {
                 r += "<div class='minimenuleft'>";
                 // r += 'Menu:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
