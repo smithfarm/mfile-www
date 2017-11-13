@@ -360,7 +360,7 @@ define ([
             r += '</p>';
 
             r += '<p class="alignright"><span id="userbox">';
-            r += appLib.fillUserBox();
+            r += appLib.userBoxContent();
             r += '</span></p>';
 
             r += '</div>';
