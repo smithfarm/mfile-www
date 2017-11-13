@@ -582,14 +582,15 @@ define ([
             // dmn is dmenu name
             // dmo is dmenu object
             var dmo = target.pull(dmn),
-                r = '',
-                len = dmo.entries.length,
+                entry,
                 i,
-                entry;
+                len,
+                r = '';
         
             r += '<form id="' + dmn + '"><br><b>' + dmo.title + '</b><br><br>';
 
             dmo.entries.unshift(null);
+            len = dmo.entries.length;
             for (i = 1; i < len; i += 1) {
                 // the entries are names of targets
                 entry = target.pull(dmo.entries[i]);
