@@ -381,7 +381,6 @@ define ([
                 r += 'Plack session ID: ' + cf('sessionID');
                 r += ' (last_seen ' + cf('sessionLastSeen') + ')</br>';
             }
-            r += '<div class="d3"></div>';
             return r;
         }, // body
 
