@@ -472,14 +472,15 @@ define ([
                 }
             };
         },
-        drowselectListen = function () {
+        drowselectListen = function (resultLine) {
             var drso = coreLib.drowselectState.obj,
                 set = coreLib.drowselectState.set,
                 pos = coreLib.drowselectState.pos;
-            $('#result').text("Displaying rowselect with " + coreLib.genObjStr(set.length));
+            resultLine = resultLine ? resultLine : "Displaying rowselect with " + coreLib.genObjStr(set.length);
+            coreLib.displayResult(resultLine);
             $('#mainarea').html(drso.source(set));
             coreLib.reverseVideo(pos, true);
-            console.log("Listening in rowselect " + drso.name);
+            // console.log("Listening in rowselect " + drso.name);
             $('#' + drso.name).submit(suppressSubmitEvent);
             $('input[name="sel"]').val('').focus();
             $('#submitButton').on("click", function (event) {
@@ -660,7 +661,7 @@ define ([
                         coreLib.drowselectState.pos = state.pos;
                     }
                     // start browsing
-                    drowselectListen();
+                    drowselectListen(opts.resultLine);
                 };
             }
         }, // drowselect
