@@ -61,12 +61,16 @@ define ([
         },
 
         "shift": function (populateArray) {
-            console.log("Entering populate.shift() with " +
-                        populateArray.length + " populate functions left");
+            console.log("Entering populate.shift() with populateArray", populateArray);
+            if (! lib.isArray(populateArray)) {
+                throw "populateArray is not an array!";
+            }
             if (populateArray.length === 0) {
+                console.log("No more populate functions left");
                 lib.displayResult(resultLine);
                 return function () {};
             }
+            console.log(populateArray.length + " populate functions left");
             return populateArray.shift();
         }
 
