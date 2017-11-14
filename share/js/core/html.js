@@ -588,7 +588,7 @@ define ([
                 for (i = 1; i < len; i += 1) {
                     // the entries are names of targets
                     entry = menuObj.entries[i];
-                    r += i + '. ' + entry.menuText + '<br>';
+                    r += i + '.&nbsp;' + entry.menuText + '<br>';
                 }
             }
             r += 'X. Exit/back<br>';
