@@ -243,6 +243,8 @@ define ([
                 i,
                 r;
             r = "<div class='minimenu' id='minimenu'>";
+            console.log("Generating miniMenu HTML for target", tobj);
+            // console.log("menu object is", mm);
             if (mm.isEmpty) {
                 r += "To leave this page, press ENTER or click the Submit button";
             } else {

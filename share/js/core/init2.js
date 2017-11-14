@@ -60,7 +60,6 @@ define([
                 i,
                 newMenu;
 
-            console.log("Entering transformMenu() with menu", menu);
             if (! coreLib.isArray(menu)) {
                 throw("CRITICAL ERROR: non-array sent to transformMenu");
             }
@@ -79,7 +78,7 @@ define([
             newMenu.isMiniMenu = (type === 'miniMenu');
 
             // return transformed array of target objects
-            console.log("Transformed menu into", menu, newMenu);
+            // console.log("Transformed menu into", newMenu);
             return newMenu;
         };
 
@@ -99,6 +98,7 @@ define([
                 if (wtype === 'dmenu') {
                     if (! tgt.menuObj) {
                         if ('entries' in tgt && coreLib.isArray(tgt.entries)) {
+                            // console.log("Transforming dmenu " + tgt.name);
                             tgt.menuObj = transformMenu(tgt.entries, "dmenu");
                         } else {
                             tgt.menuObj = Object.create(prototypes.menu);
@@ -108,15 +108,14 @@ define([
                     tgt.source = html[wtype](i);
                     continue; // dmenus do not have miniMenus
                 }
+                // console.log("Considering miniMenu of target", tgt);
                 if (   tgt.miniMenu &&
                        'entries' in tgt.miniMenu &&
                        coreLib.isArray(tgt.miniMenu.entries) &&
                        ! tgt.miniMenu.menuObj
                    ) {
+                    // console.log("Transforming miniMenu of " + tgt.name);
                     tgt.miniMenu.menuObj = transformMenu(tgt.miniMenu.entries, "miniMenu");
-                } else {
-                    tgt.miniMenu = { 'menuObj': Object.create(prototypes.menu) };
-                    tgt.miniMenu.menuObj.isMiniMenu = true;
                 }
                 tgt.source = html[wtype](i);
             }
