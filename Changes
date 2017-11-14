@@ -1125,3 +1125,9 @@ Revision history for App::MFILE::WWW
 - js: core/html: give minimenu div an id
 - js: reflect appLib.fillUserBox() behavior change
 
+0.175 2017-11-14 17:24 CET
+- js: core/start: pass resultLine to drowselectListen()
+- js: core: implement "menu" prototype
+- js: core/populate: handle undefined populateArray a little less stupidly
+- js: core/init2: do not clobber miniMenu objects
+
