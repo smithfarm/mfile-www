@@ -71,17 +71,11 @@ define ([
             // dmo is dmenu object
             var dmo = target.pull(dmn),
                 sel = $('input[name="sel"]').val(),
-                len = dmo.entries.length,
                 entry,
-                selection;
+                entries = dmo.menuObj.entries;
         
-            if ($.isNumeric(sel) && sel > 0 && sel <= len) {
-                // we can only select the entry if we have sufficient priv level
-                selection = target.pull(dmo.entries[sel]);
-                if (coreLib.privCheck(selection.aclProfile)) {
-                    //console.log('Selection ' + sel + ' passed priv check');
-                    entry = selection;
-                }
+            if ($.isNumeric(sel) && sel > 0 && sel <= entries.length) {
+                entry = entries[sel];
             } else if (sel === 'X' || sel === 'x') {
                 stack.pop(undefined, { "logout": true });
                 return;
@@ -205,19 +199,16 @@ define ([
                 i,
                 newObj,
                 selection,
-                entry,
-                item,
-                wlen,
-                entries = currentTarget.miniMenu.entries;
+                formEntry,
+                menuEntry,
+                menuObj = currentTarget.miniMenu.menuObj;
 
-            // if miniMenu has zero or one entries, 'Back' is the only option
-            // console.log("entries", entries);
-            if (! coreLib.isArray(entries) || entries.length === 0) {
+            if (menuObj.isEmpty) {
                 console.log("Setting sel to 'X' by default because miniMenu has no entries");
                 sel = 'X';
                 len = 0;
             } else {
-                len = entries.length;
+                len = menuObj.entries.length;
             }
             if (len > 0 && sel === '') {
                 console.log("User hit ENTER ambiguously; doing nothing");
@@ -226,16 +217,7 @@ define ([
 
             // console.log("sel === " + sel + " and len === " + len);
             if (sel > 0 && sel <= len) {
-                // console.log("sel " + sel + " is within range");
-                // the selection number the user sees is array index + 1, because
-                // otherwise the miniMenu selections would be numbered starting
-                // from zero, which is unintuitive for non-programmers
-                selection = target.pull(currentTarget.miniMenu.entries[sel - 1]);
-                // we can only select the item if we have sufficient priv level
-                if (coreLib.privCheck(selection.aclProfile)) {
-                    //console.log('Selection ' + sel + ' passed priv check');
-                    item = selection;
-                }
+                menuEntry = menuObj.entries[sel];
             } else if (sel === 'X' || sel === 'x') {
                 var xtgt = stack.getXTarget();
                 if (typeof xtgt === "string") {
@@ -247,28 +229,27 @@ define ([
             } else {
                 console.log('Selection is ' + sel + ' (invalid) -- doing nothing');
             }
-            if (item !== undefined) {
-                //console.log("Selected " + dfn + " menu item: " + item.name);
+            if (menuEntry !== undefined) {
                 if (obj === undefined) {
                     newObj = {};
                 } else {
                     newObj = $.extend({}, obj);
                 }
-                // Vet all writable entries
+                // Vet all writable form entries
                 len = currentTarget.entriesWrite ? currentTarget.entriesWrite.length : 0;
                 console.log("Vetting " + len + " writable dform entries");
                 for (i = 0; i < len; i += 1) {
-                    entry = currentTarget.entriesWrite[i];
-                    if (! mmVetEntry(i, entry.name)) {
+                    formEntry = currentTarget.entriesWrite[i];
+                    if (! mmVetEntry(i, formEntry.name)) {
                         return;
                     }
-                    newObj[entry.prop] = $('#' + entry.name).val();
+                    newObj[formEntry.prop] = $('#' + formEntry.name).val();
                 }
                 if (currentTarget.rememberState) {
                     console.log("Changing stack state to", newObj);
                     stack.setState(newObj);
                 }
-                stack.push(item, newObj);
+                stack.push(menuEntry, newObj);
             }
         },
 

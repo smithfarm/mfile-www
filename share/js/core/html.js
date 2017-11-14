@@ -202,7 +202,7 @@ define ([
 
 		// miniMenu at the bottom: selections are target names defined
 		// in the 'miniMenu' property of the dform object
-                r += miniMenu(tobj.miniMenu);
+                r += miniMenu(tobj);
 
                 // your choice section
                 r += yourChoice();
@@ -235,22 +235,18 @@ define ([
             return max;
         }, // maxLength
 
-        miniMenu = function (mm) {
+        miniMenu = function (tobj) {
             var entries,
                 entry,
                 menuText,
+                mm = tobj.miniMenu.menuObj,
                 i,
                 r;
-            if (typeof mm === 'object' && 'entries' in mm && coreLib.isArray(mm.entries)) {
-                entries = mm.entries.slice(0);
-                entries.unshift(null);
-            } else {
-                entries = [ null ];
-            }
-            console.log("miniMenu", mm);
-            console.log("entries", entries);
             r = "<div class='minimenu' id='minimenu'>";
-            if (entries.length > 1) {
+            if (mm.isEmpty) {
+                r += "To leave this page, press ENTER or click the Submit button";
+            } else {
+                entries = mm.entries;
                 r += "<div class='minimenuleft'>";
                 // r += 'Menu:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                 r += 'Menu:';
@@ -258,17 +254,12 @@ define ([
                 r += "<div class='minimenuright'>";
                 for (i = 1; i < entries.length; i += 1) {
                     // console.log("i === " + i);
-                    // console.log("Attempting to pull target " + entries[i] + " from miniMenu");
-                    entry = target.pull(entries[i]);
+                    entry = entries[i];
                     menuText = entry.menuText.replace(/ /g, '&nbsp;');
-                    if (coreLib.privCheck(entry.aclProfile)) {
-                        r += i + '.&nbsp' + menuText + '&nbsp; ';
-                    }
+                    r += i + '.&nbsp' + menuText + '&nbsp; ';
                 }
                 r += 'X.&nbspExit/back';
                 r += '</div>'; // minimenuright
-            } else {
-                r += "To leave this page, press ENTER or click the Submit button";
             }
             r += "</div>"; // minimenu
             return r;
@@ -441,7 +432,7 @@ define ([
                 
 		// miniMenu at the bottom: selections are target names defined
 		// in the 'miniMenu' property of the dbrowser object
-                r += miniMenu(dbo.miniMenu);
+                r += miniMenu(dbo);
 
                 // your choice section
                 r += yourChoice();
@@ -464,7 +455,7 @@ define ([
 
             r += '<form id="' + dcn + '">';
             // miniMenu at the bottom
-            r += miniMenu(dco.miniMenu);
+            r += miniMenu(dco);
             // your choice section
             r += yourChoice();
             r += '</form>';
@@ -566,7 +557,7 @@ define ([
                 }
 
                 // miniMenu at the bottom
-                r += miniMenu(dfo.miniMenu);
+                r += miniMenu(dfo);
 
                 // your choice section
                 r += yourChoice();
@@ -582,6 +573,7 @@ define ([
             // dmn is dmenu name
             // dmo is dmenu object
             var dmo = target.pull(dmn),
+                menuObj = dmo.menuObj,
                 entry,
                 i,
                 len,
@@ -589,13 +581,11 @@ define ([
         
             r += '<form id="' + dmn + '"><br><b>' + dmo.title + '</b><br><br>';
 
-            dmo.entries.unshift(null);
-            len = dmo.entries.length;
-            for (i = 1; i < len; i += 1) {
-                // the entries are names of targets
-                entry = target.pull(dmo.entries[i]);
-                // console.log("Pulled target " + dmo.entries[i] + " with result ", entry);
-                if (coreLib.privCheck(entry.aclProfile)) {
+            if (! menuObj.isEmpty) {
+                len = menuObj.entries.length;
+                for (i = 1; i < len; i += 1) {
+                    // the entries are names of targets
+                    entry = menuObj.entries[i];
                     r += i + '. ' + entry.menuText + '<br>';
                 }
             }
