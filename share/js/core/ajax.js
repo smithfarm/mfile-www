@@ -85,6 +85,14 @@ define ([
     lib,
 ) {
 
+    var logout = function () {
+        currentUser('obj', null);
+        currentUser('priv', null);
+        appLib.fillUserBox();
+        $('#mainarea').html(html.logout());
+    }
+    ;
+
     return function (rest, sc, fc) {
         // console.log("Initiating AJAX call", mfao);
         lib.displayResult('* * * AJAX call * * *');
@@ -95,29 +103,30 @@ define ([
             'processData': false,
             'contentType': 'application/json'
         })
-        .done(function (data) {
-            lib.clearResult();
-            if (typeof data !== 'object' || data === null || data === undefined || ! 'level' in data) {
-                console.log("AJAX failure", data);
-                currentUser('obj', null);
-                currentUser('priv', null);
-                appLib.fillUserBox();
-                $('#mainarea').html(html.logout());
-            } else if (data.level === 'OK') {
-                console.log("AJAX success", rest, data);
+        .done(function (data, textStatus) {
+            console.log("REST API RESPONSE", data);
+            if (data.level === 'OK') {
                 if (typeof sc === 'function') {
                     sc(data);
                 } else {
                     lib.displayResult(data.text);
                 }
+                return;
             } else {
-                console.log("AJAX failure", rest, data);
                 if (typeof fc === 'function') {
                     fc(data);
                 } else {
                     lib.displayError(data.payload.message);
                 }
+                return;
             }
+            console.log("AJAX unexpected success response ->" + textStatus + "<- with data", data);
+            throw textStatus;
+        })
+        .fail(function (data, textStatus) {
+            console.log("AJAX failure", data);
+            lib.displayResult(textStatus);
+            logout();
         });
     };
 
