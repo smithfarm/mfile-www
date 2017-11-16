@@ -363,7 +363,9 @@ define ([
             r += '   unresponsive, make sure browser window is active and press \'TAB\'</span>';
             r += '</div>';
 
-            r += '<div class="mainarea" id="mainarea"></div>';
+            r += '<div class="mainarea" id="mainarea">';
+            r += '<br><br><br><br><br><center><p>LOADING . . . PLEASE WAIT</p></center><br><br><br><br><br>';
+            r += '</div>';
 
             r += '<div class="boxtopbot" id="result">&nbsp;</div>';
 
