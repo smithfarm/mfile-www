@@ -74,10 +74,14 @@
 define ([
     'jquery',
     'cf',
+    'current-user',
+    'html',
     'lib',
 ], function (
     $,
     cf,
+    currentUser,
+    html,
     lib,
 ) {
 
@@ -92,10 +96,16 @@ define ([
             'contentType': 'application/json'
         })
         .done(function (data) {
-            if (data.level === 'OK') {
+            lib.clearResult();
+            if (typeof data !== 'object' || data === null || data === undefined || ! 'level' in data) {
+                console.log("AJAX failure", data);
+                currentUser('obj', null);
+                currentUser('priv', null);
+                appLib.fillUserBox();
+                $('#mainarea').html(html.logout());
+            } else if (data.level === 'OK') {
                 console.log("AJAX success", rest, data);
                 if (typeof sc === 'function') {
-                    lib.clearResult();
                     sc(data);
                 } else {
                     lib.displayResult(data.text);
