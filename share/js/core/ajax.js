@@ -107,6 +107,7 @@ define ([
             console.log("REST API RESPONSE", data);
             if (data.level === 'OK') {
                 if (typeof sc === 'function') {
+                    lib.clearResult();
                     sc(data);
                 } else {
                     lib.displayResult(data.text);
@@ -114,6 +115,7 @@ define ([
                 return;
             } else {
                 if (typeof fc === 'function') {
+                    lib.clearResult();
                     fc(data);
                 } else {
                     lib.displayError(data.payload.message);
